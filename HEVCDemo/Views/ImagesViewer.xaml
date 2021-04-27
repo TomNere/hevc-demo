@@ -2,22 +2,29 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:views="clr-namespace:HEVCDemo.Views"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid Margin="10">
+    <Grid Margin="0" Width="1920">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1080"/>
+        </Grid.RowDefinitions>
+        
+        <!--Image-->
+        <Border Grid.Row="0" BorderThickness="2" BorderBrush="Black" Height="1080" Width="1920">
+            <Image Source="{Binding CurrentImage}" />
+        </Border>
+        <!--CanvasTest is overlay-->
+        <views:CanvasTest Grid.Row="0" Height="1080" Width="1920" Margin="0"/>
+        <!--Controls-->
+        <Grid Grid.Row="0" Height="1920" Width="1920">
         <Grid.RowDefinitions>
             <RowDefinition Height="38"/>
             <RowDefinition Height="720"/>
             <RowDefinition Height="38"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1280"/>
-        </Grid.ColumnDefinitions>
+            
         <Button Command="{Binding SelectVideoClick}" Width="100" HorizontalAlignment="Left" Margin="4">Select Video</Button>
-        <Border Grid.Row="1" BorderThickness="2" BorderBrush="Black">
-            <Image Source="{Binding CurrentImage}" />    
-        </Border>
-
+        
         <Grid Grid.Row="2" HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -34,6 +41,7 @@
                                  HorizontalAlignment="Center" />
             </Button>
         </Grid>
+    </Grid>
     </Grid>
     <UserControl.InputBindings>
         <KeyBinding Key="Left" Command="{Binding BackwardClick}"/>

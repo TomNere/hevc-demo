@@ -37,7 +37,7 @@ namespace HEVCDemo.Helpers
 
             IConversionResult conversionResult = await FFmpeg.Conversions.New()
                 .AddStream(videoStream)
-                .AddParameter($"-ss {TimeSpan.FromSeconds(30)}")
+                .AddParameter($"-ss {TimeSpan.FromSeconds(3)}")
                 .AddParameter($"-t {TimeSpan.FromSeconds(3)}")
                 .ExtractEveryNthFrame(1, outputFileNameBuilder)
                 .Start();

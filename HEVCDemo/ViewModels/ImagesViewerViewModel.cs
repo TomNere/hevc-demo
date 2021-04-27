@@ -70,7 +70,7 @@ namespace HEVCDemo.ViewModels
 
         private bool CanExecuteForward()
         {
-            return this.files?.Count > this.counter + 1;
+                return this.files?.Count > this.counter + 1;
         }
 
         private DelegateCommand selectVideoClick;
@@ -80,7 +80,7 @@ namespace HEVCDemo.ViewModels
         async void ExecuteSelectVideoClick()
         {
             var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Video file|*.y4m";
+            openFileDialog.Filter = "Video file|*.h265";
             if (openFileDialog.ShowDialog() == true)
             {
                 Mouse.OverrideCursor = Cursors.Wait;

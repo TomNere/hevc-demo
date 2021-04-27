@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\CanvasTest.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ImagesViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -68,10 +72,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GraphicObjects\Rectangle.cs" />
     <Compile Include="Helpers\FFmpegHelper.cs" />
     <Compile Include="MainModule.cs" />
+    <Compile Include="ViewModels\CanvasTestViewModel.cs" />
     <Compile Include="ViewModels\ImagesViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\CanvasTest.xaml.cs">
+      <DependentUpon>CanvasTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ImagesViewer.xaml.cs">
       <DependentUpon>ImagesViewer.xaml</DependentUpon>
     </Compile>
