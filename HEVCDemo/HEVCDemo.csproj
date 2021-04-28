@@ -73,11 +73,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CustomControls\FastCanvas.cs" />
-    <Compile Include="GraphicObjects\Rectangle.cs" />
     <Compile Include="Helpers\CacheProvider.cs" />
     <Compile Include="Helpers\FFmpegHelper.cs" />
     <Compile Include="MainModule.cs" />
+    <Compile Include="Parsers\CUPUParser.cs" />
     <Compile Include="ViewModels\CanvasTestViewModel.cs" />
     <Compile Include="ViewModels\ImagesViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

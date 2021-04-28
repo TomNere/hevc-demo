@@ -1,4 +1,5 @@
 ﻿using HEVCDemo.Helpers;
+using HEVCDemo.Parsers;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -13,8 +14,8 @@ namespace HEVCDemo.ViewModels
     public class ImagesViewerViewModel : BindableBase
     {
         private int counter;
-        private int count = -1;
-        private List<FileInfo> files;
+        private List<FileInfo> framesFiles;
+        private List<FileInfo> cupuFiles;
 
         private CacheProvider cacheProvider;
 
@@ -43,13 +44,21 @@ namespace HEVCDemo.ViewModels
             set { SetProperty(ref currentFrameImage, value); }
         }
 
+        private string currentCUPUImage;
+        public string CurrentCUPUImage
+        {
+            get { return currentCUPUImage; }
+            set { SetProperty(ref currentCUPUImage, value); }
+        }
+
         private DelegateCommand backwardClick;
         public DelegateCommand BackwardClick =>
             backwardClick ?? (backwardClick = new DelegateCommand(ExecuteBackwardClick, CanExecuteBackward));
 
         private void ExecuteBackwardClick()
         {
-            this.CurrentFrameImage = files[--counter].FullName;
+            this.CurrentFrameImage = framesFiles[--counter].FullName;
+            this.CurrentCUPUImage = cupuFiles[--counter].FullName;
             this.ForwardClick.RaiseCanExecuteChanged();
             this.BackwardClick.RaiseCanExecuteChanged();
         }
@@ -65,14 +74,15 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteForwardClick()
         {
-            this.CurrentFrameImage = files[++counter].FullName;
+            this.CurrentFrameImage = framesFiles[++counter].FullName;
+            this.CurrentCUPUImage = cupuFiles[++counter].FullName;
             this.ForwardClick.RaiseCanExecuteChanged();
             this.BackwardClick.RaiseCanExecuteChanged();
         }
 
         private bool CanExecuteForward()
         {
-                return this.files?.Count > this.counter + 1;
+                return this.framesFiles?.Count > this.counter + 1;
         }
 
         private DelegateCommand selectVideoClick;
@@ -86,23 +96,32 @@ namespace HEVCDemo.ViewModels
             //if (openFileDialog.ShowDialog() == true)
             {
 
-                var filePath = @"C:\out.h265";
+                var filePath = @"C:\out2.h265";
 
                 this.cacheProvider = new CacheProvider(filePath);
                 if (!cacheProvider.CacheExists)
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     await FFmpegHelper.ExtractFrames(filePath, cacheProvider);
+
+                    var cupuParser = new CUPUParser();
+                    cupuParser.ParseFile(cacheProvider);
+
                     Mouse.OverrideCursor = Cursors.Arrow;
                 }
 
-                this.files = cacheProvider.GetAllFrames();
+                //var cupuParser = new CUPUParser();
+                //cupuParser.ParseFile(cacheProvider);
 
-                if (this.files?.Count > 0)
+                framesFiles = cacheProvider.GetAllFrames();
+                cupuFiles = cacheProvider.GetAllCupus();
+
+                if (framesFiles?.Count > 0 && cupuFiles.Count == framesFiles.Count)
                 {
-                    this.CurrentFrameImage = this.files[0].FullName;
-                    this.counter = 0;
-                    this.ForwardClick.RaiseCanExecuteChanged();
+                    CurrentFrameImage = framesFiles[0].FullName;
+                    CurrentCUPUImage = cupuFiles[0].FullName;
+                    counter = 0;
+                    ForwardClick.RaiseCanExecuteChanged();
                 }
             }
         }
