@@ -16,6 +16,8 @@ namespace HEVCDemo.ViewModels
         private int count = -1;
         private List<FileInfo> files;
 
+        private CacheProvider cacheProvider;
+
         public ImagesViewerViewModel()
         {
         }
@@ -34,11 +36,11 @@ namespace HEVCDemo.ViewModels
             set { SetProperty(ref forwardEnabled, value); }
         }
 
-        private string currentImage;
-        public string CurrentImage
+        private string currentFrameImage;
+        public string CurrentFrameImage
         {
-            get { return currentImage; }
-            set { SetProperty(ref currentImage, value); }
+            get { return currentFrameImage; }
+            set { SetProperty(ref currentFrameImage, value); }
         }
 
         private DelegateCommand backwardClick;
@@ -47,7 +49,7 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteBackwardClick()
         {
-            this.CurrentImage = files[--counter].FullName;
+            this.CurrentFrameImage = files[--counter].FullName;
             this.ForwardClick.RaiseCanExecuteChanged();
             this.BackwardClick.RaiseCanExecuteChanged();
         }
@@ -63,7 +65,7 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteForwardClick()
         {
-            this.CurrentImage = files[++counter].FullName;
+            this.CurrentFrameImage = files[++counter].FullName;
             this.ForwardClick.RaiseCanExecuteChanged();
             this.BackwardClick.RaiseCanExecuteChanged();
         }
@@ -79,19 +81,26 @@ namespace HEVCDemo.ViewModels
 
         async void ExecuteSelectVideoClick()
         {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Video file|*.h265";
-            if (openFileDialog.ShowDialog() == true)
+            //var openFileDialog = new OpenFileDialog();
+            //openFileDialog.Filter = "Video file|*.h265";
+            //if (openFileDialog.ShowDialog() == true)
             {
-                Mouse.OverrideCursor = Cursors.Wait;
-                await FFmpegHelper.ExtractFrames(openFileDialog.FileName);
-                Mouse.OverrideCursor = Cursors.Arrow;
 
-                this.ForwardEnabled = true;
-                this.files = (new DirectoryInfo(@".\frames\")).GetFiles().ToList();
+                var filePath = @"C:\out.h265";
+
+                this.cacheProvider = new CacheProvider(filePath);
+                if (!cacheProvider.CacheExists)
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    await FFmpegHelper.ExtractFrames(filePath, cacheProvider);
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                }
+
+                this.files = cacheProvider.GetAllFrames();
+
                 if (this.files?.Count > 0)
                 {
-                    this.CurrentImage = this.files[0].FullName;
+                    this.CurrentFrameImage = this.files[0].FullName;
                     this.counter = 0;
                     this.ForwardClick.RaiseCanExecuteChanged();
                 }

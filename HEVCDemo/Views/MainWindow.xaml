@@ -5,9 +5,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title}"
-        WindowState="Maximized"
-        MinHeight="1080"
-        MinWidth="1920">
+        WindowState="Maximized">
     <Grid>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
     </Grid>

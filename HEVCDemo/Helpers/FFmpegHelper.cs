@@ -27,19 +27,18 @@ namespace HEVCDemo.Helpers
         }
 
 
-        public async static Task ExtractFrames(string fileFullName)
+        public async static Task ExtractFrames(string fileFullName, CacheProvider cacheProvider)
         {
-            Directory.CreateDirectory(@".\frames\");
-
-            Func<string, string> outputFileNameBuilder = (number) => { return @".\frames\frame" + number + ".bmp"; };
+            cacheProvider.InitCacheFolders();
+            
             IMediaInfo info = await FFmpeg.GetMediaInfo(fileFullName).ConfigureAwait(false);
             IVideoStream videoStream = info.VideoStreams.First()?.SetCodec(VideoCodec.bmp);
 
             IConversionResult conversionResult = await FFmpeg.Conversions.New()
                 .AddStream(videoStream)
-                .AddParameter($"-ss {TimeSpan.FromSeconds(3)}")
-                .AddParameter($"-t {TimeSpan.FromSeconds(3)}")
-                .ExtractEveryNthFrame(1, outputFileNameBuilder)
+                //.AddParameter($"-ss {TimeSpan.FromSeconds(3)}")
+                //.AddParameter($"-t {TimeSpan.FromSeconds(3)}")
+                .ExtractEveryNthFrame(1, cacheProvider.FramesOutputFileNameBuilder)
                 .Start();
         }
     }

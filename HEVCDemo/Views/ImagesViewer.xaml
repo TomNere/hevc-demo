@@ -4,38 +4,41 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:views="clr-namespace:HEVCDemo.Views"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid Margin="0" Width="1920">
+    <Grid Margin="2">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1080"/>
+            <RowDefinition Height="950"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <!--Image-->
-        <Border Grid.Row="0" BorderThickness="2" BorderBrush="Black" Height="1080" Width="1920">
-            <Image Source="{Binding CurrentImage}" />
-        </Border>
-        <!--CanvasTest is overlay-->
-        <views:CanvasTest Grid.Row="0" Height="1080" Width="1920" Margin="0"/>
+        <!--Frame Image-->
+        <Image Grid.Row="0" Source="{Binding CurrentFrameImage}" Height="972" Width="1728"/>
+        
+        <!--CU Structure Image (Overlay)-->
+        <Image Grid.Row="0" Source="{Binding CurrentCUStructureImage}" Height="972" Width="1728"/>
+        
         <!--Controls-->
-        <Grid Grid.Row="0" Height="1920" Width="1920">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="38"/>
-            <RowDefinition Height="720"/>
-            <RowDefinition Height="38"/>
-        </Grid.RowDefinitions>
-            
-        <Button Command="{Binding SelectVideoClick}" Width="100" HorizontalAlignment="Left" Margin="4">Select Video</Button>
-        
-        <Grid Grid.Row="2" HorizontalAlignment="Center">
+        <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="38"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="4" Command="{Binding BackwardClick}">
+            
+        <Button Grid.Column="0" Command="{Binding SelectVideoClick}" Width="150" HorizontalAlignment="Left">Open sample video</Button>
+        
+        <Grid Grid.Column="1" HorizontalAlignment="Center" Margin="8,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Command="{Binding BackwardClick}">
                 <iconPacks:PackIconModern Kind="NavigatePrevious"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Center" />
             </Button>
-            <Button Grid.Column="1" Margin="4"  Command="{Binding ForwardClick}">
+            <Button Grid.Column="1" Margin="4,0,0,0" Command="{Binding ForwardClick}">
                 <iconPacks:PackIconModern Kind="NavigateNext"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Center" />

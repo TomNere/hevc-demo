@@ -8,19 +8,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace HEVCDemo.ViewModels
 {
     public class CanvasTestViewModel : BindableBase
     {
-        private List<Rectangle> preCacheRectangles; 
-        private List<Rectangle> rectangles;
-        public List<Rectangle> Rectangles
-        {
-            get { return rectangles; }
-            set { SetProperty(ref rectangles, value); }
-        }
+        private List<Rect> preCacheRectangles; 
+        //private List<Rectangle> rectangles;
+        //public List<Rectangle> Rectangles
+        //{
+        //    get { return rectangles; }
+        //    set { SetProperty(ref rectangles, value); }
+        //}
 
         public CanvasTestViewModel()
         {
@@ -60,7 +61,7 @@ namespace HEVCDemo.ViewModels
 
             var file = new System.IO.StreamReader(@"./test.txt");
 
-            this.preCacheRectangles = new List<Rectangle>();
+            this.preCacheRectangles = new List<Rect>();
 
             for (int i = 0; i < 509; i++)
             {
@@ -101,7 +102,7 @@ namespace HEVCDemo.ViewModels
                 //qSort(pcFrame->getLCUs().begin(), pcFrame->getLCUs().end(), xCUSortingOrder);
 
             }
-            this.Rectangles = preCacheRectangles;
+            //this.Rectang
 
             return true;
         }
@@ -148,7 +149,7 @@ namespace HEVCDemo.ViewModels
                     //pcPU->setWidth(iPUWidth);
                     //pcPU->setHeight(iPUHeight);
                     //pcCU->getPUs().push_back(pcPU);
-                    this.preCacheRectangles.Add(new Rectangle { X = iPUX, Y = iPUY, Width = iPUWidth, Height = iPUHeight });
+                    //this.preCacheRectangles.Add(new Rectangle { X = iPUX, Y = iPUY, Width = iPUWidth, Height = iPUHeight });
                 }
 
             }
