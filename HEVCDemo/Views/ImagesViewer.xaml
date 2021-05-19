@@ -11,10 +11,10 @@
         </Grid.RowDefinitions>
         
         <!--Frame Image-->
-        <Image Grid.Row="0" Source="{Binding CurrentFrameImage}" Height="972" Width="1728"/>
+        <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="972" Width="1728"/>
         
         <!--CU Structure Image (Overlay)-->
-        <Image Grid.Row="0" Source="{Binding CurrentCUPUImage}" Height="972" Width="1728"/>
+        <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCUPUImage}" Height="972" Width="1728"/>
         
         <!--Controls-->
         <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="4">

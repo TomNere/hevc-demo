@@ -32,13 +32,14 @@ namespace HEVCDemo.Helpers
             cacheProvider.InitCacheFolders();
             
             IMediaInfo info = await FFmpeg.GetMediaInfo(fileFullName).ConfigureAwait(false);
-            IVideoStream videoStream = info.VideoStreams.First()?.SetCodec(VideoCodec.bmp);
+            IVideoStream videoStream = info.VideoStreams.First()?.SetCodec(VideoCodec.png);
 
             IConversionResult conversionResult = await FFmpeg.Conversions.New()
                 .AddStream(videoStream)
                 //.AddParameter($"-ss {TimeSpan.FromSeconds(3)}")
                 //.AddParameter($"-t {TimeSpan.FromSeconds(3)}")
                 .ExtractEveryNthFrame(1, cacheProvider.FramesOutputFileNameBuilder)
+                //.SetOutputFormat(Format.png_pipe)
                 .Start();
         }
     }

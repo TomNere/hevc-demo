@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
 {
@@ -27,6 +26,8 @@ namespace HEVCDemo.Parsers
             //QTextStream cCUInfoStream;
             int iDecOrder = -1;
             int iLastPOC = -1;
+
+            //var bitmaps = new Dictionary<int, BitmapSource>();
 
             try
             {
@@ -83,8 +84,8 @@ namespace HEVCDemo.Parsers
                         strOneLine = file.ReadLine();
                         if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
                         {
-                            Bitmap bitmap = new Bitmap(1920, 1080);
-                            Graphics g = Graphics.FromImage(bitmap);
+                            var writeableBitmap = BitmapFactory.New(1920, 1080);
+                            //Graphics g = Graphics.FromImage(bitmap);
 
                             //Image img = Bitmap.FromFile(LoadPath);
                             //Image img2 = Bitmap.FromFile(TempPath);
@@ -92,14 +93,20 @@ namespace HEVCDemo.Parsers
                             //g.DrawImage(img, 0, 0);
                             //g.DrawImage(img2, 250, 250);
 
-                            var pen = new System.Drawing.Pen(System.Drawing.Brushes.Black, 1);
-                            for (int i = 0; i < rectangles.Count; i++)
-                            {
-                                var rect = rectangles[i];
-                                g.DrawRectangle(pen, rect);
-                            }
-                            cacheProvider.SaveCupuBitmap(bitmap, frameNumber);
+                            //var pen = new System.Drawing.Pen(System.Drawing.Brushes.Black, 1);
 
+                            using (writeableBitmap.GetBitmapContext())
+                            {
+                                for (int i = 0; i < rectangles.Count; i++)
+                                {
+                                    var rect = rectangles[i];
+                                    //g.DrawRectangle(pen, rect);
+                                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Black);
+                                }
+                            }
+
+                            cacheProvider.SaveBitmap(writeableBitmap, frameNumber, CacheProvider.CacheItemType.Cupu);
+                            //bitmaps.Add(frameNumber, writeableBitmap);
                             break;
                         }
                     }

@@ -37,7 +37,7 @@ namespace HEVCDemo.Views
 
             var file = new System.IO.StreamReader(@"./test.txt");
 
-            this.RectanglesCanvas.Rectangles.Clear();
+            //this.RectanglesCanvas.Rectangles.Clear();
             for (int i = 0; i < 509; i++)
             {
                 strOneLine = file.ReadLine();
@@ -77,7 +77,7 @@ namespace HEVCDemo.Views
                 //qSort(pcFrame->getLCUs().begin(), pcFrame->getLCUs().end(), xCUSortingOrder);
 
             }
-            this.Dispatcher.Invoke(() => this.RectanglesCanvas.InvalidateVisual());
+            //this.Dispatcher.Invoke(() => this.RectanglesCanvas.InvalidateVisual());
             return true;
         }
 
@@ -123,7 +123,7 @@ namespace HEVCDemo.Views
                     //pcPU->setWidth(iPUWidth);
                     //pcPU->setHeight(iPUHeight);
                     //pcCU->getPUs().push_back(pcPU);
-                    this.RectanglesCanvas.Rectangles.Add(new Rectangle { X = iPUX, Y = iPUY, Width = iPUWidth, Height = iPUHeight });
+                    //this.RectanglesCanvas.Rectangles.Add(new Rectangle { X = iPUX, Y = iPUY, Width = iPUWidth, Height = iPUHeight });
                 }
 
             }
