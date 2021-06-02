@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="Helpers\CacheProvider.cs" />
     <Compile Include="Helpers\FFmpegHelper.cs" />
+    <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="Parsers\CUPUParser.cs" />
     <Compile Include="ViewModels\CanvasTestViewModel.cs" />

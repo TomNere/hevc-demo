@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Helpers
@@ -22,18 +19,23 @@ namespace HEVCDemo.Helpers
 
         private const string imageFormat = "png";
         private const string textFileFormat = "txt";
+        private const string annexBFormat = "bin";
 
         private readonly string cachePath;
 
         public string CupuFilePath;
+        public string AnnexBFilePath;
 
-        public bool CacheExists => !string.IsNullOrEmpty(cachePath) && Directory.Exists(cachePath);
+        public bool CacheExists => !string.IsNullOrEmpty(cachePath) && File.Exists(AnnexBFilePath);
         public Func<string, string> FramesOutputFileNameBuilder => (number) => { return $@"{cachePath}\{framesPrefix}\{number}.{imageFormat}"; };
 
         public CacheProvider(string filePath)
         {
             cachePath = $@".\{cachePrefix}\{Path.GetFileNameWithoutExtension(filePath)}";
             CupuFilePath = $@"{cachePath}\cupu.{textFileFormat}";
+            AnnexBFilePath = $@"{cachePath}\annexB.{annexBFormat}";
+
+            InitCacheFolders();
         }
 
         public void InitCacheFolders()
@@ -47,17 +49,26 @@ namespace HEVCDemo.Helpers
             return new DirectoryInfo($@"{cachePath}\{framesPrefix}").GetFiles().Take(end).ToList();
         }
 
-        public List<BitmapImage> GetFrames(int start, int end)
+        public int GetFramesCount()
         {
-            var files = new DirectoryInfo($@"{cachePath}\{framesPrefix}").GetFiles().ToList();
-            return GetBitmapsInRange(files, start, end).ToList();
+            return new DirectoryInfo($@"{cachePath}\{framesPrefix}").GetFiles().Length;
         }
 
-        public List<BitmapImage> GetCupus(int start, int end)
+        public List<BitmapImage> GetFrames(int start, int count)
+        {
+            var files = new DirectoryInfo($@"{cachePath}\{framesPrefix}").GetFiles().ToList();
+            return GetBitmapsInRange(files, start, start + count).ToList();
+        }
+
+        public List<BitmapImage> GetCupus(int start, int count)
         {
             var files = new DirectoryInfo($@"{cachePath}\{CacheItemType.Cupu}").GetFiles().ToList();
-            return GetBitmapsInRange(files, start, end).ToList();
-            
+            return GetBitmapsInRange(files, start, start + count).ToList();
+        }
+
+        public void CreateAnnexBCopy(string filePath)
+        {
+            File.Copy(filePath, AnnexBFilePath);
         }
 
         private IEnumerable<BitmapImage> GetBitmapsInRange(List<FileInfo> files, int start, int end)

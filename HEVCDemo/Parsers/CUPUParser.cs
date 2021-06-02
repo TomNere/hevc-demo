@@ -43,9 +43,10 @@ namespace HEVCDemo.Parsers
                     }
 
                     int frameNumber = int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1));
-                    var rectangles = new List<Rectangle>();
+                    var cuRectangles = new List<Rectangle>();
+                    var puRectangles = new List<Rectangle>();
 
-                    while(true)
+                    while (true)
                     {
                         int addressStart = strOneLine.LastIndexOf(',');
                         int addressEnd = strOneLine.LastIndexOf('>');
@@ -72,7 +73,9 @@ namespace HEVCDemo.Parsers
                         /// recursively parse the CU&PU quard-tree structure
                         //QString strCUInfo = cMatchTarget.cap(3);
                         //cCUInfoStream.setString(&strCUInfo, QIODevice::ReadOnly);
-                        if (!xReadInCUMode(tokens, pcLCU, rectangles))
+                        puRectangles.Add(new Rectangle { X = pcLCU.iPixelX, Y = pcLCU.iPixelY, Height = pcLCU.Size, Width = pcLCU.Size });
+                        var index = 0;
+                        if (!xReadInCUMode(tokens, pcLCU, cuRectangles, puRectangles, ref index))
                         {
                             throw new FormatException();
                         }
@@ -97,11 +100,16 @@ namespace HEVCDemo.Parsers
 
                             using (writeableBitmap.GetBitmapContext())
                             {
-                                for (int i = 0; i < rectangles.Count; i++)
+                                for (int i = 0; i < cuRectangles.Count; i++)
                                 {
-                                    var rect = rectangles[i];
+                                    var rect = cuRectangles[i];
                                     //g.DrawRectangle(pen, rect);
-                                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Black);
+                                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Blue);
+                                }
+                                for (int i = 0; i < puRectangles.Count; i++)
+                                {
+                                    var rect = puRectangles[i];
+                                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Yellow);
                                 }
                             }
 
@@ -121,7 +129,7 @@ namespace HEVCDemo.Parsers
             return true;
         }
 
-        public bool xReadInCUMode(string[] tokens, ComCU pcLCU, List<Rectangle> rectangles, int index = 0)
+        public bool xReadInCUMode(string[] tokens, ComCU pcLCU, List<Rectangle> cuRectangles, List<Rectangle> puRectangles, ref int index)
         {
             if (index > tokens.Length - 1)
             {
@@ -148,7 +156,9 @@ namespace HEVCDemo.Parsers
                     pcChildNode.iPixelX = iSubCUX;
                     pcChildNode.iPixelY = iSubCUY;
                     //pcCU->getSCUs().push_back(pcChildNode);
-                    xReadInCUMode(tokens, pcChildNode, rectangles, index + 1);//, pcChildNode);
+                    cuRectangles.Add(new Rectangle { X = iSubCUX, Y = iSubCUY, Width = pcLCU.Size / 2, Height = pcLCU.Size / 2 });
+                    index++;
+                    xReadInCUMode(tokens, pcChildNode, cuRectangles, puRectangles, ref index);//, pcChildNode);
                 }
             }
             else
@@ -159,6 +169,8 @@ namespace HEVCDemo.Parsers
                 int iPUCount = getPUNum((PartSize)iCUMode);
                 for (int i = 0; i < iPUCount; i++)
                 {
+                    //rectangles.Add(new Rectangle { X = pcLCU.iPixelX, Y = pcLCU.iPixelY, Width = pcLCU.Size, Height = pcLCU.Size});
+
                     //ComPU* pcPU = new ComPU(pcCU);
                     getPUOffsetAndSize(pcLCU.Size, (PartSize)iCUMode, i, out var iPUOffsetX, out var iPUOffsetY, out var iPUWidth, out var iPUHeight);
                     int iPUX = pcLCU.iPixelX + iPUOffsetX;
@@ -168,9 +180,8 @@ namespace HEVCDemo.Parsers
                     //pcPU->setWidth(iPUWidth);
                     //pcPU->setHeight(iPUHeight);
                     //pcCU->getPUs().push_back(pcPU);
-                    rectangles.Add(new Rectangle { X = iPUX, Y = iPUY, Width = iPUWidth, Height = iPUHeight });
+                    //puRectangles.Add(new Rectangle { X = iPUX, Y = iPUY, Width = iPUWidth, Height = iPUHeight });
                 }
-
             }
             return true;
         }
