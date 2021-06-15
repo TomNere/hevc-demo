@@ -4,17 +4,17 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:views="clr-namespace:HEVCDemo.Views"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid Margin="2">
+    <Grid Margin="2" IsEnabled="{Binding Enabled}">
         <Grid.RowDefinitions>
             <RowDefinition Height="950"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
         <!--Frame Image-->
-        <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="972" Width="1728"/>
+        <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Mode=OneWay, Path=Height}" Width="{Binding Mode=OneWay, Path=Width}"/>
         
         <!--CU Structure Image (Overlay)-->
-        <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCUPUImage}" Height="972" Width="1728"/>
+        <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCUPUImage}" Height="{Binding Mode=OneWay, Path=Height}" Width="{Binding Mode=OneWay, Path=Width}"/>
         
         <!--Controls-->
         <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="4">
@@ -32,10 +32,12 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Command="{Binding BackwardClick}">
                 <iconPacks:PackIconModern Kind="NavigatePrevious"
                                  VerticalAlignment="Center"
@@ -51,6 +53,8 @@
                 <DockPanel Grid.Column="4" Width="400">
                     <Slider Margin="4,0,0,0" Maximum="{Binding MaxSliderValue}" TickFrequency="30" TickPlacement="BottomRight" Value="{Binding Counter}"/>
                 </DockPanel>
+                <Label Margin="4,0,0,0" Grid.Column="5">App State: </Label>
+                <Label Margin="4,0,0,0" Grid.Column="6" Content="{Binding AppState}"/>
             </Grid>
     </Grid>
     </Grid>

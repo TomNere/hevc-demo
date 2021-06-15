@@ -2,131 +2,150 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
 {
-    public class CUPUParser
+    public class CupuParser
     {
-        private int iSeqWidth = 1920;
-        private int iMaxCUSize = 64;
+        private int iSeqWidth;
+        private int iSeqHeight;
+        private int iMaxCUSize;
 
-        public bool ParseFile(CacheProvider cacheProvider)
+        public CupuParser(int seqWidth, int seqHeight, int maxCUSize)
         {
-            int iCUOneRow = (iSeqWidth + iMaxCUSize - 1) / iMaxCUSize;
+            this.iSeqWidth = seqWidth;
+            this.iSeqHeight = seqHeight;
+            this.iMaxCUSize = maxCUSize;
+        }
 
-            /// <1,1> 99 0 0 5 0
-            /// read one LCU
-            //ComFrame* pcFrame = NULL;
-            //ComCU* pcLCU = NULL;
-            int iLCUSize = iMaxCUSize; //pcSequence->getMaxCUSize();
-            //cMatchTarget.setPattern("^<(-?[0-9]+),([0-9]+)> (.*) ");
-            //QTextStream cCUInfoStream;
-            int iDecOrder = -1;
-            int iLastPOC = -1;
-
-            //var bitmaps = new Dictionary<int, BitmapSource>();
-
-            try
-            {
-                var file = new System.IO.StreamReader(cacheProvider.CupuFilePath);
-                string strOneLine = file.ReadLine();
-
-                while (strOneLine != null)
+        public async Task<bool> ParseFile(CacheProvider cacheProvider)
+        {
+            return await Task.Run(
+                () =>
                 {
-                    if (strOneLine[0] != '<')
+                    if (iSeqWidth == 0 || iMaxCUSize == 0)
                     {
-                        // Line must start with <
                         throw new FormatException();
                     }
 
-                    int frameNumber = int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1));
-                    var cuRectangles = new List<Rectangle>();
-                    var puRectangles = new List<Rectangle>();
+                    int iCUOneRow = (iSeqWidth + iMaxCUSize - 1) / iMaxCUSize;
 
-                    while (true)
+                    /// <1,1> 99 0 0 5 0
+                    /// read one LCU
+                    //ComFrame* pcFrame = NULL;
+                    //ComCU* pcLCU = NULL;
+                    int iLCUSize = iMaxCUSize; //pcSequence->getMaxCUSize();
+                                               //cMatchTarget.setPattern("^<(-?[0-9]+),([0-9]+)> (.*) ");
+                                               //QTextStream cCUInfoStream;
+                    int iDecOrder = -1;
+                    int iLastPOC = -1;
+
+                    //var bitmaps = new Dictionary<int, BitmapSource>();
+
+                    try
                     {
-                        int addressStart = strOneLine.LastIndexOf(',');
-                        int addressEnd = strOneLine.LastIndexOf('>');
-                        int iAddr = int.Parse(strOneLine.Substring(addressStart + 1, addressEnd - addressStart - 1));
-                        var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
+                        var file = new System.IO.StreamReader(cacheProvider.CupuFilePath);
+                        string strOneLine = file.ReadLine();
 
-                        /// poc and lcu addr
-                        //int iPoc = cMatchTarget.cap(1).toInt();
-                        //iDecOrder += (iLastPOC != iPoc);
-                        //iLastPOC = iPoc;
-                        //pcFrame = pcSequence->getFramesInDecOrder().at(iDecOrder);
-                        var pcLCU = new ComCU { iAddr = iAddr };
-                        //pcLCU->setAddr(iAddr);
-                        //pcLCU->setFrame(pcFrame);
-                        //pcLCU->setDepth(0);
-                        //pcLCU->setZorder(0);
-                        //pcLCU->setSize(iLCUSize);
-                        pcLCU.iPixelX = (iAddr % iCUOneRow) * iMaxCUSize;
-                        pcLCU.iPixelY = (iAddr / iCUOneRow) * iMaxCUSize;
-                        pcLCU.Size = iLCUSize;
-                        //pcLCU->setX(iPixelX);
-                        //pcLCU->setY(iPixelY);
-
-                        /// recursively parse the CU&PU quard-tree structure
-                        //QString strCUInfo = cMatchTarget.cap(3);
-                        //cCUInfoStream.setString(&strCUInfo, QIODevice::ReadOnly);
-                        puRectangles.Add(new Rectangle { X = pcLCU.iPixelX, Y = pcLCU.iPixelY, Height = pcLCU.Size, Width = pcLCU.Size });
-                        var index = 0;
-                        if (!xReadInCUMode(tokens, pcLCU, cuRectangles, puRectangles, ref index))
+                        while (strOneLine != null)
                         {
-                            throw new FormatException();
-                        }
-                        else
-                        {
-                            
-                        }
-
-                        strOneLine = file.ReadLine();
-                        if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
-                        {
-                            var writeableBitmap = BitmapFactory.New(1920, 1080);
-                            //Graphics g = Graphics.FromImage(bitmap);
-
-                            //Image img = Bitmap.FromFile(LoadPath);
-                            //Image img2 = Bitmap.FromFile(TempPath);
-
-                            //g.DrawImage(img, 0, 0);
-                            //g.DrawImage(img2, 250, 250);
-
-                            //var pen = new System.Drawing.Pen(System.Drawing.Brushes.Black, 1);
-
-                            using (writeableBitmap.GetBitmapContext())
+                            if (strOneLine[0] != '<')
                             {
-                                for (int i = 0; i < cuRectangles.Count; i++)
-                                {
-                                    var rect = cuRectangles[i];
-                                    //g.DrawRectangle(pen, rect);
-                                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Blue);
-                                }
-                                for (int i = 0; i < puRectangles.Count; i++)
-                                {
-                                    var rect = puRectangles[i];
-                                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Yellow);
-                                }
+                                // Line must start with <
+                                throw new FormatException();
                             }
 
-                            cacheProvider.SaveBitmap(writeableBitmap, frameNumber, CacheProvider.CacheItemType.Cupu);
-                            //bitmaps.Add(frameNumber, writeableBitmap);
-                            break;
-                        }
-                    }
-                }
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show($"Error parsing CUPU file!\n\n{e.Message}");
-                return false;
-            }
+                            int frameNumber = int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1));
+                            var cuRectangles = new List<Rectangle>();
+                            var puRectangles = new List<Rectangle>();
 
-            return true;
+                            while (true)
+                            {
+                                int addressStart = strOneLine.LastIndexOf(',');
+                                int addressEnd = strOneLine.LastIndexOf('>');
+                                int iAddr = int.Parse(strOneLine.Substring(addressStart + 1, addressEnd - addressStart - 1));
+                                var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
+
+                                /// poc and lcu addr
+                                //int iPoc = cMatchTarget.cap(1).toInt();
+                                //iDecOrder += (iLastPOC != iPoc);
+                                //iLastPOC = iPoc;
+                                //pcFrame = pcSequence->getFramesInDecOrder().at(iDecOrder);
+                                var pcLCU = new ComCU { iAddr = iAddr };
+                                //pcLCU->setAddr(iAddr);
+                                //pcLCU->setFrame(pcFrame);
+                                //pcLCU->setDepth(0);
+                                //pcLCU->setZorder(0);
+                                //pcLCU->setSize(iLCUSize);
+                                pcLCU.iPixelX = (iAddr % iCUOneRow) * iMaxCUSize;
+                                pcLCU.iPixelY = (iAddr / iCUOneRow) * iMaxCUSize;
+                                pcLCU.Size = iLCUSize;
+                                //pcLCU->setX(iPixelX);
+                                //pcLCU->setY(iPixelY);
+
+                                /// recursively parse the CU&PU quard-tree structure
+                                //QString strCUInfo = cMatchTarget.cap(3);
+                                //cCUInfoStream.setString(&strCUInfo, QIODevice::ReadOnly);
+                                puRectangles.Add(new Rectangle { X = pcLCU.iPixelX, Y = pcLCU.iPixelY, Height = pcLCU.Size, Width = pcLCU.Size });
+                                var index = 0;
+                                if (!xReadInCUMode(tokens, pcLCU, cuRectangles, puRectangles, ref index))
+                                {
+                                    throw new FormatException();
+                                }
+                                else
+                                {
+
+                                }
+
+                                strOneLine = file.ReadLine();
+                                if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
+                                {
+                                    var writeableBitmap = BitmapFactory.New(iSeqWidth, iSeqHeight);
+                                    //Graphics g = Graphics.FromImage(bitmap);
+
+                                    //Image img = Bitmap.FromFile(LoadPath);
+                                    //Image img2 = Bitmap.FromFile(TempPath);
+
+                                    //g.DrawImage(img, 0, 0);
+                                    //g.DrawImage(img2, 250, 250);
+
+                                    //var pen = new System.Drawing.Pen(System.Drawing.Brushes.Black, 1);
+
+                                    using (writeableBitmap.GetBitmapContext())
+                                    {
+                                        for (int i = 0; i < cuRectangles.Count; i++)
+                                        {
+                                            var rect = cuRectangles[i];
+                                            //g.DrawRectangle(pen, rect);
+                                            writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Blue);
+                                        }
+                                        for (int i = 0; i < puRectangles.Count; i++)
+                                        {
+                                            var rect = puRectangles[i];
+                                            writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Yellow);
+                                        }
+                                    }
+
+                                    cacheProvider.SaveBitmap(writeableBitmap, frameNumber, CacheProvider.CacheItemType.Cupu);
+                                    //bitmaps.Add(frameNumber, writeableBitmap);
+                                    break;
+                                }
+                            }
+                        }
+                        file.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show($"Error parsing CUPU file!\n\n{e.Message}");
+                        return false;
+                    }
+                    
+                    return true;
+                });
         }
 
         public bool xReadInCUMode(string[] tokens, ComCU pcLCU, List<Rectangle> cuRectangles, List<Rectangle> puRectangles, ref int index)

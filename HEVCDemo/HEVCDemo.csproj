@@ -57,10 +57,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\CanvasTest.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\ImagesViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -76,14 +72,12 @@
     <Compile Include="Helpers\CacheProvider.cs" />
     <Compile Include="Helpers\FFmpegHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
+    <Compile Include="Helpers\ActionsHelper.cs" />
     <Compile Include="MainModule.cs" />
-    <Compile Include="Parsers\CUPUParser.cs" />
-    <Compile Include="ViewModels\CanvasTestViewModel.cs" />
+    <Compile Include="Parsers\PropsParser.cs" />
+    <Compile Include="Parsers\CupuParser.cs" />
     <Compile Include="ViewModels\ImagesViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="Views\CanvasTest.xaml.cs">
-      <DependentUpon>CanvasTest.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ImagesViewer.xaml.cs">
       <DependentUpon>ImagesViewer.xaml</DependentUpon>
     </Compile>

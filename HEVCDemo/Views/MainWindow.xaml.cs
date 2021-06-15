@@ -1,6 +1,4 @@
-﻿using HEVCDemo.Helpers;
-using MahApps.Metro.Controls;
-using System.Windows;
+﻿using MahApps.Metro.Controls;
 
 namespace HEVCDemo.Views
 {
@@ -12,8 +10,6 @@ namespace HEVCDemo.Views
         public MainWindow()
         {
             InitializeComponent();
-            FFmpegHelper.InitializeFFmpeg();
-            //FFmpegHelper.ExtractEvery();
         }
     }
 }

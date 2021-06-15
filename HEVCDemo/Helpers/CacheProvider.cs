@@ -1,7 +1,9 @@
-﻿using System;
+﻿using HEVCDemo.Parsers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Helpers
@@ -13,115 +15,176 @@ namespace HEVCDemo.Helpers
             Cupu
         }
 
+        public readonly string LoadedFilePath;
+
+        private const int cacheSize = 30;
         private const string cachePrefix = "cache";
-        private const string framesPrefix = "frames";
-        private const string cupuPrefix = "cupu";
 
-        private const string imageFormat = "png";
-        private const string textFileFormat = "txt";
-        private const string annexBFormat = "bin";
+        private const string imageExtension = ".png";
+        private const string textExtension = ".txt";
+        private const string annexBExtension = ".bin";
+        private const string yuvExtension = "yuv";
 
-        private readonly string cachePath;
+        private readonly string cacheDirPath;
 
+        public readonly Dictionary<int, BitmapImage> DecodedFramesBitmaps = new Dictionary<int, BitmapImage>();
+        public readonly Dictionary<int, BitmapImage> CupuImagesBitmaps = new Dictionary<int, BitmapImage>();
+
+        public string StatsDirPath;
         public string CupuFilePath;
+        public string PropsFilePath;
         public string AnnexBFilePath;
+        public string YuvFilePath;
+        public string DecodedFramesDirPath;
+        public string CupuImagesDirPath;
 
-        public bool CacheExists => !string.IsNullOrEmpty(cachePath) && File.Exists(AnnexBFilePath);
-        public Func<string, string> FramesOutputFileNameBuilder => (number) => { return $@"{cachePath}\{framesPrefix}\{number}.{imageFormat}"; };
+        public bool CacheExists => File.Exists(PropsFilePath);
+        public Func<string, string> FramesOutputFileNameBuilder => (number) => $@"{DecodedFramesDirPath}\{number}{imageExtension}";
+
+        public int Height { get; private set; }
+        public int Width { get; private set; }
+        public int MaxCUHeight { get; private set; }
+
+        private int offset;
+        public int FramesCount;
 
         public CacheProvider(string filePath)
         {
-            cachePath = $@".\{cachePrefix}\{Path.GetFileNameWithoutExtension(filePath)}";
-            CupuFilePath = $@"{cachePath}\cupu.{textFileFormat}";
-            AnnexBFilePath = $@"{cachePath}\annexB.{annexBFormat}";
+            LoadedFilePath = filePath;
+            cacheDirPath = $@".\{cachePrefix}\{Path.GetFileNameWithoutExtension(filePath)}";
+
+            // Stats
+            StatsDirPath = $@"{cacheDirPath}\stats";
+            CupuFilePath = $@"{StatsDirPath}\cupu{textExtension}";
+            PropsFilePath = $@"{StatsDirPath}\props{textExtension}";
+
+            // Images
+            DecodedFramesDirPath = $@"{cacheDirPath}\decodedFrames";
+            CupuImagesDirPath = $@"{cacheDirPath}\cupuImages";
+
+            // AnnexB file stays at his location
+            AnnexBFilePath = Path.GetExtension(filePath).ToLower() == annexBExtension ? filePath : $@"{cacheDirPath}\annexB{annexBExtension}";
+            YuvFilePath = $@"{cacheDirPath}\yuvFile{yuvExtension}";
+        }
+
+        public BitmapImage GetDecodedFrameBitmap(int index)
+            => DecodedFramesBitmaps[index - offset];
+
+        public BitmapImage GetCupuImageBitmap(int index)
+            => CupuImagesBitmaps[index - offset];
+
+        public async Task CreateCache(Action<string> setAppState)
+        {
+            // Clear at first
+            if (Directory.Exists(cacheDirPath)) Directory.Delete(cacheDirPath, true);
 
             InitCacheFolders();
+
+            // Check if already annexB format and convert if not
+            if (Path.GetExtension(LoadedFilePath).ToLower() != annexBExtension)
+            {
+                setAppState("Converting to AnnexB format");
+                await FFmpegHelper.ConvertToAnnexB(this);
+            }
+
+            // Get stats data from annexB file
+            setAppState("Processing AnnexB file");
+            await ProcessHelper.RunProcessAsync($@".\TAppDecoder.exe", $@"-b {AnnexBFilePath} -o {YuvFilePath} -p {StatsDirPath}");
+
+            // Extract frames 
+            setAppState("Creating demo data");
+            var framesLoading = FFmpegHelper.ExtractFrames(this);
+
+            // Parse properties
+            ParseProps();
+
+            var cupuParser = new CupuParser(Width, Height, MaxCUHeight);
+            await cupuParser.ParseFile(this);
+            await framesLoading;
+            FramesCount = GetFramesCount();
         }
 
-        public void InitCacheFolders()
+        public void ParseProps()
         {
-            Directory.CreateDirectory($@"{cachePath}\{framesPrefix}");
-            Directory.CreateDirectory($@"{cachePath}\{cupuPrefix}");
+            var propsParser = new PropsParser();
+            propsParser.ParseProps(this);
+            Height = propsParser.SeqHeight;
+            Width = propsParser.SeqWidth;
+            MaxCUHeight = propsParser.MaxCUHeight;
         }
 
-        public List<FileInfo> GetFrames(int end)
+        private void InitCacheFolders()
         {
-            return new DirectoryInfo($@"{cachePath}\{framesPrefix}").GetFiles().Take(end).ToList();
+            Directory.CreateDirectory(DecodedFramesDirPath);
+            Directory.CreateDirectory(CupuImagesDirPath);
+            Directory.CreateDirectory(StatsDirPath);
+        }
+
+        public async Task LoadIntoCache(int startIndex, Action<string> setAppState, Action<string, string> handleError)
+        {
+            await ActionsHelper.InvokeSafelyAsync(async () =>
+            {
+                setAppState("Loading into cache");
+
+                offset = (startIndex / cacheSize) * cacheSize;
+
+                int canLoad = Math.Min(FramesCount - offset, 30);
+
+                await LoadFramesIntoCache(canLoad);
+                await LoadCupusIntoCache(canLoad);
+
+                setAppState("Ready");
+            }, "Load into cache", handleError);
+        }
+
+        public async void EnsureFrameInCache(int index, Action<string> setAppState, Action<string, string> handleError)
+        {
+            if (!DecodedFramesBitmaps.ContainsKey(index - offset))
+            {
+                await LoadIntoCache(index, setAppState, handleError);
+            }
         }
 
         public int GetFramesCount()
         {
-            return new DirectoryInfo($@"{cachePath}\{framesPrefix}").GetFiles().Length;
+            return new DirectoryInfo(DecodedFramesDirPath).GetFiles().Length;
         }
 
-        public List<BitmapImage> GetFrames(int start, int count)
+        public async Task LoadFramesIntoCache(int count)
         {
-            var files = new DirectoryInfo($@"{cachePath}\{framesPrefix}").GetFiles().ToList();
-            return GetBitmapsInRange(files, start, start + count).ToList();
+            var files = new DirectoryInfo(DecodedFramesDirPath).GetFiles().ToList();
+            await LoadBitmaps(DecodedFramesBitmaps, files, count);
         }
 
-        public List<BitmapImage> GetCupus(int start, int count)
+        public async Task LoadCupusIntoCache(int count)
         {
-            var files = new DirectoryInfo($@"{cachePath}\{CacheItemType.Cupu}").GetFiles().ToList();
-            return GetBitmapsInRange(files, start, start + count).ToList();
+            var files = new DirectoryInfo(CupuImagesDirPath).GetFiles().ToList();
+            await LoadBitmaps(CupuImagesBitmaps, files, count);
         }
 
-        public void CreateAnnexBCopy(string filePath)
+        private async Task LoadBitmaps(Dictionary<int, BitmapImage> dictionary, List<FileInfo> files, int count)
         {
-            File.Copy(filePath, AnnexBFilePath);
-        }
-
-        private IEnumerable<BitmapImage> GetBitmapsInRange(List<FileInfo> files, int start, int end)
-        {
-            for (int i = start; i < end; i++)
+            await Task.Run(() =>
             {
+                dictionary.Clear();
+                for (int i = offset; i < offset + count; i++)
                 {
                     var imageStreamSource = new FileStream(files[i].FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    //yield return Image.FromStream(imageStreamSource);
-                    //var decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-                    //yield return decoder.Frames[0];
                     var bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.StreamSource = imageStreamSource;
                     bitmap.EndInit();
-                    yield return bitmap;
+                    dictionary.Add(i - offset, bitmap);
                 }
-            }
-        }
-
-        public string TryGetFramePath(int index)
-        {
-            string filePath = $@"{cachePath}\{framesPrefix}\{index}.{imageFormat}";
-            return File.Exists(filePath) ? filePath : null;
-        }
-
-        public string TryGetCUPUPath(int index)
-        {
-            string filePath = $@"{cachePath}\{cupuPrefix}\{index}.{textFileFormat}";
-            return File.Exists(filePath) ? filePath : null;
-        }
-
-        public void SaveBitmaps(Dictionary<int, BitmapSource> bitmaps, CacheItemType type)
-        {
-            foreach(var bitmap in bitmaps)
-            {
-                string name = bitmap.Key.ToString().PadLeft(3, '0');
-
-                using (FileStream fs = File.Create($@"{cachePath}\{type}\{name}.{imageFormat}"))
-                {
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(bitmap.Value));
-                    encoder.Save(fs);
-                }
-            }
+            });
         }
 
         public void SaveBitmap(BitmapSource bitmap, int number, CacheItemType type)
         {
             string name = number.ToString().PadLeft(3, '0');
 
-            using (FileStream fs = File.Create($@"{cachePath}\{type}\{name}.{imageFormat}"))
+            using (FileStream fs = File.Create($@"{cacheDirPath}\{type}\{name}{imageExtension}"))
             {
                 var encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(bitmap));

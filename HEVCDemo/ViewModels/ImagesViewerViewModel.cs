@@ -1,92 +1,45 @@
 ﻿using HEVCDemo.Helpers;
-using HEVCDemo.Parsers;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Windows.Input;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.ViewModels
 {
     public class ImagesViewerViewModel : BindableBase
     {
-        private int counter;
-        private int offset;
-        private readonly Dictionary<int, BitmapImage> framesBitmaps = new Dictionary<int, BitmapImage>();
-        private readonly Dictionary<int, BitmapImage> cupuBitmaps = new Dictionary<int, BitmapImage>();
-
         private CacheProvider cacheProvider;
 
-        public ImagesViewerViewModel()
+        #region Binding properties
+
+        private bool enabled = false;
+        public bool Enabled
         {
+            get => enabled;
+            set { SetProperty(ref enabled, value); }
         }
 
-        private bool backwardEnabled = true;
-        public bool BackwardEnabled
+        private string appState;
+        public string AppState
         {
-            get { return backwardEnabled; }
-            set { SetProperty(ref backwardEnabled, value); }
+            get => appState;
+            set { SetProperty(ref appState, value); }
         }
 
-        private bool forwardEnabled = true;
-        public bool ForwardEnabled
+        private int height;
+        public int Height
         {
-            get { return forwardEnabled; }
-            set { SetProperty(ref forwardEnabled, value); }
+            get => height;
+            set { SetProperty(ref height, value); }
         }
 
-        private BitmapImage  currentFrameImage;
-        public  BitmapImage  CurrentFrameImage
+        private int width;
+        public int Width
         {
-            get { return currentFrameImage; }
-            set { SetProperty(ref currentFrameImage, value); }
+            get => width;
+            set { SetProperty(ref width, value); }
         }
-
-        public int Counter
-        {
-            get { return counter; }
-            set
-            {
-                if (!framesBitmaps.ContainsKey(value - offset))
-                {
-                    LoadIntoCache(value);
-                }
-                SetProperty(ref counter, value);
-                this.CurrentFrameImage = framesBitmaps[value - offset];
-                this.CurrentCUPUImage = cupuBitmaps[value - offset];
-                this.ForwardClick.RaiseCanExecuteChanged();
-                this.BackwardClick.RaiseCanExecuteChanged();
-            }
-        }
-
-        private void LoadIntoCache(int value)
-        {
-            Mouse.OverrideCursor = Cursors.Wait;
-
-            offset = (value / 30) * 30;
-
-            var canLoad = Math.Min(framesCount - offset, 30);
-
-            var frames = cacheProvider.GetFrames(offset, canLoad);
-            var cupus = cacheProvider.GetCupus(offset, canLoad);
-
-            framesBitmaps.Clear();
-            cupuBitmaps.Clear();
-
-            for (int i = 0; i < canLoad; i++)
-            {
-                framesBitmaps.Add(i, frames[i]);
-                cupuBitmaps.Add(i, cupus[i]);
-            }
-            BackwardClick.RaiseCanExecuteChanged();
-            ForwardClick.RaiseCanExecuteChanged();
-            Mouse.OverrideCursor = Cursors.Hand;
-        }
-
-        private int framesCount;
 
         private int maxSliderValue;
         public int MaxSliderValue
@@ -95,12 +48,87 @@ namespace HEVCDemo.ViewModels
             set { SetProperty(ref maxSliderValue, value); }
         }
 
-        private BitmapImage currentCUPUImage;
-        public  BitmapImage CurrentCUPUImage
+        private BitmapImage currentFrameImage;
+        public BitmapImage CurrentFrameImage
         {
-            get { return currentCUPUImage; }
-            set { SetProperty(ref currentCUPUImage, value); }
+            get => currentFrameImage;
+            set { SetProperty(ref currentFrameImage, value); }
         }
+
+        private BitmapImage currentCupuImage;
+        public BitmapImage CurrentCupuImage
+        {
+            get => currentCupuImage;
+            set { SetProperty(ref currentCupuImage, value); }
+        }
+
+        private int currentFrameCounter;
+        public int CurrentFrameIndex
+        {
+            get => currentFrameCounter;
+            set
+            {
+                cacheProvider.EnsureFrameInCache(value, SetAppState, HandleError);
+                SetProperty(ref currentFrameCounter, value);
+                SetCurrentFrame();
+            }
+        }
+
+        #endregion
+
+        public ImagesViewerViewModel()
+        {
+            CheckFFmpeg(true);
+        }
+
+        private void HandleError(string actionDescription, string message)
+        {
+            Enabled = true;
+            AppState = "Error occured";
+            MessageBox.Show("Error occured", $"{actionDescription}\n\nError message:\n{message}");
+        }
+
+        private void SetAppState(string state)
+        {
+            AppState = state;
+        }
+
+        private async void CheckFFmpeg(bool changeState)
+        {
+            await ActionsHelper.InvokeSafelyAsync(async () =>
+            {
+                if (changeState)
+                {
+                    AppState = "Checking FFmpeg";
+                }
+
+                if (!FFmpegHelper.FFmpegExists)
+                {
+                    var result = MessageBox.Show("FFmpeg not found. Do you wish to automatically download it?", "HEVC demo app", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        AppState = "Downloading FFmpeg";
+                        await FFmpegHelper.DownloadFFmpeg();
+                        MessageBox.Show("FFmpeg sucessfully downloaded.");
+                        AppState = "Ready";
+                    }
+                    else
+                    {
+                        AppState = "FFmpeg missing";
+                    }
+                }
+                else if (changeState)
+                {
+                    AppState = "Ready";
+                }
+
+                // Enable to allow invoking download by clicking on "Select video"
+                Enabled = true;
+
+            }, "Download FFmpeg helper", HandleError);
+        }
+
+        #region Backward Forward controls
 
         private DelegateCommand backwardClick;
         public DelegateCommand BackwardClick =>
@@ -108,15 +136,13 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteBackwardClick()
         {
-            this.CurrentFrameImage = framesBitmaps[--Counter - offset];
-            this.CurrentCUPUImage = cupuBitmaps[Counter - offset];
-            this.ForwardClick.RaiseCanExecuteChanged();
-            this.BackwardClick.RaiseCanExecuteChanged();
+            CurrentFrameIndex--;
+            SetCurrentFrame();
         }
 
         private bool CanExecuteBackward()
         {
-            return this.Counter > 0;
+            return this.CurrentFrameIndex > 0;
         }
 
         private DelegateCommand forwardClick;
@@ -125,72 +151,74 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteForwardClick()
         {
-            this.CurrentFrameImage = framesBitmaps[++Counter - offset];
-            this.CurrentCUPUImage = cupuBitmaps[Counter - offset];
-            this.ForwardClick.RaiseCanExecuteChanged();
-            this.BackwardClick.RaiseCanExecuteChanged();
+            CurrentFrameIndex++;
+            SetCurrentFrame();
         }
 
         private bool CanExecuteForward()
         {
-            return this.framesCount > this.Counter + 1;
+            return cacheProvider?.FramesCount > CurrentFrameIndex + 1;
         }
+
+        private void SetCurrentFrame()
+        {
+            CurrentFrameImage = cacheProvider.GetDecodedFrameBitmap(CurrentFrameIndex);
+            CurrentCupuImage = cacheProvider.GetCupuImageBitmap(CurrentFrameIndex);
+            ForwardClick.RaiseCanExecuteChanged();
+            BackwardClick.RaiseCanExecuteChanged();
+        }
+
+        #endregion
+
+        #region Select Video
 
         private DelegateCommand selectVideoClick;
         public DelegateCommand SelectVideoClick =>
             selectVideoClick ?? (selectVideoClick = new DelegateCommand(ExecuteSelectVideoClick));
 
-        async void ExecuteSelectVideoClick()
+        private async void ExecuteSelectVideoClick()
         {
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin";
+
             if (openFileDialog.ShowDialog() == true)
             {
-                Mouse.OverrideCursor = Cursors.Wait;
-
-                var filePath = openFileDialog.FileName;
-
-                this.cacheProvider = new CacheProvider(filePath);
-                if (!cacheProvider.CacheExists)
+                await ActionsHelper.InvokeSafelyAsync(async () =>
                 {
-                    // Extract frames
+                    string filePath = openFileDialog.FileName;
 
-                    var duration = await FFmpegHelper.GetDuration(filePath);
-
-                    // Already annexB format
-                    if (Path.GetExtension(filePath) == "bin")
+                    cacheProvider = new CacheProvider(filePath);
+                    if (cacheProvider.CacheExists)
                     {
-                        cacheProvider.CreateAnnexBCopy(filePath);
+                        var result = MessageBox.Show("HEVC demo app", "Cache exists. Do you with to overwrite?", MessageBoxButton.YesNo);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            await cacheProvider.CreateCache(SetAppState);
+                        }
                     }
                     else
                     {
-                        await FFmpegHelper.ConvertToAnnexB(filePath, cacheProvider, duration);
+                        cacheProvider.ParseProps();
                     }
 
-                    await FFmpegHelper.ExtractFrames(cacheProvider);
+                    await cacheProvider.LoadIntoCache(0, SetAppState, HandleError);
 
-                    // Get cupu data
-                    await ProcessHelper.RunProcessAsync($@".\TAppDecoder.exe", $@"-b {cacheProvider.AnnexBFilePath} -o c:\out.yuv -p {cacheProvider.CupuFilePath}");
-                    File.Delete(@"c:\out.yuv");
-
-                    var cupuParser = new CUPUParser();
-                    cupuParser.ParseFile(cacheProvider);
-                }
-
-                framesCount = cacheProvider.GetFramesCount();
-
-                LoadIntoCache(0);
-
-                if (framesBitmaps?.Count > 0 && cupuBitmaps?.Count == framesBitmaps.Count)
-                {
-                    CurrentFrameImage = framesBitmaps[0];
-                    CurrentCUPUImage = cupuBitmaps[0];
-                    MaxSliderValue = framesCount - 1;
-                    offset = 0;
-                    Counter = 0;
-                }
-                Mouse.OverrideCursor = Cursors.Arrow;
+                    if (cacheProvider.DecodedFramesBitmaps.Count > 0 &&
+                        cacheProvider.DecodedFramesBitmaps.Count == cacheProvider.CupuImagesBitmaps.Count)
+                    {
+                        CurrentFrameImage = cacheProvider.DecodedFramesBitmaps[0];
+                        CurrentCupuImage = cacheProvider.CupuImagesBitmaps[0];
+                        MaxSliderValue = cacheProvider.DecodedFramesBitmaps.Count - 1;
+                        CurrentFrameIndex = 0;
+                    }
+                    else
+                    {
+                        AppState = "Error - mismatch in count of frames and cupu images";
+                    }
+                }, "Create cache", HandleError);
             }
         }
+
+        #endregion Select video
     }
 }

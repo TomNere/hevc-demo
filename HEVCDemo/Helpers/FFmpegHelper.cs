@@ -10,19 +10,14 @@ namespace HEVCDemo.Helpers
 {
     public static class FFmpegHelper
     {
-        public async static void InitializeFFmpeg()
+        public static bool FFmpegExists => File.Exists(@"ffmpeg.exe");
+
+        public async static Task DownloadFFmpeg()
         {
-            // Set directory where the app will look up for FFmpeg (and download eventually)
-            FFmpeg.SetExecutablesPath(@".");
-
-            if (!Directory.Exists(@".\ffmpeg\"))
+            if (!FFmpegExists)
             {
-                Directory.CreateDirectory(@".\ffmpeg\");
-                // Download latest version
-                MessageBox.Show("FFmpeg downloading...");
+                // By default, FFmpeg executable (and download) path is "."
                 await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Full);
-
-                MessageBox.Show("FFmpeg downloaded!");
             }
         }
 
@@ -46,9 +41,11 @@ namespace HEVCDemo.Helpers
                 .Start();
         }
 
-        public async static Task ConvertToAnnexB(string fileFullName, CacheProvider cacheProvider, TimeSpan duration)
+        public async static Task ConvertToAnnexB(CacheProvider cacheProvider)
         {
-            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $"-ss {TimeSpan.FromSeconds(0)} -t {TimeSpan.FromSeconds(Math.Min(duration.Seconds, 10))} -i {fileFullName} -c:v copy -bsf hevc_mp4toannexb -f hevc {cacheProvider.AnnexBFilePath}");
+            var duration = await GetDuration(cacheProvider.LoadedFilePath);
+
+            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $"-ss {TimeSpan.FromSeconds(0)} -t {TimeSpan.FromSeconds(Math.Min(duration.Seconds, 10))} -i {cacheProvider.LoadedFilePath} -c:v copy -bsf hevc_mp4toannexb -f hevc {cacheProvider.AnnexBFilePath}");
         }
     }
 }
