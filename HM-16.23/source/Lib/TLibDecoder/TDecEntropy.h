@@ -67,7 +67,8 @@ public:
   virtual Void  setBitstream          ( TComInputBitstream* p )  = 0;
 
   virtual Void  parseVPS                  ( TComVPS* pcVPS )     = 0;
-  virtual Void  parseSPS                  ( TComSPS* pcSPS )     = 0;
+  // hevc_demo
+  virtual Void  parseSPS                  ( TComSPS* pcSPS, string statsOutputPath )     = 0;
   virtual Void  parsePPS                  ( TComPPS* pcPPS )     = 0;
 
   virtual Void parseSliceHeader          ( TComSlice* pcSlice, ParameterSetManager *parameterSetManager, const Int prevTid0POC)       = 0;
@@ -143,7 +144,8 @@ public:
   Void    resetEntropy                ( TComSlice* p)           { m_pcEntropyDecoderIf->resetEntropy(p);                    }
 
   Void    decodeVPS                   ( TComVPS* pcVPS ) { m_pcEntropyDecoderIf->parseVPS(pcVPS); }
-  Void    decodeSPS                   ( TComSPS* pcSPS ) { m_pcEntropyDecoderIf->parseSPS(pcSPS); }
+  // hevc_demo
+  Void    decodeSPS                   ( TComSPS* pcSPS, string statsOutputPath) { m_pcEntropyDecoderIf->parseSPS(pcSPS, statsOutputPath); }
   Void    decodePPS                   ( TComPPS* pcPPS ) { m_pcEntropyDecoderIf->parsePPS(pcPPS); }
   Void    decodeSliceHeader           ( TComSlice* pcSlice, ParameterSetManager *parameterSetManager, const Int prevTid0POC)  { m_pcEntropyDecoderIf->parseSliceHeader(pcSlice, parameterSetManager, prevTid0POC);         }
 

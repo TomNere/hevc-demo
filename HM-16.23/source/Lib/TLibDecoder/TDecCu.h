@@ -46,6 +46,9 @@
 #include "TDecEntropy.h"
 #include "TDecConformance.h"
 
+// hevc_demo
+#include <fstream>
+
 //! \ingroup TLibDecoder
 //! \{
 
@@ -90,15 +93,17 @@ public:
   /// destroy internal buffers
   Void  destroy                 ();
 
+  /// hevc_demo
   /// decode Ctu information
-  Void  decodeCtu               ( TComDataCU* pCtu, Bool &isLastCtuOfSliceSegment );
+  Void  decodeCtu               ( TComDataCU* pCtu, Bool &isLastCtuOfSliceSegment, ofstream& cupuOutput );
 
   /// reconstruct Ctu information
   Void  decompressCtu           ( TComDataCU* pCtu );
 
 protected:
 
-  Void xDecodeCU                ( TComDataCU* const pcCU, const UInt uiAbsPartIdx, const UInt uiDepth, Bool &isLastCtuOfSliceSegment);
+  // hevc_demo
+  Void xDecodeCU                ( TComDataCU* const pcCU, const UInt uiAbsPartIdx, const UInt uiDepth, Bool &isLastCtuOfSliceSegment, ofstream& cupuOutput);
   Void xFinishDecodeCU          ( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth, Bool &isLastCtuOfSliceSegment);
   Bool xDecodeSliceEnd          ( TComDataCU* pcCU, UInt uiAbsPartIdx );
   Void xDecompressCU            ( TComDataCU* pCtu, UInt uiAbsPartIdx, UInt uiDepth );

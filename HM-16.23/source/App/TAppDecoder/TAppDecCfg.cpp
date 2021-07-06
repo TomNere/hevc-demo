@@ -71,6 +71,8 @@ Bool TAppDecCfg::parseCfg( Int argc, TChar* argv[] )
 
   ("help",                      do_help,                               false,      "this help text")
   ("BitstreamFile,b",           m_bitstreamFileName,                   string(""), "bitstream input file name")
+  //hevc_demo
+  ("StatsOutputPath,p",         m_statsOutputPath,                     string(""), "Output cupu path")
   ("ReconFile,o",               m_reconFileName,                       string(""), "reconstructed YUV output file name\n"
                                                                                    "YUV writing is skipped if omitted")
   ("WarnUnknowParameter,w",     warnUnknowParameter,                                  0, "warn for unknown configuration parameters instead of failing")

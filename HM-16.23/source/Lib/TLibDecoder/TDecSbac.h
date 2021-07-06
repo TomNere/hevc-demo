@@ -77,7 +77,8 @@ public:
   Void  resetEntropy (TComSlice* pSlice );
   Void  setBitstream              ( TComInputBitstream* p  ) { m_pcBitstream = p; m_pcTDecBinIf->init( p ); }
   Void  parseVPS                  ( TComVPS* /*pcVPS*/ ) {}
-  Void  parseSPS                  ( TComSPS* /*pcSPS*/ ) {}
+  // hevc_demo
+  Void  parseSPS                  ( TComSPS* /*pcSPS*/, string statsOutputPath ) {}
   Void  parsePPS                  ( TComPPS* /*pcPPS*/ ) {}
 
   Void  parseSliceHeader          ( TComSlice* /*pcSlice*/, ParameterSetManager* /*parameterSetManager*/, const Int /*prevTid0POC*/) {}

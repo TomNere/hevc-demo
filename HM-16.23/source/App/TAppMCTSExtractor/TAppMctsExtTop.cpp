@@ -110,6 +110,11 @@ Void TAppMctsExtTop::extract()
   }
 
   AccessUnit outAccessUnit;
+
+  // hevc_demo
+  ofstream cupuOutput;
+  cupuOutput.open(m_statsOutputPath + "\\cupu.txt");
+
   while (!!bitstreamFile)
   {
     streampos location = bitstreamFile.tellg();
@@ -128,7 +133,8 @@ Void TAppMctsExtTop::extract()
       read(inNalu);
       m_pcSlice = m_cTDecTop.getApcSlicePilot();
       // decode HLS, skipping cabac decoding and reconstruction
-      bNewPicture = m_cTDecTop.decode(inNalu, iSkipFrame, iPOCLastDisplay, true);
+      // hevc_demo
+      bNewPicture = m_cTDecTop.decode(inNalu, iSkipFrame, iPOCLastDisplay, cupuOutput, m_statsOutputPath, true);
 
       if (bNewPicture)
       {
@@ -217,6 +223,8 @@ Void TAppMctsExtTop::extract()
   // destroy internal classes
   xDestroyMctsExtLib();
 
+  // hevc_demo
+  cupuOutput.close();
 }
 
 // ====================================================================================================================
@@ -297,7 +305,9 @@ Void TAppMctsExtTop::xExtractSuitableParameterSets(SEIMessages SEIMctsSEIs, SEIM
             TComSPS* nestedSps = new TComSPS();
             m_cEntropyDecoder.setEntropyDecoder(&m_cCavlcDecoder);
             m_cEntropyDecoder.setBitstream(&sps_rbsps[0]);
-            m_cEntropyDecoder.decodeSPS(nestedSps);
+
+            // hevc_demo
+            m_cEntropyDecoder.decodeSPS(nestedSps, m_statsOutputPath);
 
             printf("MCTS extraction info for target MCTS index %d found\n", m_targetMctsIdx);
             printf("Output bitstream resolution: %dx%d\n\n", nestedSps->getPicWidthInLumaSamples(), nestedSps->getPicHeightInLumaSamples());

@@ -144,6 +144,10 @@ Void TAppDecTop::decode()
 #endif
   Bool loopFiltered = false;
 
+  // hevc_demo
+  ofstream cupuOutput;
+  cupuOutput.open(m_statsOutputPath + "\\cupu.txt");
+
   while (!!bitstreamFile)
   {
     /* location serves to work around a design fault in the decoder, whereby
@@ -181,7 +185,8 @@ Void TAppDecTop::decode()
       }
       else
       {
-        bNewPicture = m_cTDecTop.decode(nalu, m_iSkipFrame, m_iPOCLastDisplay);
+        // hevc_demo
+        bNewPicture = m_cTDecTop.decode(nalu, m_iSkipFrame, m_iPOCLastDisplay, cupuOutput, m_statsOutputPath);
         if (bNewPicture)
         {
           bitstreamFile.clear();
@@ -291,6 +296,9 @@ Void TAppDecTop::decode()
 
   // destroy internal classes
   xDestroyDecLib();
+
+  // hevc_demo
+  cupuOutput.close();
 }
 
 // ====================================================================================================================

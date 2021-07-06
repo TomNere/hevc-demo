@@ -57,6 +57,8 @@ class TAppDecCfg
 {
 protected:
   std::string   m_bitstreamFileName;                    ///< input bitstream file name
+  // hevc_demo
+  std::string   m_statsOutputPath;
   std::string   m_reconFileName;                        ///< output reconstruction file name
   Int           m_iSkipFrame;                           ///< counter for frames prior to the random access point to skip
   Int           m_outputBitDepth[MAX_NUM_CHANNEL_TYPE]; ///< bit depth used for writing output
@@ -85,6 +87,8 @@ public:
   TAppDecCfg()
   : m_bitstreamFileName()
   , m_reconFileName()
+  // hevc_demo
+  , m_statsOutputPath()
   , m_iSkipFrame(0)
   // m_outputBitDepth array initialised below
   , m_outputColourSpaceConvert(IPCOLOURSPACE_UNCHANGED)

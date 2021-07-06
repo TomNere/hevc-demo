@@ -612,7 +612,8 @@ Void TDecCavlc::parseHrdParameters(TComHRD *hrd, Bool commonInfPresentFlag, UInt
   }
 }
 
-Void TDecCavlc::parseSPS(TComSPS* pcSPS)
+// hevc_demo
+Void TDecCavlc::parseSPS(TComSPS* pcSPS, string statsOutputPath)
 {
 #if ENC_DEC_TRACE
 #if MCTS_EXTRACTION
@@ -746,6 +747,15 @@ Void TDecCavlc::parseSPS(TComSPS* pcSPS)
   const Int ctbLog2SizeY = minCbLog2SizeY + maxCUDepthDelta;
   pcSPS->setMaxCUWidth  ( 1<<ctbLog2SizeY );
   pcSPS->setMaxCUHeight ( 1<<ctbLog2SizeY );
+
+  // hevc_demo
+  ofstream propsOutput;
+  propsOutput.open(statsOutputPath + "\\props.txt");
+  propsOutput << "maxCUHeight:" << pcSPS->getMaxCUHeight() << endl;
+  propsOutput << "seqWidthInLuma:" << pcSPS->getPicWidthInLumaSamples() << endl;
+  propsOutput << "seqHeightInLuma:" << pcSPS->getPicHeightInLumaSamples() << endl;
+  propsOutput.close();
+
   READ_UVLC_CHK( uiCode, "log2_min_luma_transform_block_size_minus2", 0, minCbLog2SizeY-1-2 );
   const UInt minTbLog2SizeY = uiCode + 2;
   pcSPS->setQuadtreeTULog2MinSize( minTbLog2SizeY );

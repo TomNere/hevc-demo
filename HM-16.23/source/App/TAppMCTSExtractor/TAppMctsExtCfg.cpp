@@ -68,6 +68,8 @@ Bool TAppMctsExtCfg::parseCfg(Int argc, TChar* argv[])
     ("c", po::parseConfigFile, "configuration file name")
     ("InputBitstreamFile,i", m_inputBitstreamFileName, string(""), "Input bitstream file name")
     ("OutputBitstreamFile,b", m_outputBitstreamFileName, string(""), "Output subbitstream file name")
+    // hevc_demo
+    ("StatsOutputPath,p", m_statsOutputPath, string(""), "Output stats path")
     ("TargetMCTSIdx,d", m_targetMctsIdx, 0, "Target MCTS idx to be extracted. TargetMCTSIdx = 0 per default.")
     ;
 

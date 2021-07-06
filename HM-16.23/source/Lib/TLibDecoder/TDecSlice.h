@@ -78,7 +78,8 @@ public:
   Void  create            ();
   Void  destroy           ();
 
-  Void  decompressSlice   ( TComInputBitstream** ppcSubstreams,   TComPic* pcPic, TDecSbac* pcSbacDecoder );
+  // hevc_demo
+  Void  decompressSlice   ( TComInputBitstream** ppcSubstreams,   TComPic* pcPic, TDecSbac* pcSbacDecoder, ofstream& cupuOutput);
 };
 
 //! \}

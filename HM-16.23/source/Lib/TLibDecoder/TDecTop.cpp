@@ -502,7 +502,8 @@ Void TDecTop::xAnalysePrefixSEImessages()
 #endif
 
 #if MCTS_EXTRACTION
-Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay, Bool bSkipCabacAndReconstruction)
+// hevc_demo
+Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay, Bool bSkipCabacAndReconstruction, ofstream& cupuOutput)
 #else
 Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay)
 #endif
@@ -775,8 +776,9 @@ Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisp
     m_cTrQuant.setUseScalingList(false);
   }
 
+  //  hevc_demo
   //  Decode a picture
-  m_cGopDecoder.decompressSlice(&(nalu.getBitstream()), m_pcPic);
+  m_cGopDecoder.decompressSlice(&(nalu.getBitstream()), m_pcPic, cupuOutput);
 
   m_bFirstSliceInPicture = false;
   m_uiSliceIdx++;
@@ -792,13 +794,15 @@ Void TDecTop::xDecodeVPS(const std::vector<UChar> &naluData)
   m_parameterSetManager.storeVPS(vps, naluData);
 }
 
-Void TDecTop::xDecodeSPS(const std::vector<UChar> &naluData)
+// hevc_demo
+Void TDecTop::xDecodeSPS(const std::vector<UChar> &naluData, string statsOutputPath)
 {
   TComSPS* sps = new TComSPS();
 #if O0043_BEST_EFFORT_DECODING
   sps->setForceDecodeBitDepth(m_forceDecodeBitDepth);
 #endif
-  m_cEntropyDecoder.decodeSPS( sps );
+  // hevc_demo
+  m_cEntropyDecoder.decodeSPS( sps, statsOutputPath);
   m_parameterSetManager.storeSPS(sps, naluData);
 }
 
@@ -810,7 +814,8 @@ Void TDecTop::xDecodePPS(const std::vector<UChar> &naluData)
 }
 
 #if MCTS_EXTRACTION
-Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay, Bool bSkipCabacAndReconstruction)
+// hevc_demo
+Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay, ofstream& cupuOutput, string statsOutputPath, Bool bSkipCabacAndReconstruction)
 #else
 Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay)
 #endif
@@ -832,7 +837,8 @@ Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay)
       return false;
 
     case NAL_UNIT_SPS:
-      xDecodeSPS(nalu.getBitstream().getFifo());
+      // hevc_demo
+      xDecodeSPS(nalu.getBitstream().getFifo(), statsOutputPath);
       return false;
 
     case NAL_UNIT_PPS:
@@ -872,7 +878,8 @@ Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay)
     case NAL_UNIT_CODED_SLICE_RASL_N:
     case NAL_UNIT_CODED_SLICE_RASL_R:
 #if MCTS_EXTRACTION
-      return xDecodeSlice(nalu, iSkipFrame, iPOCLastDisplay, bSkipCabacAndReconstruction);
+      // hevc_demo
+      return xDecodeSlice(nalu, iSkipFrame, iPOCLastDisplay, bSkipCabacAndReconstruction, cupuOutput);
 #else
       return xDecodeSlice(nalu, iSkipFrame, iPOCLastDisplay);
 #endif

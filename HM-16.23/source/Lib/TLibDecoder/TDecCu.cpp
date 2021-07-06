@@ -139,7 +139,8 @@ Void TDecCu::destroy()
  \param    pCtu                      [in/out] pointer to CTU data structure
  \param    isLastCtuOfSliceSegment   [out]    true, if last CTU of the slice segment
  */
-Void TDecCu::decodeCtu( TComDataCU* pCtu, Bool& isLastCtuOfSliceSegment )
+// hevc_demo
+Void TDecCu::decodeCtu( TComDataCU* pCtu, Bool& isLastCtuOfSliceSegment, ofstream& cupuOutput)
 {
   if ( pCtu->getSlice()->getPPS()->getUseDQP() )
   {
@@ -150,9 +151,15 @@ Void TDecCu::decodeCtu( TComDataCU* pCtu, Bool& isLastCtuOfSliceSegment )
   {
     setIsChromaQpAdjCoded(true);
   }
+  // hevc_demo
+  cupuOutput << "<" << pCtu->getSlice()->getPOC() << "," << pCtu->getCtuRsAddr() << ">" << " ";
 
+  // hevc_demo
   // start from the top level CU
-  xDecodeCU( pCtu, 0, 0, isLastCtuOfSliceSegment);
+  xDecodeCU( pCtu, 0, 0, isLastCtuOfSliceSegment, cupuOutput);
+
+  // hevc_demo
+  cupuOutput << endl;
 }
 
 /** 
@@ -185,8 +192,9 @@ Bool TDecCu::xDecodeSliceEnd( TComDataCU* pcCU, UInt uiAbsPartIdx )
   return uiIsLastCtuOfSliceSegment>0;
 }
 
+// hevc_demo
 //! decode CU block recursively
-Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UInt uiDepth, Bool &isLastCtuOfSliceSegment)
+Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UInt uiDepth, Bool &isLastCtuOfSliceSegment, ofstream& cupuOutput)
 {
   TComPic* pcPic        = pcCU->getPic();
   const TComSPS &sps    = pcPic->getPicSym()->getSPS();
@@ -225,6 +233,8 @@ Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UI
       setIsChromaQpAdjCoded(true);
     }
 
+    // hevc_demo
+    cupuOutput << "99" << " ";
     for ( UInt uiPartUnitIdx = 0; uiPartUnitIdx < 4; uiPartUnitIdx++ )
     {
       uiLPelX   = pcCU->getCUPelX() + g_auiRasterToPelX[ g_auiZscanToRaster[uiIdx] ];
@@ -232,11 +242,15 @@ Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UI
 
       if ( !isLastCtuOfSliceSegment && ( uiLPelX < sps.getPicWidthInLumaSamples() ) && ( uiTPelY < sps.getPicHeightInLumaSamples() ) )
       {
-        xDecodeCU( pcCU, uiIdx, uiDepth+1, isLastCtuOfSliceSegment );
+        // hevc_demo
+        xDecodeCU( pcCU, uiIdx, uiDepth+1, isLastCtuOfSliceSegment, cupuOutput );
       }
       else
       {
         pcCU->setOutsideCUPart( uiIdx, uiDepth+1 );
+
+        // hevc_demo
+        cupuOutput << "15 ";
       }
 
       uiIdx += uiQNumParts;
@@ -274,9 +288,11 @@ Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UI
     m_pcEntropyDecoder->decodeSkipFlag( pcCU, uiAbsPartIdx, uiDepth );
   }
 
-
   if( pcCU->isSkipped(uiAbsPartIdx) )
   {
+    // hevc_demo
+    cupuOutput << "0 ";
+
     m_ppcCU[uiDepth]->copyInterPredInfoFrom( pcCU, uiAbsPartIdx, REF_PIC_LIST_0 );
     m_ppcCU[uiDepth]->copyInterPredInfoFrom( pcCU, uiAbsPartIdx, REF_PIC_LIST_1 );
     TComMvField cMvFieldNeighbours[MRG_MAX_NUM_CANDS << 1]; // double length for mv of both lists
@@ -315,8 +331,11 @@ Void TDecCu::xDecodeCU( TComDataCU*const pcCU, const UInt uiAbsPartIdx, const UI
     return;
   }
 
-  m_pcEntropyDecoder->decodePredMode( pcCU, uiAbsPartIdx, uiDepth );
-  m_pcEntropyDecoder->decodePartSize( pcCU, uiAbsPartIdx, uiDepth );
+  m_pcEntropyDecoder->decodePredMode(pcCU, uiAbsPartIdx, uiDepth);
+  m_pcEntropyDecoder->decodePartSize(pcCU, uiAbsPartIdx, uiDepth);
+
+  // hevc_demo
+  cupuOutput << (Int)pcCU->getPartitionSize(uiAbsPartIdx) << " ";
 
   if (pcCU->isIntra( uiAbsPartIdx ) && pcCU->getPartitionSize( uiAbsPartIdx ) == SIZE_2Nx2N )
   {

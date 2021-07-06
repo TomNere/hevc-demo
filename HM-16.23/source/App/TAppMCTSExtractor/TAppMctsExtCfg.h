@@ -59,12 +59,16 @@ class TAppMctsExtCfg
 protected:
   std::string   m_inputBitstreamFileName;             ///< input bitstream file name
   std::string   m_outputBitstreamFileName;            ///< output subbitstream filename
+  // hevc_demo
+  std::string   m_statsOutputPath;
   Int           m_targetMctsIdx;                      ///< MCTS Id extracted
 
 public:
   TAppMctsExtCfg()
     : m_inputBitstreamFileName()
     , m_outputBitstreamFileName()
+    // hevc_demo
+    , m_statsOutputPath()
     , m_targetMctsIdx(-1)
   {
 

@@ -95,7 +95,8 @@ public:
                  );
   Void  create  ();
   Void  destroy ();
-  Void  decompressSlice(TComInputBitstream* pcBitstream, TComPic* pcPic );
+  // hevc_demo
+  Void  decompressSlice(TComInputBitstream* pcBitstream, TComPic* pcPic, ofstream& cupuOutput);
   Void  filterPicture  (TComPic* pcPic );
 
   Void setDecodedPictureHashSEIEnabled(Int enabled) { m_decodedPictureHashSEIEnabled = enabled; }

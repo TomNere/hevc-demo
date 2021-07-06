@@ -68,7 +68,8 @@ Void TDecSlice::init(TDecEntropy* pcEntropyDecoder, TDecCu* pcCuDecoder, TDecCon
   m_pDecConformanceCheck = pDecConformanceCheck;
 }
 
-Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcPic, TDecSbac* pcSbacDecoder)
+// hevc_demo
+Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcPic, TDecSbac* pcSbacDecoder, ofstream& cupuOutput)
 {
   TComSlice* pcSlice                 = pcPic->getSlice(pcPic->getCurrSliceIdx());
 
@@ -211,7 +212,8 @@ Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcP
       }
     }
 
-    m_pcCuDecoder->decodeCtu     ( pCtu, isLastCtuOfSliceSegment );
+    // hevc_demo
+    m_pcCuDecoder->decodeCtu     ( pCtu, isLastCtuOfSliceSegment, cupuOutput );
 
 #if DECODER_PARTIAL_CONFORMANCE_CHECK != 0
     const UInt numRemainingBitsPostCtu=ppcSubstreams[uiSubStrm]->getNumBitsLeft(); // NOTE: Does not account for changes in buffered bits in CABAC decoder, although it's probably good enough.
