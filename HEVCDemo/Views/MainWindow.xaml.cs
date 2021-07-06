@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using System.Windows;
 
 namespace HEVCDemo.Views
 {
@@ -10,6 +11,14 @@ namespace HEVCDemo.Views
         public MainWindow()
         {
             InitializeComponent();
+
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+        }
+
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+            MessageBox.Show($"Unhandled exception occured:\n\n{e.Exception.Message}");
         }
     }
 }

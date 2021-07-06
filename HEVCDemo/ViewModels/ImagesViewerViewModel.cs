@@ -2,8 +2,10 @@
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
+using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace HEVCDemo.ViewModels
 {
@@ -17,35 +19,35 @@ namespace HEVCDemo.ViewModels
         public bool Enabled
         {
             get => enabled;
-            set { SetProperty(ref enabled, value); }
+            set => SetProperty(ref enabled, value);
         }
 
         private string appState;
         public string AppState
         {
             get => appState;
-            set { SetProperty(ref appState, value); }
+            set => SetProperty(ref appState, value);
         }
 
-        private int height;
-        public int Height
+        private double height;
+        public double Height
         {
             get => height;
-            set { SetProperty(ref height, value); }
+            set => SetProperty(ref height, value);
         }
 
-        private int width;
-        public int Width
+        private double width;
+        public double Width
         {
             get => width;
-            set { SetProperty(ref width, value); }
+            set => SetProperty(ref width, value);
         }
 
         private int maxSliderValue;
         public int MaxSliderValue
         {
             get { return maxSliderValue; }
-            set { SetProperty(ref maxSliderValue, value); }
+            set => SetProperty(ref maxSliderValue, value);
         }
 
         private BitmapImage currentFrameImage;
@@ -59,21 +61,40 @@ namespace HEVCDemo.ViewModels
         public BitmapImage CurrentCupuImage
         {
             get => currentCupuImage;
-            set { SetProperty(ref currentCupuImage, value); }
+            set => SetProperty(ref currentCupuImage, value);
         }
 
-        private int currentFrameCounter;
+        private int currentFrameIndex;
         public int CurrentFrameIndex
         {
-            get => currentFrameCounter;
+            get => currentFrameIndex;
             set
             {
-                cacheProvider.EnsureFrameInCache(value, SetAppState, HandleError);
-                SetProperty(ref currentFrameCounter, value);
-                SetCurrentFrame();
+                SetCurrentFrame(value);
+                SetProperty(ref currentFrameIndex, value);
             }
         }
 
+        private Visibility startButtonVisibility = Visibility.Visible;
+        public Visibility StartButtonVisibility
+        {
+            get => startButtonVisibility;
+            set => SetProperty(ref startButtonVisibility, value);
+        }
+
+        private string resolution;
+        public string Resolution
+        {
+            get => resolution;
+            set => SetProperty(ref resolution, value);
+        }
+
+        private string fileSize;
+        public string FileSize
+        {
+            get => fileSize;
+            set => SetProperty(ref fileSize, value);
+        }
         #endregion
 
         public ImagesViewerViewModel()
@@ -85,12 +106,13 @@ namespace HEVCDemo.ViewModels
         {
             Enabled = true;
             AppState = "Error occured";
-            MessageBox.Show("Error occured", $"{actionDescription}\n\nError message:\n{message}");
+            MessageBox.Show($"{actionDescription}\n\nError message:\n{message}", "Error occured");
         }
 
-        private void SetAppState(string state)
+        private void SetAppState(string state, bool enabled)
         {
             AppState = state;
+            Enabled = enabled;
         }
 
         private async void CheckFFmpeg(bool changeState)
@@ -137,7 +159,6 @@ namespace HEVCDemo.ViewModels
         private void ExecuteBackwardClick()
         {
             CurrentFrameIndex--;
-            SetCurrentFrame();
         }
 
         private bool CanExecuteBackward()
@@ -152,7 +173,6 @@ namespace HEVCDemo.ViewModels
         private void ExecuteForwardClick()
         {
             CurrentFrameIndex++;
-            SetCurrentFrame();
         }
 
         private bool CanExecuteForward()
@@ -160,12 +180,34 @@ namespace HEVCDemo.ViewModels
             return cacheProvider?.FramesCount > CurrentFrameIndex + 1;
         }
 
-        private void SetCurrentFrame()
+        private async void SetCurrentFrame(int index)
         {
-            CurrentFrameImage = cacheProvider.GetDecodedFrameBitmap(CurrentFrameIndex);
-            CurrentCupuImage = cacheProvider.GetCupuImageBitmap(CurrentFrameIndex);
+            await cacheProvider.EnsureFrameInCache(index, SetAppState, HandleError);
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[index]);
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[index]);
             ForwardClick.RaiseCanExecuteChanged();
             BackwardClick.RaiseCanExecuteChanged();
+        }
+
+        #endregion
+
+        #region Zoom controls
+
+        private DelegateCommand zoomOutClick;
+        public DelegateCommand ZoomOutClick => zoomOutClick ?? (zoomOutClick = new DelegateCommand(ExecuteZoomOutClick));
+
+        private void ExecuteZoomOutClick()
+        {
+            Height /= 1.05;
+            Width /= 1.05;
+        }
+
+        private DelegateCommand zoomInClick;
+        public DelegateCommand ZoomInClick => zoomInClick ?? (zoomInClick = new DelegateCommand(ExecuteZoomInClick));
+        private void ExecuteZoomInClick()
+        {
+            Height *= 1.05;
+            Width *= 1.05;
         }
 
         #endregion
@@ -190,26 +232,38 @@ namespace HEVCDemo.ViewModels
                     cacheProvider = new CacheProvider(filePath);
                     if (cacheProvider.CacheExists)
                     {
-                        var result = MessageBox.Show("HEVC demo app", "Cache exists. Do you with to overwrite?", MessageBoxButton.YesNo);
+                        var result = MessageBox.Show("Cache exists. Do you wish to overwrite?", "HEVC demo app", MessageBoxButton.YesNo);
                         if (result == MessageBoxResult.Yes)
                         {
                             await cacheProvider.CreateCache(SetAppState);
                         }
+                        else
+                        {
+                            cacheProvider.InitFramesCount();
+                            cacheProvider.ParseProps();
+                        }
                     }
                     else
                     {
-                        cacheProvider.ParseProps();
+                        await cacheProvider.CreateCache(SetAppState);
                     }
 
-                    await cacheProvider.LoadIntoCache(0, SetAppState, HandleError);
+                    await cacheProvider.LoadIntoCache(0, SetAppState);
 
-                    if (cacheProvider.DecodedFramesBitmaps.Count > 0 &&
-                        cacheProvider.DecodedFramesBitmaps.Count == cacheProvider.CupuImagesBitmaps.Count)
+                    if (cacheProvider.YuvFramesBitmaps.Count > 0 &&
+                        cacheProvider.YuvFramesBitmaps.Count == cacheProvider.CupuFramesBitmaps.Count)
                     {
-                        CurrentFrameImage = cacheProvider.DecodedFramesBitmaps[0];
-                        CurrentCupuImage = cacheProvider.CupuImagesBitmaps[0];
-                        MaxSliderValue = cacheProvider.DecodedFramesBitmaps.Count - 1;
+                        Height = cacheProvider.Height;
+                        Width = cacheProvider.Width;
+                        Resolution = $"{cacheProvider.Width} x {cacheProvider.Height}";
+                        double length = new FileInfo(openFileDialog.FileName).Length / 1024d;
+                        FileSize = length < 1000 ? $"{length:0.000} KB" : $"{length / 1024:0.000} MB";
+
+                        Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[0]);
+                        Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[0]);
+                        MaxSliderValue = cacheProvider.FramesCount - 1;
                         CurrentFrameIndex = 0;
+                        StartButtonVisibility = Visibility.Hidden;
                     }
                     else
                     {

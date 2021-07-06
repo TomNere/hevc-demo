@@ -6,7 +6,7 @@ namespace HEVCDemo.Helpers
 {
     public static class ActionsHelper
     {
-        public async static Task InvokeSafelyAsync(Func<Task> action, string actionDescription, Action<string, string> errorHandler)
+        public static async Task InvokeSafelyAsync(Func<Task> action, string actionDescription, Action<string, string> errorHandler)
         {
             try
             {

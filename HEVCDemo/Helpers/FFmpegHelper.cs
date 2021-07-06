@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 
@@ -29,16 +27,7 @@ namespace HEVCDemo.Helpers
 
         public async static Task ExtractFrames(CacheProvider cacheProvider)
         {
-            IMediaInfo info = await FFmpeg.GetMediaInfo(cacheProvider.AnnexBFilePath).ConfigureAwait(false);
-            IVideoStream videoStream = info.VideoStreams.First()?.SetCodec(VideoCodec.png);
-
-            IConversionResult conversionResult = await FFmpeg.Conversions.New()
-                .AddStream(videoStream)
-                //.AddParameter($"-ss {TimeSpan.FromSeconds(3)}")
-                //.AddParameter($"-t {TimeSpan.FromSeconds(3)}")
-                .ExtractEveryNthFrame(1, cacheProvider.FramesOutputFileNameBuilder)
-                //.SetOutputFormat(Format.)
-                .Start();
+            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $@"-s {cacheProvider.Width}x{cacheProvider.Height} -i {cacheProvider.YuvFilePath} -preset fast {cacheProvider.YuvFramesDirPath}\%03d.bmp");
         }
 
         public async static Task ConvertToAnnexB(CacheProvider cacheProvider)

@@ -76,6 +76,8 @@
     <Compile Include="MainModule.cs" />
     <Compile Include="Parsers\PropsParser.cs" />
     <Compile Include="Parsers\CupuParser.cs" />
+    <Compile Include="Types\ComCU.cs" />
+    <Compile Include="Types\PartSize.cs" />
     <Compile Include="ViewModels\ImagesViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\ImagesViewer.xaml.cs">
