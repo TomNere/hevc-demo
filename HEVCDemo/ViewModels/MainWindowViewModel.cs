@@ -4,16 +4,15 @@ namespace HEVCDemo.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "HEVC Demo app";
+        private string title = "HEVC Demo app";
         public string Title
         {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
+            get { return title; }
+            set { SetProperty(ref title, value); }
         }
 
         public MainWindowViewModel()
         {
-
         }
     }
 }

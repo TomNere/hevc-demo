@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 
@@ -10,37 +8,33 @@ namespace HEVCDemo.Helpers
 {
     public static class FFmpegHelper
     {
-        public async static void InitializeFFmpeg()
+        public static bool FFmpegExists => File.Exists(@"ffmpeg.exe");
+
+        public async static Task DownloadFFmpeg()
         {
-            // Set directory where the app will look up for FFmpeg (and download eventually)
-            FFmpeg.SetExecutablesPath(@".");
-
-            if (!Directory.Exists(@".\ffmpeg\"))
+            if (!FFmpegExists)
             {
-                Directory.CreateDirectory(@".\ffmpeg\");
-                // Download latest version
-                MessageBox.Show("FFmpeg downloading...");
+                // By default, FFmpeg executable (and download) path is "."
                 await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Full);
-
-                MessageBox.Show("FFmpeg downloaded!");
             }
         }
 
-
-        public async static Task ExtractFrames(string fileFullName)
+        public async static Task<TimeSpan> GetDuration(string fileFullName)
         {
-            Directory.CreateDirectory(@".\frames\");
-
-            Func<string, string> outputFileNameBuilder = (number) => { return @".\frames\frame" + number + ".bmp"; };
             IMediaInfo info = await FFmpeg.GetMediaInfo(fileFullName).ConfigureAwait(false);
-            IVideoStream videoStream = info.VideoStreams.First()?.SetCodec(VideoCodec.bmp);
+            return info.Duration;
+        }
 
-            IConversionResult conversionResult = await FFmpeg.Conversions.New()
-                .AddStream(videoStream)
-                .AddParameter($"-ss {TimeSpan.FromSeconds(30)}")
-                .AddParameter($"-t {TimeSpan.FromSeconds(3)}")
-                .ExtractEveryNthFrame(1, outputFileNameBuilder)
-                .Start();
+        public async static Task ExtractFrames(CacheProvider cacheProvider)
+        {
+            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $@"-s {cacheProvider.Width}x{cacheProvider.Height} -i {cacheProvider.YuvFilePath} -preset fast {cacheProvider.YuvFramesDirPath}\%03d.bmp");
+        }
+
+        public async static Task ConvertToAnnexB(CacheProvider cacheProvider)
+        {
+            var duration = await GetDuration(cacheProvider.LoadedFilePath);
+
+            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $"-ss {TimeSpan.FromSeconds(0)} -t {TimeSpan.FromSeconds(Math.Min(duration.Seconds, 10))} -i {cacheProvider.LoadedFilePath} -c:v copy -bsf hevc_mp4toannexb -f hevc {cacheProvider.AnnexBFilePath}");
         }
     }
 }

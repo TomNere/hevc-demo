@@ -2,37 +2,108 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:views="clr-namespace:HEVCDemo.Views"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid Margin="10">
+    <Grid Margin="0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="38"/>
-            <RowDefinition Height="720"/>
-            <RowDefinition Height="38"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1280"/>
+            <ColumnDefinition Width="0.8*"/>
+            <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
-        <Button Command="{Binding SelectVideoClick}" Width="100" HorizontalAlignment="Left" Margin="4">Select Video</Button>
-        <Border Grid.Row="1" BorderThickness="2" BorderBrush="Black">
-            <Image Source="{Binding CurrentImage}" />    
-        </Border>
 
-        <Grid Grid.Row="2" HorizontalAlignment="Center">
+        <!--Image viewer-->
+        <ScrollViewer Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
+            <Grid>
+                <Button Command="{Binding SelectVideoClick}" FontSize="20" Visibility="{Binding StartButtonVisibility}">Start by selecting HEVC(h.265) video file</Button>
+                <!--Frame Image-->
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Height}" Width="{Binding Width}" Stretch="Fill"/>
+                <!--CU Structure Image (Overlay)-->
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCupuImage}" Height="{Binding Height}" Width="{Binding Width}" Stretch="Fill" />
+            </Grid>
+        </ScrollViewer>
+
+        <!--Video info-->
+        <Grid Grid.Row="0" Grid.Column="1" Margin="4,0,0,0" IsEnabled="{Binding Enabled}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="38"/>
+                <RowDefinition Height="38"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="4" Command="{Binding BackwardClick}">
-                <iconPacks:PackIconModern Kind="NavigatePrevious"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Center" />
+            <Button Grid.Row="0" Grid.ColumnSpan="3" Margin="4" Command="{Binding SelectVideoClick}">Select video file</Button>
+            <Label Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">Video properties</Label>
+            <Label Grid.Row="2" VerticalAlignment="Center">Resolution:</Label>
+            <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Resolution}"/>
+            <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="30" Width="30">
+                <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
-            <Button Grid.Column="1" Margin="4"  Command="{Binding ForwardClick}">
-                <iconPacks:PackIconModern Kind="NavigateNext"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Center" />
+            <Label Grid.Row="3" VerticalAlignment="Center">File size:</Label>
+            <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{Binding FileSize}"/>
+            <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="30" Width="30">
+                <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
+        </Grid>
+
+        <!--Image Viewer Controls-->
+        <Grid Grid.Row="1" Grid.Column="0" IsEnabled="{Binding Enabled}">
+            <!--Frame index-->
+            <Grid Margin="6,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Margin="4,0,0,0" Content="Current frame: "/>
+                <Label Grid.Column="1" Margin="4,0,0,0" Content="{Binding CurrentFrameIndex }" />
+            </Grid>
+            <!--Slider-->
+            <DockPanel Grid.Column="2" Width="400" Margin="10,26,0,6" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Slider Margin="4,0,0,0" Maximum="{Binding MaxSliderValue}" TickFrequency="30" TickPlacement="BottomRight" Value="{Binding CurrentFrameIndex}"/>
+            </DockPanel>
+            <!--Buttons-->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="38">
+                <!--Navigate-->
+                <Button Grid.Column="0" Command="{Binding BackwardClick}">
+                    <iconPacks:PackIconModern Kind="NavigatePrevious"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+                </Button>
+                <Button Grid.Column="1" Margin="4,0,0,0" Command="{Binding ForwardClick}">
+                    <iconPacks:PackIconModern Kind="NavigateNext"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+                </Button>
+                <!--Zoom-->
+                <Button Grid.Column="7" Margin="10,0,0,0" Command="{Binding ZoomOutClick}">
+                    <iconPacks:PackIconModern Kind="MagnifyMinus"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+                </Button>
+                <Button Grid.Column="8" Margin="4,0,0,0" Command="{Binding ZoomInClick}">
+                    <iconPacks:PackIconModern Kind="MagnifyAdd"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0">App State:</Label>
+            <Label Grid.Column="1" Content="{Binding AppState}"/>
         </Grid>
     </Grid>
     <UserControl.InputBindings>

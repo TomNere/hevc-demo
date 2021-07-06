@@ -38,6 +38,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -68,8 +69,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\CacheProvider.cs" />
     <Compile Include="Helpers\FFmpegHelper.cs" />
+    <Compile Include="Helpers\ProcessHelper.cs" />
+    <Compile Include="Helpers\ActionsHelper.cs" />
     <Compile Include="MainModule.cs" />
+    <Compile Include="Parsers\PropsParser.cs" />
+    <Compile Include="Parsers\CupuParser.cs" />
+    <Compile Include="Types\ComCU.cs" />
+    <Compile Include="Types\PartSize.cs" />
     <Compile Include="ViewModels\ImagesViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\ImagesViewer.xaml.cs">
@@ -119,6 +127,9 @@
     <PackageReference Include="Prism.DryIoc" Version="8.0.0.1909" />
     <PackageReference Include="Prism.Wpf">
       <Version>8.0.0.1909</Version>
+    </PackageReference>
+    <PackageReference Include="WriteableBitmapEx">
+      <Version>1.6.7</Version>
     </PackageReference>
     <PackageReference Include="Xabe.FFmpeg">
       <Version>4.4.0</Version>
