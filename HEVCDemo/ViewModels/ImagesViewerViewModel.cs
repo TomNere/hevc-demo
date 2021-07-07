@@ -95,6 +95,31 @@ namespace HEVCDemo.ViewModels
             get => fileSize;
             set => SetProperty(ref fileSize, value);
         }
+
+        public Visibility DecodedFramesVisibility => IsDecodedFramesEnabled ? Visibility.Visible : Visibility.Hidden;
+        private bool isDecodedFramesEnabled;
+        public bool IsDecodedFramesEnabled
+        {
+            get => isDecodedFramesEnabled;
+            set
+            {
+                SetProperty(ref isDecodedFramesEnabled, value);
+                RaisePropertyChanged(nameof(DecodedFramesVisibility));
+            }
+        }
+
+        public Visibility CupuVisibility => IsCupuEnabled ? Visibility.Visible : Visibility.Hidden;
+        private bool isCupuEnabled;
+        public bool IsCupuEnabled
+        {
+            get => isCupuEnabled;
+            set
+            {
+                SetProperty(ref isCupuEnabled, value);
+                RaisePropertyChanged(nameof(CupuVisibility));
+            }
+        }
+
         #endregion
 
         public ImagesViewerViewModel()

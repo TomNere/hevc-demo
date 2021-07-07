@@ -19,9 +19,9 @@
             <Grid>
                 <Button Command="{Binding SelectVideoClick}" FontSize="20" Visibility="{Binding StartButtonVisibility}">Start by selecting HEVC(h.265) video file</Button>
                 <!--Frame Image-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Height}" Width="{Binding Width}" Stretch="Fill"/>
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding DecodedFramesVisibility}" Stretch="Fill"/>
                 <!--CU Structure Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCupuImage}" Height="{Binding Height}" Width="{Binding Width}" Stretch="Fill" />
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCupuImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding CupuVisibility}" Stretch="Fill" />
             </Grid>
         </ScrollViewer>
 
@@ -33,8 +33,7 @@
                 <RowDefinition Height="38"/>
                 <RowDefinition Height="38"/>
                 <RowDefinition Height="38"/>
-                <RowDefinition Height="38"/>
-                <RowDefinition Height="38"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.4*"/>
@@ -42,7 +41,7 @@
                 <ColumnDefinition Width="0.1*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Row="0" Grid.ColumnSpan="3" Margin="4" Command="{Binding SelectVideoClick}">Select video file</Button>
-            <Label Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">Video properties</Label>
+            <Label Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">Video Properties</Label>
             <Label Grid.Row="2" VerticalAlignment="Center">Resolution:</Label>
             <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Resolution}"/>
             <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="30" Width="30">
@@ -53,6 +52,23 @@
             <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="30" Width="30">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
+
+            <!--View options-->
+            <Label Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center">View Options</Label>
+            <Grid Grid.Row="5" IsEnabled="{Binding Enabled}" Margin="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="38"/>
+                    <RowDefinition Height="38"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.8*"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox IsChecked="{Binding IsDecodedFramesEnabled}"/>
+                <Label Grid.Column="1" VerticalAlignment="Center" Content="Decoded Frames"/>
+                <CheckBox Grid.Row="1" IsChecked="{Binding IsCupuEnabled}"/>
+                <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="Coding Units"/>
+            </Grid>
         </Grid>
 
         <!--Image Viewer Controls-->
