@@ -10,7 +10,7 @@ namespace HEVCDemo
         public void OnInitialized(IContainerProvider containerProvider)
         {
             var region = containerProvider.Resolve<IRegionManager>();
-            region.RegisterViewWithRegion("ContentRegion", typeof(ImagesViewer));
+            region.RegisterViewWithRegion("ContentRegion", typeof(MainWindow));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

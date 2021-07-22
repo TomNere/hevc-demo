@@ -1,0 +1,66 @@
+{
+  "AppId": "HEVCDemo",
+  "Version": "0.1",
+  "Type": "Single",
+  "EnglishName": "English",
+  "CultureName": "English",
+  "Culture": "en-us",
+  "Data": [
+    {
+      "Id": "LanguageHeader",
+      "Header": "Language"
+    },
+    {
+      "Id": "EnglishHeader",
+      "Header": "English"
+    },
+    {
+      "Id": "CzechHeader",
+      "Header": "Czech"
+    },
+    {
+      "Id": "CustomHeader",
+      "Header": "Custom"
+    },
+    {
+      "Id": "StartButton",
+      "Content": "Start by selecting a HEVC(h.265) video file"
+    },
+    {
+      "Id": "SelectVideoButton",
+      "Content": "Select video file"
+    },
+    {
+      "Id": "VideoPropertiesLabel",
+      "Content": "Video Properties"
+    },
+    {
+      "Id": "ResolutionLabel",
+      "Content": "Resolution:"
+    },
+    {
+      "Id": "FileSizeLabel",
+      "Content": "File size:"
+    },
+    {
+      "Id": "ViewOptionsLabel",
+      "Content": "View Options"
+    },
+    {
+      "Id": "DecodedFramesLabel",
+      "Content": "Decoded Frames"
+    },
+    {
+      "Id": "CodingUnitsLabel",
+      "Content": "Coding Units"
+    },
+    {
+      "Id": "CurrentFrameLabel",
+      "Content": "Current frame: "
+    },
+    {
+      "Id": "AppStateLabel",
+      "Content": "App State:"
+    }
+  ]
+}

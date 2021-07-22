@@ -1,0 +1,66 @@
+﻿{
+  "AppId": "HEVCDemo",
+  "Version": "0.1",
+  "Type": "Single",
+  "EnglishName": "Czech",
+  "CultureName": "Czech",
+  "Culture": "cs-cz",
+  "Data": [
+    {
+      "Id": "LanguageHeader",
+      "Header": "Jazyk"
+    },
+    {
+      "Id": "EnglishHeader",
+      "Header": "Anglicky"
+    },
+    {
+      "Id": "CzechHeader",
+      "Header": "Česky"
+    },
+    {
+      "Id": "CustomHeader",
+      "Header": "Uživatelský"
+    },
+    {
+      "Id": "StartButton",
+      "Content": "Začněte volbou HEVC(h.265) video souboru"
+    },
+    {
+      "Id": "SelectVideoButton",
+      "Content": "Vybrat video soubor"
+    },
+    {
+      "Id": "VideoPropertiesLabel",
+      "Content": "Vlastnosti videa"
+    },
+    {
+      "Id": "ResolutionLabel",
+      "Content": "Rozlišení:"
+    },
+    {
+      "Id": "FileSizeLabel",
+      "Content": "Velikost souboru:"
+    },
+    {
+      "Id": "ViewOptionsLabel",
+      "Content": "Možnosti zobrazení"
+    },
+    {
+      "Id": "DecodedFramesLabel",
+      "Content": "Dekódované rámce"
+    },
+    {
+      "Id": "CodingUnitsLabel",
+      "Content": "Kódovací jednotky"
+    },
+    {
+      "Id": "CurrentFrameLabel",
+      "Content": "Aktuální rámec: "
+    },
+    {
+      "Id": "AppStateLabel",
+      "Content": "Stav aplikace:"
+    }
+  ]
+}

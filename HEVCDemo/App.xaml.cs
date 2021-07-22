@@ -1,6 +1,7 @@
 ﻿using HEVCDemo.Views;
 using Prism.Ioc;
 using Prism.Modularity;
+using Rasyidf.Localization;
 using System.Windows;
 
 namespace HEVCDemo
@@ -24,6 +25,13 @@ namespace HEVCDemo
         {
             base.ConfigureModuleCatalog(moduleCatalog);
             moduleCatalog.AddModule<MainModule>();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            // set the language packs folder and default language
+            LocalizationService.Current.Initialize();
         }
     }
 }
