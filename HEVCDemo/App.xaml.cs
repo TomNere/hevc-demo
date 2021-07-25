@@ -29,9 +29,10 @@ namespace HEVCDemo
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
             // set the language packs folder and default language
             LocalizationService.Current.Initialize();
+
+            base.OnStartup(e);
         }
     }
 }

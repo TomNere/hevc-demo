@@ -8,7 +8,7 @@ namespace HEVCDemo.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string title = "HEVC Demo app";
+        private string title = "AppTitle,Title".Localize();
         public string Title
         {
             get { return title; }

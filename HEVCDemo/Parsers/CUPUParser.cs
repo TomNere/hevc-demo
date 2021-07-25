@@ -1,5 +1,6 @@
 ﻿using HEVCDemo.Helpers;
 using HEVCDemo.Types;
+using Rasyidf.Localization;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -29,7 +30,7 @@ namespace HEVCDemo.Parsers
             {
                 if (iSeqWidth == 0 || iMaxCUSize == 0)
                 {
-                    throw new FormatException("Invalid sequence width or height");
+                    throw new FormatException("InvalidWidthEx,Text".Localize());
                 }
 
                 int iCUOneRow = (iSeqWidth + iMaxCUSize - 1) / iMaxCUSize;
@@ -46,7 +47,7 @@ namespace HEVCDemo.Parsers
                         if (strOneLine[0] != '<')
                         {
                             // Line must start with <
-                            throw new FormatException("Invalid format of cupu.txt");
+                            throw new FormatException("InvalidCupuFormatEx,Text".Localize());
                         }
 
                         int frameNumber = int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1));
@@ -71,7 +72,7 @@ namespace HEVCDemo.Parsers
                             var index = 0;
                             if (!XReadInCUMode(tokens, pcLCU, cuRectangles, puRectangles, ref index))
                             {
-                                throw new FormatException("Invalid format of cupu.txt");
+                                throw new FormatException("InvalidCupuFormatEx,Text".Localize());
                             }
 
                             strOneLine = file.ReadLine();
@@ -86,7 +87,7 @@ namespace HEVCDemo.Parsers
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show($"Error parsing CUPU file!\n\n{e.Message}");
+                    MessageBox.Show($"{"ErrorParsingCupuEx,Text".Localize()}\n\n{e.Message}");
                     return false;
                 }
 

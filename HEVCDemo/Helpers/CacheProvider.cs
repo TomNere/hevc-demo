@@ -1,4 +1,5 @@
 ﻿using HEVCDemo.Parsers;
+using Rasyidf.Localization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -74,19 +75,19 @@ namespace HEVCDemo.Helpers
             // Check if already annexB format and convert if not
             if (Path.GetExtension(LoadedFilePath).ToLower() != annexBExtension)
             {
-                setAppState("Converting to AnnexB format", false);
+                setAppState("ConvertingAnnexBState,Text".Localize(), false);
                 await FFmpegHelper.ConvertToAnnexB(this);
             }
 
             // Get stats data from annexB file
-            setAppState("Processing AnnexB file", false);
+            setAppState("ProcessingAnnexBState,Text".Localize(), false);
             await ProcessHelper.RunProcessAsync($@".\TAppDecoder.exe", $@"-b {AnnexBFilePath} -o {YuvFilePath} -p {StatsDirPath}");
 
             // Parse properties
             ParseProps();
 
             // Extract frames 
-            setAppState("Creating demo data", false);
+            setAppState("CreatingDemoState,Text".Localize(), false);
             var framesLoading = FFmpegHelper.ExtractFrames(this);
 
             var cupuParser = new CupuParser(Width, Height, MaxCUHeight);
@@ -95,7 +96,7 @@ namespace HEVCDemo.Helpers
 
             if (!InitFramesCount())
             {
-                throw new Exception("Mismatch in frames count");
+                throw new Exception("FramesMismatchEx,Text".Localize());
             }
         }
 
@@ -117,7 +118,7 @@ namespace HEVCDemo.Helpers
 
         public async Task LoadIntoCache(int index, Action<string, bool> setAppState)
         {
-            setAppState("Loading into cache", false);
+            setAppState("LoadingIntoCacheState,Text".Localize(), false);
 
             int startIndex = (index / cacheSize) * cacheSize;
 
@@ -125,7 +126,7 @@ namespace HEVCDemo.Helpers
             await LoadCupusIntoCache(startIndex);
             await framesLoading;
 
-            setAppState("Ready", true);
+            setAppState("ReadyState,Text".Localize(), true);
         }
 
         public async Task EnsureFrameInCache(int index, Action<string, bool> setAppState, Action<string, string> handleError)
@@ -135,7 +136,7 @@ namespace HEVCDemo.Helpers
                 await ActionsHelper.InvokeSafelyAsync(async () =>
                 {
                     await LoadIntoCache(index, setAppState);
-                }, "Load into cache", handleError);
+                }, "LoadIntoCacheTitle,Title".Localize(), handleError);
             }
         }
 
