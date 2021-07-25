@@ -1,0 +1,146 @@
+{
+  "AppId": "HEVCDemo",
+  "Version": "0.1",
+  "Type": "Single",
+  "EnglishName": "Custom",
+  "CultureName": "Custom",
+  "Culture": "en-uk",
+  "Data": [
+    {
+      "Id": "LanguageHeader",
+      "Header": "Language"
+    },
+    {
+      "Id": "StartButton",
+      "Content": "Start by selecting a HEVC(h.265) video file"
+    },
+    {
+      "Id": "SelectVideoButton",
+      "Content": "Select video file"
+    },
+    {
+      "Id": "VideoPropertiesLabel",
+      "Content": "Video Properties"
+    },
+    {
+      "Id": "ResolutionLabel",
+      "Content": "Resolution:"
+    },
+    {
+      "Id": "FileSizeLabel",
+      "Content": "File size:"
+    },
+    {
+      "Id": "ViewOptionsLabel",
+      "Content": "View Options"
+    },
+    {
+      "Id": "DecodedFramesLabel",
+      "Content": "Decoded Frames"
+    },
+    {
+      "Id": "CodingUnitsLabel",
+      "Content": "Coding Units"
+    },
+    {
+      "Id": "CurrentFrameLabel",
+      "Content": "Current frame: "
+    },
+    {
+      "Id": "AppStateLabel",
+      "Content": "App State:"
+    },
+    {
+      "Id": "ConvertingAnnexBState",
+      "Text": "Converting to AnnexB format"
+    },
+    {
+      "Id": "ProcessingAnnexBState",
+      "Text": "Processing AnnexB file"
+    },
+    {
+      "Id": "CreatingDemoState",
+      "Text": "Creating demo data"
+    },
+    {
+      "Id": "FramesMismatchEx",
+      "Text": "Mismatch in frames count"
+    },
+    {
+      "Id": "LoadingIntoCacheState",
+      "Text": "Loading into cache"
+    },
+    {
+      "Id": "ReadyState",
+      "Text": "Ready"
+    },
+    {
+      "Id": "LoadIntoCacheTitle",
+      "Title": "Load into cache"
+    },
+    {
+      "Id": "InvalidWidthEx",
+      "Text": "Invalid sequence width or height"
+    },
+    {
+      "Id": "InvalidCupuFormatEx",
+      "Text": "Invalid format of cupu.txt"
+    },
+    {
+      "Id": "ErrorParsingCupuEx",
+      "Text": "Error parsing CUPU file"
+    },
+    {
+      "Id": "ErrorOccuredState",
+      "Text": "Error occured"
+    },
+    {
+      "Id": "CheckingFFmpegState",
+      "Text": "Checking FFmpeg"
+    },
+    {
+      "Id": "FFmpegNotFoundMsg",
+      "Text": "FFmpeg not found. Do you wish to automatically download it?"
+    },
+    {
+      "Id": "FFmpegMissingState",
+      "Title": "FFmpeg missing"
+    },
+    {
+      "Id": "DownloadingFFmpegState",
+      "Text": "Downloading FFmpeg"
+    },
+    {
+      "Id": "FFmpegDownloadedMsg",
+      "Text": "FFmpeg sucessfully downloaded."
+    },
+    {
+      "Id": "DownloadFFmpegTitle",
+      "Title": "Download FFmpeg"
+    },
+    {
+      "Id": "CacheExistsMsg",
+      "Text": "Cache exists. Do you wish to overwrite?"
+    },
+    {
+      "Id": "FramesMismatchState",
+      "Text": "Error - mismatch in count of frames and cupu images"
+    },
+    {
+      "Id": "CreateCacheTitle",
+      "Title": "Create cache"
+    },
+    {
+      "Id": "UnhandledEx",
+      "Text": "Unhandled exception occured:"
+    },
+    {
+      "Id": "ErrorOccuredTitle",
+      "Title": "Error occured"
+    },
+    {
+      "Id": "ErrorMessageMsg",
+      "Text": "Error message:"
+    }
+  ]
+}

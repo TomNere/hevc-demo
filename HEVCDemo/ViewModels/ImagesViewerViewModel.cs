@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
+using Rasyidf.Localization;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -130,8 +131,8 @@ namespace HEVCDemo.ViewModels
         private void HandleError(string actionDescription, string message)
         {
             Enabled = true;
-            AppState = "Error occured";
-            MessageBox.Show($"{actionDescription}\n\nError message:\n{message}", "Error occured");
+            AppState = "ErrorOccuredState,Text".Localize();
+            MessageBox.Show($"{actionDescription}\n\n{"ErrorMessageMsg,Text".Localize()}\n{message}", "ErrorOccuredTitle,Title".Localize());
         }
 
         private void SetAppState(string state, bool enabled)
@@ -146,33 +147,33 @@ namespace HEVCDemo.ViewModels
             {
                 if (changeState)
                 {
-                    AppState = "Checking FFmpeg";
+                    AppState = "CheckingFFmpegState,Text".Localize();
                 }
 
                 if (!FFmpegHelper.FFmpegExists)
                 {
-                    var result = MessageBox.Show("FFmpeg not found. Do you wish to automatically download it?", "HEVC demo app", MessageBoxButton.YesNo);
+                    var result = MessageBox.Show("FFmpegNotFoundMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
-                        AppState = "Downloading FFmpeg";
+                        AppState = "DownloadingFFmpegState,Text".Localize();
                         await FFmpegHelper.DownloadFFmpeg();
-                        MessageBox.Show("FFmpeg sucessfully downloaded.");
-                        AppState = "Ready";
+                        MessageBox.Show("FFmpegDownloadedMsg,Text".Localize());
+                        AppState = "ReadyState,Text".Localize();
                     }
                     else
                     {
-                        AppState = "FFmpeg missing";
+                        AppState = "FFmpegMissingState,Text".Localize();
                     }
                 }
                 else if (changeState)
                 {
-                    AppState = "Ready";
+                    AppState = "ReadyState,Text".Localize();
                 }
 
                 // Enable to allow invoking download by clicking on "Select video"
                 Enabled = true;
 
-            }, "Download FFmpeg helper", HandleError);
+            }, "DownloadFFmpegTitle,Title".Localize(), HandleError);
         }
 
         #region Backward Forward controls
@@ -257,7 +258,7 @@ namespace HEVCDemo.ViewModels
                     cacheProvider = new CacheProvider(filePath);
                     if (cacheProvider.CacheExists)
                     {
-                        var result = MessageBox.Show("Cache exists. Do you wish to overwrite?", "HEVC demo app", MessageBoxButton.YesNo);
+                        var result = MessageBox.Show("CacheExistsMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
                         if (result == MessageBoxResult.Yes)
                         {
                             await cacheProvider.CreateCache(SetAppState);
@@ -292,9 +293,9 @@ namespace HEVCDemo.ViewModels
                     }
                     else
                     {
-                        AppState = "Error - mismatch in count of frames and cupu images";
+                        AppState = "FramesMismatchState,Text".Localize();
                     }
-                }, "Create cache", HandleError);
+                }, "CreateCacheTitle,Title".Localize(), HandleError);
             }
         }
 

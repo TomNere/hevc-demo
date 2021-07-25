@@ -1,0 +1,146 @@
+﻿{
+  "AppId": "HEVCDemo",
+  "Version": "0.1",
+  "Type": "Single",
+  "EnglishName": "Czech",
+  "CultureName": "Čeština",
+  "Culture": "cs-cz",
+  "Data": [
+    {
+      "Id": "LanguageHeader",
+      "Header": "Jazyk"
+    },
+    {
+      "Id": "StartButton",
+      "Content": "Začněte volbou HEVC(h.265) video souboru"
+    },
+    {
+      "Id": "SelectVideoButton",
+      "Content": "Vybrat video soubor"
+    },
+    {
+      "Id": "VideoPropertiesLabel",
+      "Content": "Vlastnosti videa"
+    },
+    {
+      "Id": "ResolutionLabel",
+      "Content": "Rozlišení:"
+    },
+    {
+      "Id": "FileSizeLabel",
+      "Content": "Velikost souboru:"
+    },
+    {
+      "Id": "ViewOptionsLabel",
+      "Content": "Možnosti zobrazení"
+    },
+    {
+      "Id": "DecodedFramesLabel",
+      "Content": "Dekódované rámce"
+    },
+    {
+      "Id": "CodingUnitsLabel",
+      "Content": "Kódovací jednotky"
+    },
+    {
+      "Id": "CurrentFrameLabel",
+      "Content": "Aktuální rámec: "
+    },
+    {
+      "Id": "AppStateLabel",
+      "Content": "Stav aplikace:"
+    },
+    {
+      "Id": "ConvertingAnnexBState",
+      "Text": "Konvertuji do AnnexB formátu"
+    },
+    {
+      "Id": "ProcessingAnnexBState",
+      "Text": "Zpracovávám AnnexB soubor"
+    },
+    {
+      "Id": "CreatingDemoState",
+      "Text": "Vytvářím ukázkové data"
+    },
+    {
+      "Id": "FramesMismatchEx",
+      "Text": "Nesoulad v počtu rámců"
+    },
+    {
+      "Id": "LoadingIntoCacheState",
+      "Text": "Načítám do cache"
+    },
+    {
+      "Id": "ReadyState",
+      "Text": "Připraven"
+    },
+    {
+      "Id": "LoadIntoCacheTitle",
+      "Title": "Načítání do cache"
+    },
+    {
+      "Id": "InvalidWidthEx",
+      "Text": "Výška nebo šířka video sekvence je neplatná."
+    },
+    {
+      "Id": "InvalidCupuFormatEx",
+      "Text": "Formát souboru cupu.txt je neplatný."
+    },
+    {
+      "Id": "ErrorParsingCupuEx",
+      "Text": "Problém při parsování CUPU souboru."
+    },
+    {
+      "Id": "ErrorOccuredState",
+      "Text": "Nastala chyba"
+    },
+    {
+      "Id": "CheckingFFmpegState",
+      "Text": "Kontrola přítomnosti FFmpeg"
+    },
+    {
+      "Id": "FFmpegNotFoundMsg",
+      "Text": "FFmpeg, který je potřebný k běhu aplikace nebyl nalezen. Přejete si ho automaticky stáhnout?"
+    },
+    {
+      "Id": "FFmpegMissingState",
+      "Title": "FFmpeg nebyl nalezen"
+    },
+    {
+      "Id": "DownloadingFFmpegState",
+      "Text": "Stahování FFmpeg"
+    },
+    {
+      "Id": "FFmpegDownloadedMsg",
+      "Text": "FFmpeg byl úspešně stažen."
+    },
+    {
+      "Id": "DownloadFFmpegTitle",
+      "Title": "Stáhování FFmpeg"
+    },
+    {
+      "Id": "CacheExistsMsg",
+      "Text": "Cache k dané video sekvenci již existuje. Přejete si ji přepsat?"
+    },
+    {
+      "Id": "FramesMismatchState",
+      "Text": "Chyba - nesoulad v počtu rámců a vygenerovaných obrázků s kódovacími jednotkami."
+    },
+    {
+      "Id": "CreateCacheTitle",
+      "Title": "Vytváření cache"
+    },
+    {
+      "Id": "UnhandledEx",
+      "Text": "Nastal neočekávaný problém:"
+    },
+    {
+      "Id": "ErrorOccuredTitle",
+      "Title": "Nastal problém"
+    },
+    {
+      "Id": "ErrorMessageMsg",
+      "Text": "Popis problému:"
+    }
+  ]
+}

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:views="clr-namespace:HEVCDemo.Views"
+             xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid Margin="0">
         <Grid.RowDefinitions>
@@ -17,7 +18,7 @@
         <!--Image viewer-->
         <ScrollViewer Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
             <Grid>
-                <Button Command="{Binding SelectVideoClick}" FontSize="20" Visibility="{Binding StartButtonVisibility}">Start by selecting HEVC(h.265) video file</Button>
+                <Button Command="{Binding SelectVideoClick}" FontSize="20" Visibility="{Binding StartButtonVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
                 <!--Frame Image-->
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding DecodedFramesVisibility}" Stretch="Fill"/>
                 <!--CU Structure Image (Overlay)-->
@@ -40,21 +41,21 @@
                 <ColumnDefinition Width="0.5*"/>
                 <ColumnDefinition Width="0.1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.ColumnSpan="3" Margin="4" Command="{Binding SelectVideoClick}">Select video file</Button>
-            <Label Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">Video Properties</Label>
-            <Label Grid.Row="2" VerticalAlignment="Center">Resolution:</Label>
+            <Button Grid.Row="0" Grid.ColumnSpan="3" Margin="4" Command="{Binding SelectVideoClick}" Content="{rf:Tr Uid='SelectVideoButton'}"/>
+            <Label Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="{rf:Tr Uid='VideoPropertiesLabel'}"/>
+            <Label Grid.Row="2" VerticalAlignment="Center" Content="{rf:Tr Uid='ResolutionLabel'}"/>
             <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Resolution}"/>
             <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="30" Width="30">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
-            <Label Grid.Row="3" VerticalAlignment="Center">File size:</Label>
+            <Label Grid.Row="3" VerticalAlignment="Center" Content="{rf:Tr Uid='FileSizeLabel'}"/>
             <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{Binding FileSize}"/>
             <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="30" Width="30">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
 
             <!--View options-->
-            <Label Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center">View Options</Label>
+            <Label Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="{rf:Tr Uid='ViewOptionsLabel'}"/>
             <Grid Grid.Row="5" IsEnabled="{Binding Enabled}" Margin="8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="38"/>
@@ -65,9 +66,9 @@
                     <ColumnDefinition Width="0.8*"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox IsChecked="{Binding IsDecodedFramesEnabled}"/>
-                <Label Grid.Column="1" VerticalAlignment="Center" Content="Decoded Frames"/>
+                <Label Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='DecodedFramesLabel'}"/>
                 <CheckBox Grid.Row="1" IsChecked="{Binding IsCupuEnabled}"/>
-                <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="Coding Units"/>
+                <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='CodingUnitsLabel'}"/>
             </Grid>
         </Grid>
 
@@ -80,8 +81,8 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Margin="4,0,0,0" Content="Current frame: "/>
-                <Label Grid.Column="1" Margin="4,0,0,0" Content="{Binding CurrentFrameIndex }" />
+                <Label Grid.Column="0" Margin="4,0,0,0" Content="{rf:Tr Uid='CurrentFrameLabel'}"/>
+                <Label Grid.Column="1" Margin="4,0,0,0" Content="{Binding CurrentFrameIndex}" />
             </Grid>
             <!--Slider-->
             <DockPanel Grid.Column="2" Width="400" Margin="10,26,0,6" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -118,7 +119,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0">App State:</Label>
+            <Label Grid.Column="0" Content="{rf:Tr Uid='AppStateLabel'}"/>
             <Label Grid.Column="1" Content="{Binding AppState}"/>
         </Grid>
     </Grid>
