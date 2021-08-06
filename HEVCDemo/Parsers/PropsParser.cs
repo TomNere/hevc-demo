@@ -1,4 +1,5 @@
 ﻿using HEVCDemo.Helpers;
+using HEVCDemo.Types;
 
 namespace HEVCDemo.Parsers
 {
@@ -8,11 +9,7 @@ namespace HEVCDemo.Parsers
         private const string seqWidthInLumaPrefix = "seqWidthInLuma";
         private const string seqHeightInLumaPrefix = "seqHeightInLuma";
 
-        public int MaxCUHeight;
-        public int SeqHeight;
-        public int SeqWidth;
-
-        public void ParseProps(CacheProvider cacheProvider)
+        public void ParseProps(CacheProvider cacheProvider, VideoSequence sequence)
         {
             var propsFile = new System.IO.StreamReader(cacheProvider.PropsFilePath);
             string line;
@@ -20,15 +17,15 @@ namespace HEVCDemo.Parsers
             {
                 if (line.Contains(seqWidthInLumaPrefix))
                 {
-                    SeqWidth = int.Parse(line.Substring(line.IndexOf(":") + 1));
+                    sequence.Width = int.Parse(line.Substring(line.IndexOf(":") + 1));
                 }
                 else if (line.Contains(seqHeightInLumaPrefix))
                 {
-                    SeqHeight = int.Parse(line.Substring(line.IndexOf(":") + 1));
+                    sequence.Height = int.Parse(line.Substring(line.IndexOf(":") + 1));
                 }
                 else if (line.Contains(maxCUHeightPrefix))
                 {
-                    MaxCUHeight = int.Parse(line.Substring(line.IndexOf(":") + 1));
+                    sequence.MaxCUSize = int.Parse(line.Substring(line.IndexOf(":") + 1));
                 }
             }
             propsFile.Close();

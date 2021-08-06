@@ -1,5 +1,6 @@
 ﻿using HEVCDemo.Parsers;
 using Rasyidf.Localization;
+using HEVCDemo.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,11 +38,7 @@ namespace HEVCDemo.Helpers
         public readonly Dictionary<int, BitmapImage> CupuFramesBitmaps = new Dictionary<int, BitmapImage>();
 
         public double FileSize;
-        public int Height { get; private set; }
-        public int Width { get; private set; }
-        public int MaxCUHeight { get; private set; }
-
-        public int FramesCount;
+        public VideoSequence videoSequence = new VideoSequence();
 
         public CacheProvider(string filePath)
         {
@@ -90,7 +87,7 @@ namespace HEVCDemo.Helpers
             setAppState("CreatingDemoState,Text".Localize(), false);
             var framesLoading = FFmpegHelper.ExtractFrames(this);
 
-            var cupuParser = new CupuParser(Width, Height, MaxCUHeight);
+            var cupuParser = new CupuParser(videoSequence);
             await cupuParser.ParseFile(this);
             await framesLoading;
 
@@ -103,10 +100,7 @@ namespace HEVCDemo.Helpers
         public void ParseProps()
         {
             var propsParser = new PropsParser();
-            propsParser.ParseProps(this);
-            Height = propsParser.SeqHeight;
-            Width = propsParser.SeqWidth;
-            MaxCUHeight = propsParser.MaxCUHeight;
+            propsParser.ParseProps(this, this.videoSequence);
         }
 
         private void InitCacheFolders()
@@ -142,8 +136,8 @@ namespace HEVCDemo.Helpers
 
         public bool InitFramesCount()
         {
-            FramesCount = new DirectoryInfo(YuvFramesDirPath).GetFiles().Length;
-            return FramesCount == new DirectoryInfo(CupuFramesDirPath).GetFiles().Length;
+            videoSequence.FramesCount = new DirectoryInfo(YuvFramesDirPath).GetFiles().Length;
+            return videoSequence.FramesCount == new DirectoryInfo(CupuFramesDirPath).GetFiles().Length;
         }
 
         public async Task LoadFramesIntoCache(int startIndex)

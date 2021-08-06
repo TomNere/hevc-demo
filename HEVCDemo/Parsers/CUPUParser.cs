@@ -13,33 +13,31 @@ namespace HEVCDemo.Parsers
 {
     public class CupuParser
     {
-        private int iSeqWidth;
-        private int iSeqHeight;
-        private int iMaxCUSize;
+        private readonly VideoSequence videoSequence;
 
-        public CupuParser(int seqWidth, int seqHeight, int maxCUSize)
+        public CupuParser(VideoSequence videoSequence)
         {
-            this.iSeqWidth = seqWidth;
-            this.iSeqHeight = seqHeight;
-            this.iMaxCUSize = maxCUSize;
+            this.videoSequence = videoSequence;
         }
 
         public async Task<bool> ParseFile(CacheProvider cacheProvider)
         {
             return await Task.Run(() =>
             {
-                if (iSeqWidth == 0 || iMaxCUSize == 0)
+                if (videoSequence.Width == 0 || videoSequence.MaxCUSize == 0)
                 {
                     throw new FormatException("InvalidWidthEx,Text".Localize());
                 }
 
-                int iCUOneRow = (iSeqWidth + iMaxCUSize - 1) / iMaxCUSize;
-                int iLCUSize = iMaxCUSize;
+                int iCUOneRow = (videoSequence.Width + videoSequence.MaxCUSize - 1) / videoSequence.MaxCUSize;
+                int iLCUSize = videoSequence.MaxCUSize;
 
                 try
                 {
                     var file = new System.IO.StreamReader(cacheProvider.CupuFilePath);
                     string strOneLine = file.ReadLine();
+                    int iDecOrder = -1;
+                    int iLastPOC = -1;
 
                     /// <1,1> 99 0 0 5 0
                     while (strOneLine != null)
@@ -56,16 +54,23 @@ namespace HEVCDemo.Parsers
 
                         while (true)
                         {
+                            int pocStart = strOneLine.LastIndexOf('<');
                             int addressStart = strOneLine.LastIndexOf(',');
                             int addressEnd = strOneLine.LastIndexOf('>');
+                            int iPoc = int.Parse(strOneLine.Substring(pocStart + 1, addressStart - pocStart - 1));
                             int iAddr = int.Parse(strOneLine.Substring(addressStart + 1, addressEnd - addressStart - 1));
+
+                            iDecOrder += iLastPOC != iPoc ? 1 : 0;
+                            
                             var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
 
+                            var frame = new ComFrame { POC = iPoc, Sequence = videoSequence };
+                            videoSequence.FramesInDecodeOrder.Add(frame);
+
                             /// poc and lcu addr
-                            var pcLCU = new ComCU { iAddr = iAddr };
-                            pcLCU.iPixelX = (iAddr % iCUOneRow) * iMaxCUSize;
-                            pcLCU.iPixelY = (iAddr / iCUOneRow) * iMaxCUSize;
-                            pcLCU.Size = iLCUSize;
+                            var pcLCU = new ComCU { iAddr = iAddr, Frame = frame, Size = iLCUSize };
+                            pcLCU.iPixelX = (iAddr % iCUOneRow) * videoSequence.MaxCUSize;
+                            pcLCU.iPixelY = (iAddr / iCUOneRow) * videoSequence.MaxCUSize;
 
                             /// recursively parse the CU&PU quard-tree structure
                             puRectangles.Add(new Rectangle { X = pcLCU.iPixelX, Y = pcLCU.iPixelY, Height = pcLCU.Size, Width = pcLCU.Size });
@@ -74,6 +79,8 @@ namespace HEVCDemo.Parsers
                             {
                                 throw new FormatException("InvalidCupuFormatEx,Text".Localize());
                             }
+
+                            pcLCU.Frame.CodingUnits.Add(pcLCU);
 
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
@@ -106,46 +113,50 @@ namespace HEVCDemo.Parsers
 
             if (iCUMode == 99)
             {
-                int iMaxDepth = 4;// pcCU->getFrame()->getSequence()->getMaxCUDepth();
-                //int iTotalNumPart =     1 << ((iMaxDepth - pcCU->getDepth()) << 1);
+                int iMaxDepth = pcLCU.Frame.Sequence.MaxCUDepth;
+                int iTotalNumPart = 1 << ((iMaxDepth - pcLCU.Depth) << 1);
                 /// non-leaf node : add 4 children CUs
                 for (int i = 0; i < 4; i++)
                 {
-                    var pcChildNode = new ComCU { iAddr = pcLCU.iAddr, Size = pcLCU.Size / 2, };
+                    var pcChildNode = new ComCU 
+                    {
+                        Frame = pcLCU.Frame,
+                        iAddr = pcLCU.iAddr, 
+                        Size = pcLCU.Size / 2,
+                        Depth = pcLCU.Depth + 1,
+                        Zorder = pcLCU.Zorder + (iTotalNumPart/4) * i
+                    };
 
-                    //pcChildNode->setAddr(pcCU->getAddr());
-                    //pcChildNode->setDepth(pcCU->getDepth() + 1);
-                    //pcChildNode->setZorder(pcCU->getZorder() + (iTotalNumPart / 4) * i);
-                    //pcChildNode->setSize(pcCU->getSize() / 2);
                     int iSubCUX = pcLCU.iPixelX + i % 2 * (pcLCU.Size / 2);
                     int iSubCUY = pcLCU.iPixelY + i / 2 * (pcLCU.Size / 2);
                     pcChildNode.iPixelX = iSubCUX;
                     pcChildNode.iPixelY = iSubCUY;
-                    //pcCU->getSCUs().push_back(pcChildNode);
+                    pcLCU.SCUs.Add(pcChildNode);
                     cuRectangles.Add(new Rectangle { X = iSubCUX, Y = iSubCUY, Width = pcLCU.Size / 2, Height = pcLCU.Size / 2 });
                     index++;
-                    XReadInCUMode(tokens, pcChildNode, cuRectangles, puRectangles, ref index);//, pcChildNode);
+                    XReadInCUMode(tokens, pcChildNode, cuRectangles, puRectangles, ref index);
                 }
             }
             else
             {
                 /// leaf node : create PUs and write the PU Mode for it
-                //pcCU->setPartSize((PartSize)iCUMode);
+                pcLCU.PartSize = (PartSize)iCUMode;
 
                 int iPUCount = GetPUNum((PartSize)iCUMode);
                 for (int i = 0; i < iPUCount; i++)
                 {
                     //rectangles.Add(new Rectangle { X = pcLCU.iPixelX, Y = pcLCU.iPixelY, Width = pcLCU.Size, Height = pcLCU.Size});
 
-                    //ComPU* pcPU = new ComPU(pcCU);
+                    var pcPU = new ComPU { CU = pcLCU };
                     GetPUOffsetAndSize(pcLCU.Size, (PartSize)iCUMode, i, out var iPUOffsetX, out var iPUOffsetY, out var iPUWidth, out var iPUHeight);
                     int iPUX = pcLCU.iPixelX + iPUOffsetX;
                     int iPUY = pcLCU.iPixelY + iPUOffsetY;
-                    //pcPU->setX(iPUX);
-                    //pcPU->setY(iPUY);
-                    //pcPU->setWidth(iPUWidth);
-                    //pcPU->setHeight(iPUHeight);
-                    //pcCU->getPUs().push_back(pcPU);
+                    pcPU.X = iPUX;
+                    pcPU.Y = iPUY;
+                    pcPU.Width = iPUWidth;
+                    pcPU.Height = iPUHeight;
+                    pcLCU.PUs.Add(pcPU);
+
                     //puRectangles.Add(new Rectangle { X = iPUX, Y = iPUY, Width = iPUWidth, Height = iPUHeight });
                 }
             }
@@ -154,7 +165,7 @@ namespace HEVCDemo.Parsers
 
         private void WriteBitmaps(CacheProvider cacheProvider, List<Rectangle> cuRectangles, List<Rectangle> puRectangles, int frameNumber)
         {
-            var writeableBitmap = BitmapFactory.New(iSeqWidth, iSeqHeight);
+            var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
             using (writeableBitmap.GetBitmapContext())
             {
                 for (int i = 0; i < cuRectangles.Count; i++)

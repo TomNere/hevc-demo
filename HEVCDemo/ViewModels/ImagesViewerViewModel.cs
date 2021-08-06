@@ -98,7 +98,7 @@ namespace HEVCDemo.ViewModels
         }
 
         public Visibility DecodedFramesVisibility => IsDecodedFramesEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isDecodedFramesEnabled;
+        private bool isDecodedFramesEnabled = true;
         public bool IsDecodedFramesEnabled
         {
             get => isDecodedFramesEnabled;
@@ -110,7 +110,7 @@ namespace HEVCDemo.ViewModels
         }
 
         public Visibility CupuVisibility => IsCupuEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isCupuEnabled;
+        private bool isCupuEnabled = true;
         public bool IsCupuEnabled
         {
             get => isCupuEnabled;
@@ -203,7 +203,7 @@ namespace HEVCDemo.ViewModels
 
         private bool CanExecuteForward()
         {
-            return cacheProvider?.FramesCount > CurrentFrameIndex + 1;
+            return cacheProvider?.videoSequence.FramesCount > CurrentFrameIndex + 1;
         }
 
         private async void SetCurrentFrame(int index)
@@ -279,15 +279,15 @@ namespace HEVCDemo.ViewModels
                     if (cacheProvider.YuvFramesBitmaps.Count > 0 &&
                         cacheProvider.YuvFramesBitmaps.Count == cacheProvider.CupuFramesBitmaps.Count)
                     {
-                        Height = cacheProvider.Height;
-                        Width = cacheProvider.Width;
-                        Resolution = $"{cacheProvider.Width} x {cacheProvider.Height}";
+                        Height = cacheProvider.videoSequence.Height;
+                        Width = cacheProvider.videoSequence.Width;
+                        Resolution = $"{cacheProvider.videoSequence.Width} x {cacheProvider.videoSequence.Height}";
                         double length = new FileInfo(openFileDialog.FileName).Length / 1024d;
                         FileSize = length < 1000 ? $"{length:0.000} KB" : $"{length / 1024:0.000} MB";
 
                         Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[0]);
                         Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[0]);
-                        MaxSliderValue = cacheProvider.FramesCount - 1;
+                        MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
                         CurrentFrameIndex = 0;
                         StartButtonVisibility = Visibility.Hidden;
                     }
