@@ -149,6 +149,10 @@
     {
       "Id": "ErrorParsingIntraEx",
       "Text": "Problém při parsování intra souboru."
+    },
+    {
+      "Id": "PredictionLabel",
+      "Content": "Typ predikce"
     }
   ]
 }

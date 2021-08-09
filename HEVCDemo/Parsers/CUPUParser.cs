@@ -190,7 +190,7 @@ namespace HEVCDemo.Parsers
                 }
             }
 
-            cacheProvider.SaveCupuBitmap(writeableBitmap, frameNumber);
+            cacheProvider.SaveBitmap(writeableBitmap, cacheProvider.CupuFramesDirPath, frameNumber);
         }
 
         private void GetPUOffsetAndSize(int iLeafCUSize,

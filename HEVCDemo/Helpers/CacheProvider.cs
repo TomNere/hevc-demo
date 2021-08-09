@@ -33,11 +33,13 @@ namespace HEVCDemo.Helpers
         public string YuvFilePath;
         public string YuvFramesDirPath;
         public string CupuFramesDirPath;
+        public string PredictionFramesDirPath;
 
         public bool CacheExists => File.Exists(PropsFilePath);
 
         public readonly Dictionary<int, BitmapImage> YuvFramesBitmaps = new Dictionary<int, BitmapImage>();
         public readonly Dictionary<int, BitmapImage> CupuFramesBitmaps = new Dictionary<int, BitmapImage>();
+        public readonly Dictionary<int, BitmapImage> PredictionFramesBitmaps = new Dictionary<int, BitmapImage>();
 
         public double FileSize;
         public VideoSequence videoSequence = new VideoSequence();
@@ -57,6 +59,7 @@ namespace HEVCDemo.Helpers
             // Images
             YuvFramesDirPath = $@"{cacheDirPath}\yuvFrames";
             CupuFramesDirPath = $@"{cacheDirPath}\cupuFrames";
+            PredictionFramesDirPath = $@"{cacheDirPath}\predictionFrames";
 
             // AnnexB file stays at his location
             AnnexBFilePath = Path.GetExtension(filePath).ToLower() == annexBExtension ? filePath : $@"{cacheDirPath}\annexB{annexBExtension}";
@@ -121,6 +124,7 @@ namespace HEVCDemo.Helpers
         {
             Directory.CreateDirectory(YuvFramesDirPath);
             Directory.CreateDirectory(CupuFramesDirPath);
+            Directory.CreateDirectory(PredictionFramesDirPath);
             Directory.CreateDirectory(StatsDirPath);
         }
 
@@ -130,10 +134,14 @@ namespace HEVCDemo.Helpers
 
             int startIndex = (index / cacheSize) * cacheSize;
 
-            var framesLoading = LoadFramesIntoCache(startIndex);
-            await LoadCupusIntoCache(startIndex);
-            await framesLoading;
+            var loadings = new List<Task>
+            {
+                LoadFramesIntoCache(startIndex),
+                LoadCupusIntoCache(startIndex),
+                LoadPredictionsIntoCache(startIndex)
+            };
 
+            await Task.WhenAll(loadings);
             setAppState("ReadyState,Text".Localize(), true);
         }
 
@@ -168,6 +176,13 @@ namespace HEVCDemo.Helpers
             await LoadBitmaps(CupuFramesBitmaps, files, startIndex);
         }
 
+        public async Task LoadPredictionsIntoCache(int startIndex)
+        {
+            var files = new DirectoryInfo(PredictionFramesDirPath).GetFiles().ToList();
+            files.OrderBy(file => int.Parse(Path.GetFileNameWithoutExtension(file.FullName)));
+            await LoadBitmaps(PredictionFramesBitmaps, files, startIndex);
+        }
+
         private async Task LoadBitmaps(Dictionary<int, BitmapImage> dictionary, List<FileInfo> files, int startIndex)
         {
             await Task.Run(() =>
@@ -191,11 +206,11 @@ namespace HEVCDemo.Helpers
             });
         }
 
-        public void SaveCupuBitmap(BitmapSource bitmap, int number)
+        public void SaveBitmap(BitmapSource bitmap, string path, int number)
         {
             string name = number.ToString().PadLeft(3, '0');
 
-            using (FileStream fs = File.Create($@"{CupuFramesDirPath}\{name}{imageExtension}"))
+            using (FileStream fs = File.Create($@"{path}\{name}{imageExtension}"))
             {
                 var encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(bitmap));

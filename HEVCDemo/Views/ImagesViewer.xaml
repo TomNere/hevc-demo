@@ -23,6 +23,8 @@
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding DecodedFramesVisibility}" Stretch="Fill"/>
                 <!--CU Structure Image (Overlay)-->
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCupuImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding CupuVisibility}" Stretch="Fill" />
+                <!--Prediction Image (Overlay)-->
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentPredictionImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding PredictionVisibility}" Stretch="Fill" />
             </Grid>
         </ScrollViewer>
 
@@ -60,6 +62,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="38"/>
                     <RowDefinition Height="38"/>
+                    <RowDefinition Height="38"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.2*"/>
@@ -69,6 +72,8 @@
                 <Label Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='DecodedFramesLabel'}"/>
                 <CheckBox Grid.Row="1" IsChecked="{Binding IsCupuEnabled}"/>
                 <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='CodingUnitsLabel'}"/>
+                <CheckBox Grid.Row="2" IsChecked="{Binding IsPredictionEnabled}"/>
+                <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='PredictionLabel'}"/>
             </Grid>
         </Grid>
 

@@ -65,6 +65,13 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref currentCupuImage, value);
         }
 
+        private BitmapImage currentPredictionImage;
+        public BitmapImage CurrentPredictionImage
+        {
+            get => currentPredictionImage;
+            set => SetProperty(ref currentPredictionImage, value);
+        }
+
         private int currentFrameIndex;
         public int CurrentFrameIndex
         {
@@ -118,6 +125,18 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isCupuEnabled, value);
                 RaisePropertyChanged(nameof(CupuVisibility));
+            }
+        }
+
+        public Visibility PredictionVisibility => IsPredictionEnabled ? Visibility.Visible : Visibility.Hidden;
+        private bool isPredictionEnabled = true;
+        public bool IsPredictionEnabled
+        {
+            get => isPredictionEnabled;
+            set
+            {
+                SetProperty(ref isPredictionEnabled, value);
+                RaisePropertyChanged(nameof(PredictionVisibility));
             }
         }
 
@@ -211,6 +230,7 @@ namespace HEVCDemo.ViewModels
             await cacheProvider.EnsureFrameInCache(index, SetAppState, HandleError);
             Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[index]);
             Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[index]);
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.PredictionFramesBitmaps[index]);
             ForwardClick.RaiseCanExecuteChanged();
             BackwardClick.RaiseCanExecuteChanged();
         }

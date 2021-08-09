@@ -2,11 +2,11 @@
 using HEVCDemo.Types;
 using Rasyidf.Localization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
 {
@@ -61,7 +61,12 @@ namespace HEVCDemo.Parsers
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
                             {
-                                //WriteBitmaps(cacheProvider, cuRectangles, puRectangles, frameNumber);
+                                var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
+                                foreach(var cu in frame.CodingUnits)
+                                {
+                                    WriteBitmaps(cacheProvider, cu, writeableBitmap);
+                                }
+                                cacheProvider.SaveBitmap(writeableBitmap, cacheProvider.PredictionFramesDirPath, frame.POC);
                                 break;
                             }
                         }
@@ -76,6 +81,40 @@ namespace HEVCDemo.Parsers
 
                 return true;
             });
+        }
+
+        private void WriteBitmaps(CacheProvider cacheProvider, ComCU cu, WriteableBitmap writeableBitmap)
+        {
+            foreach (var sCu in cu.SCUs)
+            {
+                WriteBitmaps(cacheProvider, sCu, writeableBitmap);
+            }
+
+            foreach (var pu in cu.PUs)
+            {
+                using (writeableBitmap.GetBitmapContext())
+                {
+                    var rect = new Rectangle(pu.X, pu.Y, pu.Width, pu.Height);
+                    System.Windows.Media.Color color = Colors.Transparent;
+
+                    switch (pu.PredictionMode)
+                    {
+                        case PredictionMode.MODE_SKIP:
+                            continue;
+                        case PredictionMode.MODE_INTER:
+                            color = System.Windows.Media.Color.FromArgb(100, 0, 100, 200);
+                            break;
+                        case PredictionMode.MODE_INTRA:
+                            color = System.Windows.Media.Color.FromArgb(100, 0, 200, 100);
+                            break;
+                        case PredictionMode.MODE_NONE:
+                            continue;
+                    }
+
+                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Black);
+                    writeableBitmap.FillRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, color);
+                }
+            }
         }
 
         public bool XReadPredictionMode(string[] tokens, ComCU pcLCU, ref int index)

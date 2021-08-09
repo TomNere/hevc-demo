@@ -75,7 +75,6 @@
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\ActionsHelper.cs" />
     <Compile Include="MainModule.cs" />
-    <Compile Include="Parsers\MotionVectorParser.cs" />
     <Compile Include="Parsers\IntraParser.cs" />
     <Compile Include="Parsers\PredictionParser.cs" />
     <Compile Include="Parsers\PropsParser.cs" />
