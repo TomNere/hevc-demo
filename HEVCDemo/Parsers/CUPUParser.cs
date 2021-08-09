@@ -61,11 +61,21 @@ namespace HEVCDemo.Parsers
                             int iAddr = int.Parse(strOneLine.Substring(addressStart + 1, addressEnd - addressStart - 1));
 
                             iDecOrder += iLastPOC != iPoc ? 1 : 0;
-                            
-                            var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
+                            ComFrame frame;
 
-                            var frame = new ComFrame { POC = iPoc, Sequence = videoSequence };
-                            videoSequence.FramesInDecodeOrder.Add(frame);
+                            if (iPoc != iLastPOC)
+                            {
+                                frame = new ComFrame { POC = iPoc, Sequence = videoSequence };
+                                videoSequence.FramesInDecodeOrder.Add(iDecOrder, frame);
+                            }
+                            else
+                            {
+                                frame = videoSequence.FramesInDecodeOrder[iDecOrder];
+                            }
+
+                            iLastPOC = iPoc;
+
+                            var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
 
                             /// poc and lcu addr
                             var pcLCU = new ComCU { iAddr = iAddr, Frame = frame, Size = iLCUSize };
@@ -80,7 +90,7 @@ namespace HEVCDemo.Parsers
                                 throw new FormatException("InvalidCupuFormatEx,Text".Localize());
                             }
 
-                            pcLCU.Frame.CodingUnits.Add(pcLCU);
+                            frame.CodingUnits.Add(pcLCU);
 
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)

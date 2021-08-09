@@ -27,6 +27,8 @@ namespace HEVCDemo.Helpers
         public string StatsDirPath;
         public string CupuFilePath;
         public string PropsFilePath;
+        public string PredictionFilePath;
+        public string IntraFilePath;
         public string AnnexBFilePath;
         public string YuvFilePath;
         public string YuvFramesDirPath;
@@ -49,6 +51,8 @@ namespace HEVCDemo.Helpers
             StatsDirPath = $@"{cacheDirPath}\stats";
             CupuFilePath = $@"{StatsDirPath}\cupu{textExtension}";
             PropsFilePath = $@"{StatsDirPath}\props{textExtension}";
+            PredictionFilePath = $@"{cachePrefix}\prediction{textExtension}";
+            IntraFilePath = $@"{cachePrefix}\intra{textExtension}";
 
             // Images
             YuvFramesDirPath = $@"{cacheDirPath}\yuvFrames";
@@ -89,7 +93,17 @@ namespace HEVCDemo.Helpers
 
             var cupuParser = new CupuParser(videoSequence);
             await cupuParser.ParseFile(this);
+
+            var predictionParser = new PredictionParser(videoSequence);
+            var intraParser = new IntraParser(videoSequence);
+            var tasks = new List<Task>
+            {
+                predictionParser.ParseFile(this),
+                intraParser.ParseFile(this)
+            };
+
             await framesLoading;
+            await Task.WhenAll(tasks);
 
             if (!InitFramesCount())
             {

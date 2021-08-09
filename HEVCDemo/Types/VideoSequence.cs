@@ -10,7 +10,6 @@ namespace HEVCDemo.Types
         public int MaxCUSize;
         public int MaxCUDepth;
 
-        public List<ComFrame> FramesInDisplayOrder = new List<ComFrame>();
-        public List<ComFrame> FramesInDecodeOrder = new List<ComFrame>();
+        public Dictionary<int, ComFrame> FramesInDecodeOrder = new Dictionary<int, ComFrame>();
     }
 }

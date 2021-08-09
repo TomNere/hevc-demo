@@ -8,6 +8,9 @@ namespace HEVCDemo.Types
         public int Y;
         public int Width;
         public int Height;
+        public PredictionMode PredictionMode;
         public ComCU CU;
+        public int IntraDirLuma;
+        public int IntraDirChroma;
     }
 }
