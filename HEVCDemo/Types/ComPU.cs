@@ -10,7 +10,7 @@ namespace HEVCDemo.Types
         public int Height;
         public PredictionMode PredictionMode;
         public ComCU CU;
-        public int IntraDirLuma;
-        public int IntraDirChroma;
+        public int IntraDirLuma = -1;
+        public int IntraDirChroma = -1;
     }
 }

@@ -2,11 +2,10 @@
 using HEVCDemo.Types;
 using Rasyidf.Localization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
 {
@@ -62,7 +61,12 @@ namespace HEVCDemo.Parsers
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
                             {
-                                //WriteBitmaps(cacheProvider, cuRectangles, puRectangles, frameNumber);
+                                var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
+                                foreach (var cu in frame.CodingUnits)
+                                {
+                                    WriteBitmaps(cacheProvider, cu, writeableBitmap);
+                                }
+                                cacheProvider.SaveBitmap(writeableBitmap, cacheProvider.IntraFramesDirPath, frame.POC);
                                 break;
                             }
                         }
@@ -77,6 +81,45 @@ namespace HEVCDemo.Parsers
 
                 return true;
             });
+        }
+
+        private void WriteBitmaps(CacheProvider cacheProvider, ComCU cu, WriteableBitmap writeableBitmap)
+        {
+            foreach (var sCu in cu.SCUs)
+            {
+                WriteBitmaps(cacheProvider, sCu, writeableBitmap);
+            }
+            foreach (var pu in cu.PUs)
+            {
+                if (pu.PredictionMode == PredictionMode.MODE_INTRA) continue;
+
+                using (writeableBitmap.GetBitmapContext())
+                {
+                    switch (pu.IntraDirLuma)
+                    {
+                        case 0: // Planar
+                            writeableBitmap.DrawEllipse(pu.X, pu.Y, pu.X + pu.Width, pu.Y + pu.Height, Colors.Yellow);
+                            break;
+                        case 1: // DC
+                            writeableBitmap.DrawLine(pu.X, pu.Y + pu.Height / 2, pu.X + pu.Width / 2, pu.Y, Colors.Yellow);
+                            break;
+                        default:
+                            if (pu.IntraDirLuma >= 2 && pu.IntraDirLuma <= 17)
+                            {
+                                var offset = pu.IntraDirLuma - 1; // 2-17 => 1-16
+                                var scaled = (pu.Height / 16) * offset;
+                                writeableBitmap.DrawLine(pu.X, pu.Y + (pu.Height - scaled), pu.X + (pu.Width / 2), pu.Y + (pu.Height / 2), Colors.Red);
+                            }
+                            else if (pu.IntraDirLuma >= 18 && pu.IntraDirLuma <= 34)
+                            {
+                                var offset = pu.IntraDirLuma - 18;
+                                var scaled = (pu.Width / 16) * offset;
+                                writeableBitmap.DrawLine(pu.X + scaled, pu.Y, pu.X + (pu.Width / 2), pu.Y + (pu.Height / 2), Colors.Blue);
+                            }
+                            break;
+                    }
+                }
+            }
         }
 
         public bool XReadIntraMode(string[] tokens, ComCU pcLCU, ref int index)

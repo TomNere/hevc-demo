@@ -153,6 +153,10 @@
     {
       "Id": "PredictionLabel",
       "Content": "Typ predikce"
+    },
+    {
+      "Id": "IntraLabel",
+      "Content": "Mód vnitřního kódování"
     }
   ]
 }

@@ -72,6 +72,13 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref currentPredictionImage, value);
         }
 
+        private BitmapImage currentIntraImage;
+        public BitmapImage CurrentIntraImage
+        {
+            get => currentIntraImage;
+            set => SetProperty(ref currentIntraImage, value);
+        }
+
         private int currentFrameIndex;
         public int CurrentFrameIndex
         {
@@ -137,6 +144,18 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isPredictionEnabled, value);
                 RaisePropertyChanged(nameof(PredictionVisibility));
+            }
+        }
+
+        public Visibility IntraVisibility => IsIntraEnabled ? Visibility.Visible : Visibility.Hidden;
+        private bool isIntraEnabled = true;
+        public bool IsIntraEnabled
+        {
+            get => isIntraEnabled;
+            set
+            {
+                SetProperty(ref isIntraEnabled, value);
+                RaisePropertyChanged(nameof(IntraVisibility));
             }
         }
 
@@ -231,6 +250,7 @@ namespace HEVCDemo.ViewModels
             Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[index]);
             Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[index]);
             Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.PredictionFramesBitmaps[index]);
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.IntraFramesBitmaps[index]);
             ForwardClick.RaiseCanExecuteChanged();
             BackwardClick.RaiseCanExecuteChanged();
         }

@@ -25,6 +25,8 @@
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCupuImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding CupuVisibility}" Stretch="Fill" />
                 <!--Prediction Image (Overlay)-->
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentPredictionImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding PredictionVisibility}" Stretch="Fill" />
+                <!--Intra Image (Overlay)-->
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentIntraImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding IntraVisibility}" Stretch="Fill" />
             </Grid>
         </ScrollViewer>
 
@@ -58,22 +60,25 @@
 
             <!--View options-->
             <Label Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="{rf:Tr Uid='ViewOptionsLabel'}"/>
-            <Grid Grid.Row="5" IsEnabled="{Binding Enabled}" Margin="8">
+            <Grid Grid.Row="5" Grid.ColumnSpan="2" IsEnabled="{Binding Enabled}" Margin="8">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="38"/>
                     <RowDefinition Height="38"/>
                     <RowDefinition Height="38"/>
                     <RowDefinition Height="38"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.8*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox IsChecked="{Binding IsDecodedFramesEnabled}"/>
+                <CheckBox IsChecked="{Binding IsDecodedFramesEnabled}" VerticalAlignment="Center"/>
                 <Label Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='DecodedFramesLabel'}"/>
-                <CheckBox Grid.Row="1" IsChecked="{Binding IsCupuEnabled}"/>
+                <CheckBox Grid.Row="1" IsChecked="{Binding IsCupuEnabled}" VerticalAlignment="Center"/>
                 <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='CodingUnitsLabel'}"/>
-                <CheckBox Grid.Row="2" IsChecked="{Binding IsPredictionEnabled}"/>
+                <CheckBox Grid.Row="2" IsChecked="{Binding IsPredictionEnabled}" VerticalAlignment="Center"/>
                 <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='PredictionLabel'}"/>
+                <CheckBox Grid.Row="3" IsChecked="{Binding IsIntraEnabled}" VerticalAlignment="Center"/>
+                <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='IntraLabel'}"/>
             </Grid>
         </Grid>
 

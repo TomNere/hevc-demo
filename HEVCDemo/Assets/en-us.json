@@ -153,6 +153,10 @@
     {
       "Id": "PredictionLabel",
       "Content": "Prediction type"
+    },
+    {
+      "Id": "IntraLabel",
+      "Content": "Intra prediction mode"
     }
   ]
 }

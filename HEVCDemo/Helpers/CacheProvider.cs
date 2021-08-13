@@ -34,12 +34,14 @@ namespace HEVCDemo.Helpers
         public string YuvFramesDirPath;
         public string CupuFramesDirPath;
         public string PredictionFramesDirPath;
+        public string IntraFramesDirPath;
 
         public bool CacheExists => File.Exists(PropsFilePath);
 
         public readonly Dictionary<int, BitmapImage> YuvFramesBitmaps = new Dictionary<int, BitmapImage>();
         public readonly Dictionary<int, BitmapImage> CupuFramesBitmaps = new Dictionary<int, BitmapImage>();
         public readonly Dictionary<int, BitmapImage> PredictionFramesBitmaps = new Dictionary<int, BitmapImage>();
+        public readonly Dictionary<int, BitmapImage> IntraFramesBitmaps = new Dictionary<int, BitmapImage>();
 
         public double FileSize;
         public VideoSequence videoSequence = new VideoSequence();
@@ -60,6 +62,7 @@ namespace HEVCDemo.Helpers
             YuvFramesDirPath = $@"{cacheDirPath}\yuvFrames";
             CupuFramesDirPath = $@"{cacheDirPath}\cupuFrames";
             PredictionFramesDirPath = $@"{cacheDirPath}\predictionFrames";
+            IntraFramesDirPath = $@"{cacheDirPath}\intraFrames";
 
             // AnnexB file stays at his location
             AnnexBFilePath = Path.GetExtension(filePath).ToLower() == annexBExtension ? filePath : $@"{cacheDirPath}\annexB{annexBExtension}";
@@ -99,14 +102,10 @@ namespace HEVCDemo.Helpers
 
             var predictionParser = new PredictionParser(videoSequence);
             var intraParser = new IntraParser(videoSequence);
-            var tasks = new List<Task>
-            {
-                predictionParser.ParseFile(this),
-                intraParser.ParseFile(this)
-            };
 
+            await predictionParser.ParseFile(this);
+            await intraParser.ParseFile(this);
             await framesLoading;
-            await Task.WhenAll(tasks);
 
             if (!InitFramesCount())
             {
@@ -125,6 +124,7 @@ namespace HEVCDemo.Helpers
             Directory.CreateDirectory(YuvFramesDirPath);
             Directory.CreateDirectory(CupuFramesDirPath);
             Directory.CreateDirectory(PredictionFramesDirPath);
+            Directory.CreateDirectory(IntraFramesDirPath);
             Directory.CreateDirectory(StatsDirPath);
         }
 
@@ -138,7 +138,8 @@ namespace HEVCDemo.Helpers
             {
                 LoadFramesIntoCache(startIndex),
                 LoadCupusIntoCache(startIndex),
-                LoadPredictionsIntoCache(startIndex)
+                LoadPredictionsIntoCache(startIndex),
+                LoadIntrasIntoCache(startIndex)
             };
 
             await Task.WhenAll(loadings);
@@ -181,6 +182,13 @@ namespace HEVCDemo.Helpers
             var files = new DirectoryInfo(PredictionFramesDirPath).GetFiles().ToList();
             files.OrderBy(file => int.Parse(Path.GetFileNameWithoutExtension(file.FullName)));
             await LoadBitmaps(PredictionFramesBitmaps, files, startIndex);
+        }
+
+        public async Task LoadIntrasIntoCache(int startIndex)
+        {
+            var files = new DirectoryInfo(IntraFramesDirPath).GetFiles().ToList();
+            files.OrderBy(file => int.Parse(Path.GetFileNameWithoutExtension(file.FullName)));
+            await LoadBitmaps(IntraFramesBitmaps, files, startIndex);
         }
 
         private async Task LoadBitmaps(Dictionary<int, BitmapImage> dictionary, List<FileInfo> files, int startIndex)
