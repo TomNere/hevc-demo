@@ -141,6 +141,22 @@
     {
       "Id": "ErrorMessageMsg",
       "Text": "Error message:"
+    },
+    {
+      "Id": "ErrorParsingPredictionEx",
+      "Text": "Error parsing prediction file"
+    },
+    {
+      "Id": "ErrorParsingIntraEx",
+      "Text": "Error parsing intra file"
+    },
+    {
+      "Id": "PredictionLabel",
+      "Content": "Prediction type"
+    },
+    {
+      "Id": "IntraLabel",
+      "Content": "Intra prediction mode"
     }
   ]
 }

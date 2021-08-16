@@ -113,7 +113,11 @@ Void TAppMctsExtTop::extract()
 
   // hevc_demo
   ofstream cupuOutput;
+  ofstream predictionOutput;
+  ofstream intraOutput;
   cupuOutput.open(m_statsOutputPath + "\\cupu.txt");
+  predictionOutput.open(m_statsOutputPath + "\\prediction.txt");
+  intraOutput.open(m_statsOutputPath + "\\intra.txt");
 
   while (!!bitstreamFile)
   {
@@ -134,7 +138,7 @@ Void TAppMctsExtTop::extract()
       m_pcSlice = m_cTDecTop.getApcSlicePilot();
       // decode HLS, skipping cabac decoding and reconstruction
       // hevc_demo
-      bNewPicture = m_cTDecTop.decode(inNalu, iSkipFrame, iPOCLastDisplay, cupuOutput, m_statsOutputPath, true);
+      bNewPicture = m_cTDecTop.decode(inNalu, iSkipFrame, iPOCLastDisplay, cupuOutput, predictionOutput, intraOutput, m_statsOutputPath, true);
 
       if (bNewPicture)
       {
@@ -225,6 +229,8 @@ Void TAppMctsExtTop::extract()
 
   // hevc_demo
   cupuOutput.close();
+  predictionOutput.close();
+  intraOutput.close();
 }
 
 // ====================================================================================================================

@@ -65,6 +65,20 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref currentCupuImage, value);
         }
 
+        private BitmapImage currentPredictionImage;
+        public BitmapImage CurrentPredictionImage
+        {
+            get => currentPredictionImage;
+            set => SetProperty(ref currentPredictionImage, value);
+        }
+
+        private BitmapImage currentIntraImage;
+        public BitmapImage CurrentIntraImage
+        {
+            get => currentIntraImage;
+            set => SetProperty(ref currentIntraImage, value);
+        }
+
         private int currentFrameIndex;
         public int CurrentFrameIndex
         {
@@ -98,7 +112,7 @@ namespace HEVCDemo.ViewModels
         }
 
         public Visibility DecodedFramesVisibility => IsDecodedFramesEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isDecodedFramesEnabled;
+        private bool isDecodedFramesEnabled = true;
         public bool IsDecodedFramesEnabled
         {
             get => isDecodedFramesEnabled;
@@ -110,7 +124,7 @@ namespace HEVCDemo.ViewModels
         }
 
         public Visibility CupuVisibility => IsCupuEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isCupuEnabled;
+        private bool isCupuEnabled = true;
         public bool IsCupuEnabled
         {
             get => isCupuEnabled;
@@ -118,6 +132,30 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isCupuEnabled, value);
                 RaisePropertyChanged(nameof(CupuVisibility));
+            }
+        }
+
+        public Visibility PredictionVisibility => IsPredictionEnabled ? Visibility.Visible : Visibility.Hidden;
+        private bool isPredictionEnabled = true;
+        public bool IsPredictionEnabled
+        {
+            get => isPredictionEnabled;
+            set
+            {
+                SetProperty(ref isPredictionEnabled, value);
+                RaisePropertyChanged(nameof(PredictionVisibility));
+            }
+        }
+
+        public Visibility IntraVisibility => IsIntraEnabled ? Visibility.Visible : Visibility.Hidden;
+        private bool isIntraEnabled = true;
+        public bool IsIntraEnabled
+        {
+            get => isIntraEnabled;
+            set
+            {
+                SetProperty(ref isIntraEnabled, value);
+                RaisePropertyChanged(nameof(IntraVisibility));
             }
         }
 
@@ -203,7 +241,7 @@ namespace HEVCDemo.ViewModels
 
         private bool CanExecuteForward()
         {
-            return cacheProvider?.FramesCount > CurrentFrameIndex + 1;
+            return cacheProvider?.videoSequence.FramesCount > CurrentFrameIndex + 1;
         }
 
         private async void SetCurrentFrame(int index)
@@ -211,6 +249,8 @@ namespace HEVCDemo.ViewModels
             await cacheProvider.EnsureFrameInCache(index, SetAppState, HandleError);
             Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[index]);
             Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[index]);
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.PredictionFramesBitmaps[index]);
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.IntraFramesBitmaps[index]);
             ForwardClick.RaiseCanExecuteChanged();
             BackwardClick.RaiseCanExecuteChanged();
         }
@@ -279,15 +319,15 @@ namespace HEVCDemo.ViewModels
                     if (cacheProvider.YuvFramesBitmaps.Count > 0 &&
                         cacheProvider.YuvFramesBitmaps.Count == cacheProvider.CupuFramesBitmaps.Count)
                     {
-                        Height = cacheProvider.Height;
-                        Width = cacheProvider.Width;
-                        Resolution = $"{cacheProvider.Width} x {cacheProvider.Height}";
+                        Height = cacheProvider.videoSequence.Height;
+                        Width = cacheProvider.videoSequence.Width;
+                        Resolution = $"{cacheProvider.videoSequence.Width} x {cacheProvider.videoSequence.Height}";
                         double length = new FileInfo(openFileDialog.FileName).Length / 1024d;
                         FileSize = length < 1000 ? $"{length:0.000} KB" : $"{length / 1024:0.000} MB";
 
                         Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[0]);
                         Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[0]);
-                        MaxSliderValue = cacheProvider.FramesCount - 1;
+                        MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
                         CurrentFrameIndex = 0;
                         StartButtonVisibility = Visibility.Hidden;
                     }

@@ -79,7 +79,8 @@ public:
   Void  destroy           ();
 
   // hevc_demo
-  Void  decompressSlice   ( TComInputBitstream** ppcSubstreams,   TComPic* pcPic, TDecSbac* pcSbacDecoder, ofstream& cupuOutput);
+  Void  decompressSlice   ( TComInputBitstream** ppcSubstreams,   TComPic* pcPic, TDecSbac* pcSbacDecoder, ofstream& cupuOutput, ofstream& predictionOutput, ofstream& intraOutput);
+  Void WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iDepth, ofstream& predictionOutput, ofstream& intraOutput);
 };
 
 //! \}

@@ -141,6 +141,22 @@
     {
       "Id": "ErrorMessageMsg",
       "Text": "Popis problému:"
+    },
+    {
+      "Id": "ErrorParsingPredictionEx",
+      "Text": "Problém při parsování prediction souboru."
+    },
+    {
+      "Id": "ErrorParsingIntraEx",
+      "Text": "Problém při parsování intra souboru."
+    },
+    {
+      "Id": "PredictionLabel",
+      "Content": "Typ predikce"
+    },
+    {
+      "Id": "IntraLabel",
+      "Content": "Mód vnitřního kódování"
     }
   ]
 }

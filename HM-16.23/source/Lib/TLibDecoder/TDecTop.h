@@ -142,7 +142,7 @@ public:
   TComSlice* getApcSlicePilot() { return m_apcSlicePilot; }
   TComPic* getPcPic() const { return m_pcPic; }
   // hevc_demo
-  Bool  decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay, ofstream& cupuOutput, string statsOutputPath, Bool bSkipCabacAndReconstruction=false);
+  Bool  decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay, ofstream& cupuOutput, ofstream& predictionOutput, ofstream& intraOutput, string statsOutputPath, Bool bSkipCabacAndReconstruction=false);
 #else
   Bool  decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay);
 #endif
@@ -169,7 +169,7 @@ protected:
 
 #if MCTS_EXTRACTION
   // hevc_demo
-  Bool      xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay, Bool bSkipCabacAndReconstruction, ofstream& cupuOutput);
+  Bool      xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay, Bool bSkipCabacAndReconstruction, ofstream& cupuOutput, ofstream& predictionOutput, ofstream& intraOutput);
   Void      xActivateParameterSets(Bool bSkipCabacAndReconstruction);
 #else
   Bool      xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay);

@@ -69,7 +69,7 @@ Void TDecSlice::init(TDecEntropy* pcEntropyDecoder, TDecCu* pcCuDecoder, TDecCon
 }
 
 // hevc_demo
-Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcPic, TDecSbac* pcSbacDecoder, ofstream& cupuOutput)
+Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcPic, TDecSbac* pcSbacDecoder, ofstream& cupuOutput, ofstream& predictionOutput, ofstream& intraOutput)
 {
   TComSlice* pcSlice                 = pcPic->getSlice(pcPic->getCurrSliceIdx());
 
@@ -222,8 +222,16 @@ Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcP
       m_pDecConformanceCheck->checkCtuDecoding(numRemainingBitsPriorToCtu-numRemainingBitsPostCtu);
     }
 #endif
+    // hevc_demo
+    predictionOutput << "<" << pCtu->getSlice()->getPOC() << "," << pCtu->getCtuRsAddr() << ">" << " ";
+    intraOutput << "<" << pCtu->getSlice()->getPOC() << "," << pCtu->getCtuRsAddr() << ">" << " ";
 
     m_pcCuDecoder->decompressCtu ( pCtu );
+    
+    // hevc_demo
+    WriteCUStats(pCtu, pCtu->getTotalNumPart(), 0, 0, predictionOutput, intraOutput);
+    predictionOutput << endl;
+    intraOutput << endl;
 
 #if ENC_DEC_TRACE
     g_bJustDoIt = g_bEncDecTraceDisable;
@@ -270,6 +278,131 @@ Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcP
     m_lastSliceSegmentEndContextState.loadContexts( pcSbacDecoder );//ctx end of dep.slice
   }
 
+}
+
+// hevc_demo
+Void TDecSlice::WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iDepth, ofstream& predictionOutput, ofstream& intraOutput)
+{
+    UChar* puhDepth = pcCU->getDepth();
+    SChar* puhPartSize = pcCU->getPartitionSize();
+
+    TComMv rcMV;
+
+    if (puhDepth[iOffset] <= iDepth)
+    {
+        /// PU number in this leaf CU
+        int iNumPart = 0;
+
+        switch (puhPartSize[iOffset])
+        {
+        case SIZE_2Nx2N:    iNumPart = 1; break;
+        case SIZE_2NxN:     iNumPart = 2; break;
+        case SIZE_Nx2N:     iNumPart = 2; break;
+        case SIZE_NxN:      iNumPart = 4; break;
+        case SIZE_2NxnU:    iNumPart = 2; break;
+        case SIZE_2NxnD:    iNumPart = 2; break;
+        case SIZE_nLx2N:    iNumPart = 2; break;
+        case SIZE_nRx2N:    iNumPart = 2; break;
+        default:    iNumPart = 0;  /*assert(0);*/  break;  ///< out of boundery
+        }
+
+        /// Traverse every PU
+        int iPartAddOffset = 0;   ///< PU offset
+        for (int i = 0; i < iNumPart; i++)
+        {
+            switch (puhPartSize[iOffset])
+            {
+            case SIZE_2NxN:
+                iPartAddOffset = (i == 0) ? 0 : iLength >> 1;
+                break;
+            case SIZE_Nx2N:
+                iPartAddOffset = (i == 0) ? 0 : iLength >> 2;
+                break;
+            case SIZE_NxN:
+                iPartAddOffset = (iLength >> 2) * i;
+                break;
+            case SIZE_2NxnU:
+                iPartAddOffset = (i == 0) ? 0 : iLength >> 3;
+                break;
+            case SIZE_2NxnD:
+                iPartAddOffset = (i == 0) ? 0 : (iLength >> 1) + (iLength >> 3);
+                break;
+            case SIZE_nLx2N:
+                iPartAddOffset = (i == 0) ? 0 : iLength >> 4;
+                break;
+            case SIZE_nRx2N:
+                iPartAddOffset = (i == 0) ? 0 : (iLength >> 2) + (iLength >> 4);
+                break;
+            default:
+                assert(puhPartSize[iOffset] == SIZE_2Nx2N);
+                iPartAddOffset = 0;
+                break;
+            }
+
+            /// Write prediction info (for historical reason, MODE_SKIP = 0, MODE_INTER = 1 ....) (SKIP mode removed after HM-8.0)
+            PredMode ePred = pcCU->getPredictionMode(iOffset + iPartAddOffset);
+            Int iPred = ePred;
+            if (ePred == MODE_INTER)
+                iPred = 1;
+            else if (ePred == MODE_INTRA)
+                iPred = 2;
+            /*else if (ePred == MODE_NONE)
+                iPred = 15;*/
+            predictionOutput << iPred << " ";
+
+            /// Write merge info
+            /*Bool bMergeFlag = pcCU->getMergeFlag(iOffset + iPartAddOffset);
+            Int iMergeIndex = pcCU->getMergeIndex(iOffset + iPartAddOffset);
+            if (bMergeFlag)
+                m_cMergeOutput << iMergeIndex << " ";
+            else
+                m_cMergeOutput << -1 << " ";*/
+
+                /// Write MV info
+                //Int iInterDir = pcCU->getInterDir(iOffset + iPartAddOffset);   ///< Inter direction: 0--Invalid, 1--List 0 only, 2--List 1 only, 3--List 0&1(bi-direction)
+                //int iRefIdx = -1;
+                //m_cMVOutput << iInterDir << " ";
+                //if (iInterDir == 0)
+                //{
+                //    // do nothing
+                //}
+                //else if (iInterDir == 1)
+                //{
+                //    rcMV = pcCU->getCUMvField(REF_PIC_LIST_0)->getMv(iOffset + iPartAddOffset);
+                //    iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_0)->getRefIdx(iOffset + iPartAddOffset);
+                //    m_cMVOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_0, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
+                //}
+                //else if (iInterDir == 2)
+                //{
+                //    rcMV = pcCU->getCUMvField(REF_PIC_LIST_1)->getMv(iOffset + iPartAddOffset);
+                //    iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_1)->getRefIdx(iOffset + iPartAddOffset);
+                //    m_cMVOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_1, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
+                //}
+                //else if (iInterDir == 3)
+                //{
+                //    rcMV = pcCU->getCUMvField(REF_PIC_LIST_0)->getMv(iOffset + iPartAddOffset);
+                //    iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_0)->getRefIdx(iOffset + iPartAddOffset);
+                //    m_cMVOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_0, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
+                //    rcMV = pcCU->getCUMvField(REF_PIC_LIST_1)->getMv(iOffset + iPartAddOffset);
+                //    iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_1)->getRefIdx(iOffset + iPartAddOffset);
+                //    m_cMVOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_1, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
+                //}
+
+                /// Write Intra info
+            Int iLumaIntraDir = pcCU->getIntraDir(CHANNEL_TYPE_LUMA, iOffset + iPartAddOffset);
+            Int iChromaIntraDir = pcCU->getIntraDir(CHANNEL_TYPE_CHROMA, iOffset + iPartAddOffset);
+            intraOutput << iLumaIntraDir << " " << iChromaIntraDir << " ";
+
+        } /// PU end
+    }
+    else
+    {
+        //m_cCUPUOutput << "99" << " ";     ///< CU info
+        for (UInt i = 0; i < 4; i++)
+        {
+            WriteCUStats(pcCU, iLength / 4, iOffset + iLength / 4 * i, iDepth + 1, predictionOutput, intraOutput);
+        }
+    }
 }
 
 //! \}
