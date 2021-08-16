@@ -503,7 +503,7 @@ Void TDecTop::xAnalysePrefixSEImessages()
 
 #if MCTS_EXTRACTION
 // hevc_demo
-Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay, Bool bSkipCabacAndReconstruction, ofstream& cupuOutput)
+Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay, Bool bSkipCabacAndReconstruction, ofstream& cupuOutput, ofstream& predictionOutput, ofstream& intraOutput)
 #else
 Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisplay)
 #endif
@@ -778,7 +778,7 @@ Bool TDecTop::xDecodeSlice(InputNALUnit &nalu, Int &iSkipFrame, Int iPOCLastDisp
 
   //  hevc_demo
   //  Decode a picture
-  m_cGopDecoder.decompressSlice(&(nalu.getBitstream()), m_pcPic, cupuOutput);
+  m_cGopDecoder.decompressSlice(&(nalu.getBitstream()), m_pcPic, cupuOutput, predictionOutput, intraOutput);
 
   m_bFirstSliceInPicture = false;
   m_uiSliceIdx++;
@@ -815,7 +815,7 @@ Void TDecTop::xDecodePPS(const std::vector<UChar> &naluData)
 
 #if MCTS_EXTRACTION
 // hevc_demo
-Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay, ofstream& cupuOutput, string statsOutputPath, Bool bSkipCabacAndReconstruction)
+Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay, ofstream& cupuOutput, ofstream& predictionOutput, ofstream& intraOutput, string statsOutputPath, Bool bSkipCabacAndReconstruction)
 #else
 Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay)
 #endif
@@ -879,7 +879,7 @@ Bool TDecTop::decode(InputNALUnit& nalu, Int& iSkipFrame, Int& iPOCLastDisplay)
     case NAL_UNIT_CODED_SLICE_RASL_R:
 #if MCTS_EXTRACTION
       // hevc_demo
-      return xDecodeSlice(nalu, iSkipFrame, iPOCLastDisplay, bSkipCabacAndReconstruction, cupuOutput);
+      return xDecodeSlice(nalu, iSkipFrame, iPOCLastDisplay, bSkipCabacAndReconstruction, cupuOutput, predictionOutput, intraOutput);
 #else
       return xDecodeSlice(nalu, iSkipFrame, iPOCLastDisplay);
 #endif

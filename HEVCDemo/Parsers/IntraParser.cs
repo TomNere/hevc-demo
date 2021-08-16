@@ -89,9 +89,10 @@ namespace HEVCDemo.Parsers
             {
                 WriteBitmaps(cacheProvider, sCu, writeableBitmap);
             }
+
             foreach (var pu in cu.PUs)
             {
-                if (pu.PredictionMode == PredictionMode.MODE_INTRA) continue;
+                if (pu.PredictionMode != PredictionMode.MODE_INTRA) continue;
 
                 using (writeableBitmap.GetBitmapContext())
                 {

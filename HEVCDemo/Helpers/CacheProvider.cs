@@ -55,8 +55,8 @@ namespace HEVCDemo.Helpers
             StatsDirPath = $@"{cacheDirPath}\stats";
             CupuFilePath = $@"{StatsDirPath}\cupu{textExtension}";
             PropsFilePath = $@"{StatsDirPath}\props{textExtension}";
-            PredictionFilePath = $@"{cachePrefix}\prediction{textExtension}";
-            IntraFilePath = $@"{cachePrefix}\intra{textExtension}";
+            PredictionFilePath = $@"{StatsDirPath}\prediction{textExtension}";
+            IntraFilePath = $@"{StatsDirPath}\intra{textExtension}";
 
             // Images
             YuvFramesDirPath = $@"{cacheDirPath}\yuvFrames";
