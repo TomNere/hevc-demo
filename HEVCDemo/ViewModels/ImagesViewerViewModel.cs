@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -85,7 +86,7 @@ namespace HEVCDemo.ViewModels
             get => currentFrameIndex;
             set
             {
-                SetCurrentFrame(value);
+                _ = SetCurrentFrame(value);
                 SetProperty(ref currentFrameIndex, value);
             }
         }
@@ -120,7 +121,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isDecodedFramesEnabled, value);
                 RaisePropertyChanged(nameof(DecodedFramesVisibility));
-                SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -133,7 +134,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isCupuEnabled, value);
                 RaisePropertyChanged(nameof(CupuVisibility));
-                SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -146,7 +147,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isPredictionEnabled, value);
                 RaisePropertyChanged(nameof(PredictionVisibility));
-                SetCurrentFrame(CurrentFrameIndex);
+                _ =SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -159,7 +160,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isIntraEnabled, value);
                 RaisePropertyChanged(nameof(IntraVisibility));
-                SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -248,12 +249,13 @@ namespace HEVCDemo.ViewModels
             return cacheProvider?.videoSequence.FramesCount > CurrentFrameIndex + 1;
         }
 
-        private async void SetCurrentFrame(int index)
+        private async Task SetCurrentFrame(int index)
         {
+            SetAppState("LoadingIntoCacheState,Text".Localize(), false);
+
             if (DecodedFramesVisibility == Visibility.Visible)
             {
-                await cacheProvider.EnsureFrameInCache(index, SetAppState, HandleError);
-                Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[index]);
+                await Dispatcher.CurrentDispatcher.Invoke(async() => CurrentFrameImage = await cacheProvider.GetYuvFrame(index, HandleError));
             }
             if (CupuVisibility == Visibility.Visible)
             {
@@ -270,6 +272,8 @@ namespace HEVCDemo.ViewModels
 
             ForwardClick.RaiseCanExecuteChanged();
             BackwardClick.RaiseCanExecuteChanged();
+
+            SetAppState("ReadyState,Text".Localize(), true);
         }
 
         #endregion
@@ -328,6 +332,7 @@ namespace HEVCDemo.ViewModels
                         }
                         else
                         {
+                            SetAppState("CreatingDemoState,Text".Localize(), false);
                             cacheProvider.InitFramesCount();
                             cacheProvider.ParseProps();
                             await cacheProvider.ProcessFiles();
@@ -337,8 +342,7 @@ namespace HEVCDemo.ViewModels
                     {
                         await cacheProvider.CreateCache(SetAppState);
                     }
-
-                    await cacheProvider.LoadIntoCache(0, SetAppState);
+                    await cacheProvider.LoadIntoCache(0);
 
                     Height = cacheProvider.videoSequence.Height;
                     Width = cacheProvider.videoSequence.Width;

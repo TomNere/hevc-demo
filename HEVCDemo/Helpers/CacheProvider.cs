@@ -1,4 +1,4 @@
-﻿using HEVCDemo.Parsers;
+using HEVCDemo.Parsers;
 using Rasyidf.Localization;
 using HEVCDemo.Types;
 using System;
@@ -116,29 +116,19 @@ namespace HEVCDemo.Helpers
             Directory.CreateDirectory(StatsDirPath);
         }
 
-        public async Task LoadIntoCache(int index, Action<string, bool> setAppState)
+        public async Task LoadIntoCache(int index)
         {
-            setAppState("LoadingIntoCacheState,Text".Localize(), false);
-
             int startIndex = (index / cacheSize) * cacheSize;
-            ClearCache();
             await LoadFramesIntoCache(startIndex);
-            setAppState("ReadyState,Text".Localize(), true);
         }
 
-        private void ClearCache()
-        {
-            YuvFramesBitmaps.Clear();
-            GC.Collect();
-        }
-
-        public async Task EnsureFrameInCache(int index, Action<string, bool> setAppState, Action<string, string> handleError)
+        public async Task EnsureFrameInCache(int index, Action<string, string> handleError)
         {
             if (!YuvFramesBitmaps.ContainsKey(index))
             {
                 await ActionsHelper.InvokeSafelyAsync(async () =>
                 {
-                    await LoadIntoCache(index, setAppState);
+                    await LoadIntoCache(index);
                 }, "LoadIntoCacheTitle,Title".Localize(), handleError);
             }
         }
@@ -157,24 +147,36 @@ namespace HEVCDemo.Helpers
 
         private async Task LoadBitmaps(Dictionary<int, BitmapImage> dictionary, List<FileInfo> files, int startIndex)
         {
-            await Task.Run(() =>
+            await Task.Run(() => 
             {
-                for (int i = startIndex; i < startIndex + cacheSize; i++)
+                lock (dictionary)
                 {
-                    var bitmap = new BitmapImage();
+                    dictionary.Clear();
+                    GC.Collect();
 
-                    using (var imageStreamSource = new FileStream(files[i].FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    for (int i = startIndex; i < Math.Min(startIndex + cacheSize, videoSequence.FramesCount); i++)
                     {
-                        bitmap.BeginInit();
-                        bitmap.StreamSource = imageStreamSource;
-                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmap.EndInit();
+                        var bitmap = new BitmapImage();
+
+                        using (var imageStreamSource = new FileStream(files[i].FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        {
+                            bitmap.BeginInit();
+                            bitmap.StreamSource = imageStreamSource;
+                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmap.EndInit();
+                        }
+
+                        bitmap.Freeze();
+                        dictionary.Add(i, bitmap);
                     }
-                        
-                    bitmap.Freeze();
-                    dictionary.Add(i, bitmap);
                 }
             });
+        }
+
+        public async Task<BitmapImage> GetYuvFrame(int index, Action<string, string> handleError)
+        {
+            await EnsureFrameInCache(index, handleError);
+            return YuvFramesBitmaps[index];
         }
 
         public WriteableBitmap GetIntraFrame(int index)
