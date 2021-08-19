@@ -75,10 +75,12 @@
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\ActionsHelper.cs" />
     <Compile Include="MainModule.cs" />
+    <Compile Include="Parsers\MotionVectorsParser.cs" />
     <Compile Include="Parsers\IntraParser.cs" />
     <Compile Include="Parsers\PredictionParser.cs" />
     <Compile Include="Parsers\PropsParser.cs" />
     <Compile Include="Parsers\CupuParser.cs" />
+    <Compile Include="Types\MotionVector.cs" />
     <Compile Include="Types\ComPU.cs" />
     <Compile Include="Types\ComCU.cs" />
     <Compile Include="Types\ComFrame.cs" />

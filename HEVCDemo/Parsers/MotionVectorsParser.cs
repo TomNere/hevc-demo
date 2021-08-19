@@ -4,16 +4,15 @@ using Rasyidf.Localization;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
 {
-    public class IntraParser
+    public class MotionVectorsParser
     {
         private readonly VideoSequence videoSequence;
 
-        public IntraParser(VideoSequence videoSequence)
+        public MotionVectorsParser(VideoSequence videoSequence)
         {
             this.videoSequence = videoSequence;
         }
@@ -24,7 +23,7 @@ namespace HEVCDemo.Parsers
             {
                 try
                 {
-                    var file = new System.IO.StreamReader(cacheProvider.IntraFilePath);
+                    var file = new System.IO.StreamReader(cacheProvider.MotionVectorsFilePath);
                     string strOneLine = file.ReadLine();
                     int iDecOrder = -1;
                     int iLastPOC = -1;
@@ -55,7 +54,7 @@ namespace HEVCDemo.Parsers
                             var pcLCU = frame.GetCUByAddress(iAddr);
 
                             var index = 0;
-                            XReadIntraMode(tokens, pcLCU, ref index);
+                            XReadMotionVectors(tokens, pcLCU, ref index);
 
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
@@ -68,7 +67,7 @@ namespace HEVCDemo.Parsers
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show($"{"ErrorParsingIntraEx,Text".Localize()}\n\n{e.Message}");
+                    MessageBox.Show($"{"ErrorParsingVectorsEx,Text".Localize()}\n\n{e.Message}");
                     return false;
                 }
 
@@ -85,38 +84,11 @@ namespace HEVCDemo.Parsers
 
             foreach (var pu in cu.PUs)
             {
-                if (pu.PredictionMode != PredictionMode.MODE_INTRA) continue;
-
-                using (writeableBitmap.GetBitmapContext())
-                {
-                    switch (pu.IntraDirLuma)
-                    {
-                        case 0: // Planar
-                            writeableBitmap.DrawEllipse(pu.X, pu.Y, pu.X + pu.Width, pu.Y + pu.Height, Colors.Yellow);
-                            break;
-                        case 1: // DC
-                            writeableBitmap.DrawLine(pu.X, pu.Y + pu.Height / 2, pu.X + pu.Width / 2, pu.Y, Colors.Yellow);
-                            break;
-                        default:
-                            if (pu.IntraDirLuma >= 2 && pu.IntraDirLuma <= 17)
-                            {
-                                var offset = pu.IntraDirLuma - 1; // 2-17 => 1-16
-                                var scaled = (pu.Height / 16) * offset;
-                                writeableBitmap.DrawLine(pu.X, pu.Y + (pu.Height - scaled), pu.X + (pu.Width / 2), pu.Y + (pu.Height / 2), Colors.Red);
-                            }
-                            else if (pu.IntraDirLuma >= 18 && pu.IntraDirLuma <= 34)
-                            {
-                                var offset = pu.IntraDirLuma - 18;
-                                var scaled = (pu.Width / 16) * offset;
-                                writeableBitmap.DrawLine(pu.X + scaled, pu.Y, pu.X + (pu.Width / 2), pu.Y + (pu.Height / 2), Colors.Blue);
-                            }
-                            break;
-                    }
-                }
+                //TODO   
             }
         }
 
-        public bool XReadIntraMode(string[] tokens, ComCU pcLCU, ref int index)
+        public bool XReadMotionVectors(string[] tokens, ComCU pcLCU, ref int index)
         {
             if (index > tokens.Length - 1)
             {
@@ -126,18 +98,38 @@ namespace HEVCDemo.Parsers
             if (pcLCU.SCUs.Count > 0)
             {
                 /// non-leaf node : recursive reading for children
-                XReadIntraMode(tokens, pcLCU.SCUs[0], ref index);
-                XReadIntraMode(tokens, pcLCU.SCUs[1], ref index);
-                XReadIntraMode(tokens, pcLCU.SCUs[2], ref index);
-                XReadIntraMode(tokens, pcLCU.SCUs[3], ref index);
+                XReadMotionVectors(tokens, pcLCU.SCUs[0], ref index);
+                XReadMotionVectors(tokens, pcLCU.SCUs[1], ref index);
+                XReadMotionVectors(tokens, pcLCU.SCUs[2], ref index);
+                XReadMotionVectors(tokens, pcLCU.SCUs[3], ref index);
             }
             else
             {
                 /// leaf node : read data
                 foreach(var pcPU in pcLCU.PUs)
                 {
-                    pcPU.IntraDirLuma = int.Parse(tokens[index++]);
-                    pcPU.IntraDirChroma = int.Parse(tokens[index++]);
+                    pcPU.InterDir = int.Parse(tokens[index++]);
+                    int vectorsCount = 0;
+
+                    if (pcPU.InterDir == 1 || pcPU.InterDir == 2)   //uni-prediction, 1 MV
+                    {
+                        vectorsCount = 1;
+                    }
+                    else if (pcPU.InterDir == 3)                    //bi-prediction, 2 MVs
+                    {
+                        vectorsCount = 2;
+                    }
+
+                    for (int i = 0; i < vectorsCount; i++)
+                    {
+                        var motionVector = new MotionVector
+                        {
+                            RefPoc = int.Parse(tokens[index++]),
+                            Horizontal = int.Parse(tokens[index++]),
+                            Vertical = int.Parse(tokens[index++])
+                        };
+                        pcPU.MotionVectors.Add(motionVector);
+                    }
                 }
             }
             return true;

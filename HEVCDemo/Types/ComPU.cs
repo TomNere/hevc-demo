@@ -12,5 +12,7 @@ namespace HEVCDemo.Types
         public ComCU CU;
         public int IntraDirLuma = -1;
         public int IntraDirChroma = -1;
+        public int InterDir;
+        public List<MotionVector> MotionVectors = new List<MotionVector>();
     }
 }
