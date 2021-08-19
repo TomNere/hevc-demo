@@ -120,6 +120,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isDecodedFramesEnabled, value);
                 RaisePropertyChanged(nameof(DecodedFramesVisibility));
+                SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -132,6 +133,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isCupuEnabled, value);
                 RaisePropertyChanged(nameof(CupuVisibility));
+                SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -144,6 +146,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isPredictionEnabled, value);
                 RaisePropertyChanged(nameof(PredictionVisibility));
+                SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -156,6 +159,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isIntraEnabled, value);
                 RaisePropertyChanged(nameof(IntraVisibility));
+                SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -246,11 +250,24 @@ namespace HEVCDemo.ViewModels
 
         private async void SetCurrentFrame(int index)
         {
-            await cacheProvider.EnsureFrameInCache(index, SetAppState, HandleError);
-            Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[index]);
-            Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.GetCuPuFrame(index));
-            Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.GetPredictionFrame(index));
-            Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.GetIntraFrame(index));
+            if (DecodedFramesVisibility == Visibility.Visible)
+            {
+                await cacheProvider.EnsureFrameInCache(index, SetAppState, HandleError);
+                Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[index]);
+            }
+            if (CupuVisibility == Visibility.Visible)
+            {
+                Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.GetCuPuFrame(index));
+            }
+            if (PredictionVisibility == Visibility.Visible)
+            {
+                Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.GetPredictionFrame(index));
+            }
+            if (IntraVisibility == Visibility.Visible)
+            {
+                Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.GetIntraFrame(index));
+            }
+
             ForwardClick.RaiseCanExecuteChanged();
             BackwardClick.RaiseCanExecuteChanged();
         }

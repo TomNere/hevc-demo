@@ -12,7 +12,7 @@
     },
     {
       "Id": "StartButton",
-      "Content": "Začněte volbou HEVC(h.265) video souboru"
+      "Content": "Začněte volbou HEVC (h.265) video souboru"
     },
     {
       "Id": "SelectVideoButton",
