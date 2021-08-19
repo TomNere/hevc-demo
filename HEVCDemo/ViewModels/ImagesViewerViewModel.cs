@@ -58,22 +58,22 @@ namespace HEVCDemo.ViewModels
             set { SetProperty(ref currentFrameImage, value); }
         }
 
-        private BitmapImage currentCupuImage;
-        public BitmapImage CurrentCupuImage
+        private WriteableBitmap currentCupuImage;
+        public WriteableBitmap CurrentCupuImage
         {
             get => currentCupuImage;
             set => SetProperty(ref currentCupuImage, value);
         }
 
-        private BitmapImage currentPredictionImage;
-        public BitmapImage CurrentPredictionImage
+        private WriteableBitmap currentPredictionImage;
+        public WriteableBitmap CurrentPredictionImage
         {
             get => currentPredictionImage;
             set => SetProperty(ref currentPredictionImage, value);
         }
 
-        private BitmapImage currentIntraImage;
-        public BitmapImage CurrentIntraImage
+        private WriteableBitmap currentIntraImage;
+        public WriteableBitmap CurrentIntraImage
         {
             get => currentIntraImage;
             set => SetProperty(ref currentIntraImage, value);
@@ -248,9 +248,9 @@ namespace HEVCDemo.ViewModels
         {
             await cacheProvider.EnsureFrameInCache(index, SetAppState, HandleError);
             Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[index]);
-            Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[index]);
-            Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.PredictionFramesBitmaps[index]);
-            Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.IntraFramesBitmaps[index]);
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.GetCuPuFrame(index));
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.GetPredictionFrame(index));
+            Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.GetIntraFrame(index));
             ForwardClick.RaiseCanExecuteChanged();
             BackwardClick.RaiseCanExecuteChanged();
         }
@@ -295,6 +295,12 @@ namespace HEVCDemo.ViewModels
                 {
                     string filePath = openFileDialog.FileName;
 
+                    if (cacheProvider?.LoadedFilePath == filePath)
+                    {
+                        MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
+                        return;
+                    }
+
                     cacheProvider = new CacheProvider(filePath);
                     if (cacheProvider.CacheExists)
                     {
@@ -307,6 +313,7 @@ namespace HEVCDemo.ViewModels
                         {
                             cacheProvider.InitFramesCount();
                             cacheProvider.ParseProps();
+                            await cacheProvider.ProcessFiles();
                         }
                     }
                     else
@@ -316,25 +323,15 @@ namespace HEVCDemo.ViewModels
 
                     await cacheProvider.LoadIntoCache(0, SetAppState);
 
-                    if (cacheProvider.YuvFramesBitmaps.Count > 0 &&
-                        cacheProvider.YuvFramesBitmaps.Count == cacheProvider.CupuFramesBitmaps.Count)
-                    {
-                        Height = cacheProvider.videoSequence.Height;
-                        Width = cacheProvider.videoSequence.Width;
-                        Resolution = $"{cacheProvider.videoSequence.Width} x {cacheProvider.videoSequence.Height}";
-                        double length = new FileInfo(openFileDialog.FileName).Length / 1024d;
-                        FileSize = length < 1000 ? $"{length:0.000} KB" : $"{length / 1024:0.000} MB";
+                    Height = cacheProvider.videoSequence.Height;
+                    Width = cacheProvider.videoSequence.Width;
+                    Resolution = $"{cacheProvider.videoSequence.Width} x {cacheProvider.videoSequence.Height}";
+                    double length = new FileInfo(openFileDialog.FileName).Length / 1024d;
+                    FileSize = length < 1000 ? $"{length:0.000} KB" : $"{length / 1024:0.000} MB";
 
-                        Dispatcher.CurrentDispatcher.Invoke(() => CurrentFrameImage = cacheProvider.YuvFramesBitmaps[0]);
-                        Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.CupuFramesBitmaps[0]);
-                        MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
-                        CurrentFrameIndex = 0;
-                        StartButtonVisibility = Visibility.Hidden;
-                    }
-                    else
-                    {
-                        AppState = "FramesMismatchState,Text".Localize();
-                    }
+                    MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
+                    CurrentFrameIndex = 0;
+                    StartButtonVisibility = Visibility.Hidden;
                 }, "CreateCacheTitle,Title".Localize(), HandleError);
             }
         }

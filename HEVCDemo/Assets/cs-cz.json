@@ -52,19 +52,15 @@
     },
     {
       "Id": "ConvertingAnnexBState",
-      "Text": "Konvertuji do AnnexB formátu"
+      "Text": "Konvertuji na tok bajtů"
     },
     {
       "Id": "ProcessingAnnexBState",
-      "Text": "Zpracovávám AnnexB soubor"
+      "Text": "Zpracovávám tok bajtů"
     },
     {
       "Id": "CreatingDemoState",
       "Text": "Vytvářím ukázkové data"
-    },
-    {
-      "Id": "FramesMismatchEx",
-      "Text": "Nesoulad v počtu rámců"
     },
     {
       "Id": "LoadingIntoCacheState",
@@ -123,10 +119,6 @@
       "Text": "Cache k dané video sekvenci již existuje. Přejete si ji přepsat?"
     },
     {
-      "Id": "FramesMismatchState",
-      "Text": "Chyba - nesoulad v počtu rámců a vygenerovaných obrázků s kódovacími jednotkami."
-    },
-    {
       "Id": "CreateCacheTitle",
       "Title": "Vytváření cache"
     },
@@ -157,6 +149,10 @@
     {
       "Id": "IntraLabel",
       "Content": "Mód vnitřního kódování"
+    },
+    {
+      "Id": "FileAlreadyLoadedMsg",
+      "Text": "Vybraný soubor je již otevřen."
     }
   ]
 }

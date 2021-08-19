@@ -61,12 +61,6 @@ namespace HEVCDemo.Parsers
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
                             {
-                                var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
-                                foreach (var cu in frame.CodingUnits)
-                                {
-                                    WriteBitmaps(cacheProvider, cu, writeableBitmap);
-                                }
-                                cacheProvider.SaveBitmap(writeableBitmap, cacheProvider.IntraFramesDirPath, frame.POC);
                                 break;
                             }
                         }
@@ -83,11 +77,11 @@ namespace HEVCDemo.Parsers
             });
         }
 
-        private void WriteBitmaps(CacheProvider cacheProvider, ComCU cu, WriteableBitmap writeableBitmap)
+        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap)
         {
             foreach (var sCu in cu.SCUs)
             {
-                WriteBitmaps(cacheProvider, sCu, writeableBitmap);
+                WriteBitmaps(sCu, writeableBitmap);
             }
 
             foreach (var pu in cu.PUs)

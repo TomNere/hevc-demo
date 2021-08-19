@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace HEVCDemo.Types
 {
@@ -11,5 +12,10 @@ namespace HEVCDemo.Types
         public int MaxCUDepth;
 
         public Dictionary<int, ComFrame> FramesInDecodeOrder = new Dictionary<int, ComFrame>();
+
+        public ComFrame GetFrameByPoc(int poc)
+        {
+            return FramesInDecodeOrder.Values.FirstOrDefault(frame => frame.POC == poc);
+        }
     }
 }

@@ -52,19 +52,15 @@
     },
     {
       "Id": "ConvertingAnnexBState",
-      "Text": "Converting to AnnexB format"
+      "Text": "Converting to byte stream"
     },
     {
       "Id": "ProcessingAnnexBState",
-      "Text": "Processing AnnexB file"
+      "Text": "Processing byte stream"
     },
     {
       "Id": "CreatingDemoState",
       "Text": "Creating demo data"
-    },
-    {
-      "Id": "FramesMismatchEx",
-      "Text": "Mismatch in frames count"
     },
     {
       "Id": "LoadingIntoCacheState",
@@ -123,10 +119,6 @@
       "Text": "Cache exists. Do you wish to overwrite?"
     },
     {
-      "Id": "FramesMismatchState",
-      "Text": "Error - mismatch in count of frames and cupu images"
-    },
-    {
       "Id": "CreateCacheTitle",
       "Title": "Create cache"
     },
@@ -157,6 +149,10 @@
     {
       "Id": "IntraLabel",
       "Content": "Intra prediction mode"
+    },
+    {
+      "Id": "FileAlreadyLoadedMsg",
+      "Text": "File is already open."
     }
   ]
 }

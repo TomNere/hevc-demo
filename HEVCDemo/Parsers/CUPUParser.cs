@@ -2,8 +2,6 @@
 using HEVCDemo.Types;
 using Rasyidf.Localization;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -49,8 +47,6 @@ namespace HEVCDemo.Parsers
                         }
 
                         int frameNumber = int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1));
-                        var cuRectangles = new List<Rectangle>();
-                        var puRectangles = new List<Rectangle>();
 
                         while (true)
                         {
@@ -83,9 +79,8 @@ namespace HEVCDemo.Parsers
                             pcLCU.iPixelY = (iAddr / iCUOneRow) * videoSequence.MaxCUSize;
 
                             /// recursively parse the CU&PU quard-tree structure
-                            puRectangles.Add(new Rectangle { X = pcLCU.iPixelX, Y = pcLCU.iPixelY, Height = pcLCU.Size, Width = pcLCU.Size });
                             var index = 0;
-                            if (!XReadInCUMode(tokens, pcLCU, cuRectangles, puRectangles, ref index))
+                            if (!XReadInCUMode(tokens, pcLCU, ref index))
                             {
                                 throw new FormatException("InvalidCupuFormatEx,Text".Localize());
                             }
@@ -95,7 +90,6 @@ namespace HEVCDemo.Parsers
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
                             {
-                                WriteBitmaps(cacheProvider, cuRectangles, puRectangles, frameNumber);
                                 break;
                             }
                         }
@@ -112,7 +106,7 @@ namespace HEVCDemo.Parsers
             });
         }
 
-        public bool XReadInCUMode(string[] tokens, ComCU pcLCU, List<Rectangle> cuRectangles, List<Rectangle> puRectangles, ref int index)
+        public bool XReadInCUMode(string[] tokens, ComCU pcLCU, ref int index)
         {
             if (index > tokens.Length - 1)
             {
@@ -142,9 +136,8 @@ namespace HEVCDemo.Parsers
                     pcChildNode.iPixelX = iSubCUX;
                     pcChildNode.iPixelY = iSubCUY;
                     pcLCU.SCUs.Add(pcChildNode);
-                    cuRectangles.Add(new Rectangle { X = iSubCUX, Y = iSubCUY, Width = pcLCU.Size / 2, Height = pcLCU.Size / 2 });
                     index++;
-                    XReadInCUMode(tokens, pcChildNode, cuRectangles, puRectangles, ref index);
+                    XReadInCUMode(tokens, pcChildNode, ref index);
                 }
             }
             else
@@ -155,8 +148,6 @@ namespace HEVCDemo.Parsers
                 int iPUCount = GetPUNum((PartSize)iCUMode);
                 for (int i = 0; i < iPUCount; i++)
                 {
-                    //rectangles.Add(new Rectangle { X = pcLCU.iPixelX, Y = pcLCU.iPixelY, Width = pcLCU.Size, Height = pcLCU.Size});
-
                     var pcPU = new ComPU { CU = pcLCU };
                     GetPUOffsetAndSize(pcLCU.Size, (PartSize)iCUMode, i, out var iPUOffsetX, out var iPUOffsetY, out var iPUWidth, out var iPUHeight);
                     int iPUX = pcLCU.iPixelX + iPUOffsetX;
@@ -166,40 +157,36 @@ namespace HEVCDemo.Parsers
                     pcPU.Width = iPUWidth;
                     pcPU.Height = iPUHeight;
                     pcLCU.PUs.Add(pcPU);
-
-                    //puRectangles.Add(new Rectangle { X = iPUX, Y = iPUY, Width = iPUWidth, Height = iPUHeight });
                 }
             }
             return true;
         }
 
-        private void WriteBitmaps(CacheProvider cacheProvider, List<Rectangle> cuRectangles, List<Rectangle> puRectangles, int frameNumber)
+        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap)
         {
-            var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
-            using (writeableBitmap.GetBitmapContext())
+            foreach (var sCu in cu.SCUs)
             {
-                for (int i = 0; i < cuRectangles.Count; i++)
-                {
-                    var rect = cuRectangles[i];
-                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Blue);
-                }
-                for (int i = 0; i < puRectangles.Count; i++)
-                {
-                    var rect = puRectangles[i];
-                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Yellow);
-                }
+                WriteBitmaps(sCu, writeableBitmap);
             }
 
-            cacheProvider.SaveBitmap(writeableBitmap, cacheProvider.CupuFramesDirPath, frameNumber);
+            using (writeableBitmap.GetBitmapContext())
+            {
+                //foreach (var pu in cu.PUs)
+                //{
+                //    writeableBitmap.DrawRectangle(pu.X, pu.Y, pu.X + pu.Width, pu.Y + pu.Height, Colors.Yellow);
+                //}
+
+                writeableBitmap.DrawRectangle(cu.iPixelX, cu.iPixelY, cu.iPixelX + cu.Size, cu.iPixelY + cu.Size, Colors.Blue);
+            }
         }
 
         private void GetPUOffsetAndSize(int iLeafCUSize,
-                                 PartSize ePartSize,
-                                 int uiPUIdx,
-                                 out int riXOffset,
-                                 out int riYOffset,
-                                 out int riWidth,
-                                 out int riHeight)
+                                        PartSize ePartSize,
+                                        int uiPUIdx,
+                                        out int riXOffset,
+                                        out int riYOffset,
+                                        out int riWidth,
+                                        out int riHeight)
         {
             switch (ePartSize)
             {
