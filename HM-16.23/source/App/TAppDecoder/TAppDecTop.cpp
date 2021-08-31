@@ -152,7 +152,7 @@ Void TAppDecTop::decode()
   cupuOutput.open(m_statsOutputPath + "\\cupu.txt");
   predictionOutput.open(m_statsOutputPath + "\\prediction.txt");
   intraOutput.open(m_statsOutputPath + "\\intra.txt");
-  motionVectorsOutput.open(m_statsOutputPath + "\\movtionVectors.txt");
+  motionVectorsOutput.open(m_statsOutputPath + "\\motionVectors.txt");
 
   while (!!bitstreamFile)
   {
