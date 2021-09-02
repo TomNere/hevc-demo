@@ -27,6 +27,8 @@
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentPredictionImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding PredictionVisibility}" Stretch="Fill" />
                 <!--Intra Image (Overlay)-->
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentIntraImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding IntraVisibility}" Stretch="Fill" />
+                <!--Motion Vectors Image (Overlay)-->
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentMotionVectorsImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding MotionVectorsVisibility}" Stretch="Fill" />
             </Grid>
         </ScrollViewer>
 
@@ -66,6 +68,7 @@
                     <RowDefinition Height="38"/>
                     <RowDefinition Height="38"/>
                     <RowDefinition Height="38"/>
+                    <RowDefinition Height="38"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -79,6 +82,21 @@
                 <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='PredictionLabel'}"/>
                 <CheckBox Grid.Row="3" IsChecked="{Binding IsIntraEnabled}" VerticalAlignment="Center"/>
                 <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='IntraLabel'}"/>
+                <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="38"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox IsChecked="{Binding IsMotionVectorsEnabled}" VerticalAlignment="Center"/>
+                    <Label Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='MotionVectorsLabel'}"/>
+                    <CheckBox Grid.Column="2" IsChecked="{Binding IsVectorsStartEnabled}" VerticalAlignment="Center"/>
+                    <Label Grid.Column="3" VerticalAlignment="Center" Content="{rf:Tr Uid='VectorsStartLabel'}"/>
+                </Grid>
             </Grid>
         </Grid>
 

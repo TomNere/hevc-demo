@@ -148,9 +148,11 @@ Void TAppDecTop::decode()
   ofstream cupuOutput;
   ofstream predictionOutput;
   ofstream intraOutput;
+  ofstream motionVectorsOutput;
   cupuOutput.open(m_statsOutputPath + "\\cupu.txt");
   predictionOutput.open(m_statsOutputPath + "\\prediction.txt");
   intraOutput.open(m_statsOutputPath + "\\intra.txt");
+  motionVectorsOutput.open(m_statsOutputPath + "\\motionVectors.txt");
 
   while (!!bitstreamFile)
   {
@@ -190,7 +192,7 @@ Void TAppDecTop::decode()
       else
       {
         // hevc_demo
-        bNewPicture = m_cTDecTop.decode(nalu, m_iSkipFrame, m_iPOCLastDisplay, cupuOutput, predictionOutput, intraOutput, m_statsOutputPath);
+        bNewPicture = m_cTDecTop.decode(nalu, m_iSkipFrame, m_iPOCLastDisplay, cupuOutput, predictionOutput, intraOutput, motionVectorsOutput, m_statsOutputPath);
         if (bNewPicture)
         {
           bitstreamFile.clear();
@@ -305,6 +307,7 @@ Void TAppDecTop::decode()
   cupuOutput.close();
   predictionOutput.close();
   intraOutput.close();
+  motionVectorsOutput.close();
 }
 
 // ====================================================================================================================

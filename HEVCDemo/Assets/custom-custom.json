@@ -79,12 +79,8 @@
       "Text": "Invalid sequence width or height"
     },
     {
-      "Id": "InvalidCupuFormatEx",
-      "Text": "Invalid format of cupu.txt"
-    },
-    {
       "Id": "ErrorParsingCupuEx",
-      "Text": "Error parsing CUPU file"
+      "Text": "Error parsing cupu.txt"
     },
     {
       "Id": "ErrorOccuredState",
@@ -136,11 +132,11 @@
     },
     {
       "Id": "ErrorParsingPredictionEx",
-      "Text": "Error parsing prediction file"
+      "Text": "Error parsing prediction.txt"
     },
     {
       "Id": "ErrorParsingIntraEx",
-      "Text": "Error parsing intra file"
+      "Text": "Error parsing intra.txt"
     },
     {
       "Id": "PredictionLabel",
@@ -153,6 +149,18 @@
     {
       "Id": "FileAlreadyLoadedMsg",
       "Text": "File is already open."
+    },
+    {
+      "Id": "ErrorParsingVectorsEx",
+      "Text": "Error parsing vectors.txt"
+    }
+    {
+      "Id": "MotionVectorsLabel",
+      "Content": "Motion Vectors"
+    },
+    {
+      "Id": "VectorsStartLabel",
+      "Content": "Vectors starting point"
     }
   ]
 }

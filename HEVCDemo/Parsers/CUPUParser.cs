@@ -42,8 +42,7 @@ namespace HEVCDemo.Parsers
                     {
                         if (strOneLine[0] != '<')
                         {
-                            // Line must start with <
-                            throw new FormatException("InvalidCupuFormatEx,Text".Localize());
+                            throw new FormatException("Line must start with <");
                         }
 
                         int frameNumber = int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1));
@@ -82,7 +81,7 @@ namespace HEVCDemo.Parsers
                             var index = 0;
                             if (!XReadInCUMode(tokens, pcLCU, ref index))
                             {
-                                throw new FormatException("InvalidCupuFormatEx,Text".Localize());
+                                throw new FormatException("Invalid format");
                             }
 
                             frame.CodingUnits.Add(pcLCU);

@@ -2,7 +2,6 @@
 using HEVCDemo.Types;
 using Rasyidf.Localization;
 using System;
-using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -10,11 +9,11 @@ using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
 {
-    public class PredictionParser
+    public class MotionVectorsParser
     {
         private readonly VideoSequence videoSequence;
 
-        public PredictionParser(VideoSequence videoSequence)
+        public MotionVectorsParser(VideoSequence videoSequence)
         {
             this.videoSequence = videoSequence;
         }
@@ -25,7 +24,7 @@ namespace HEVCDemo.Parsers
             {
                 try
                 {
-                    var file = new System.IO.StreamReader(cacheProvider.PredictionFilePath);
+                    var file = new System.IO.StreamReader(cacheProvider.MotionVectorsFilePath);
                     string strOneLine = file.ReadLine();
                     int iDecOrder = -1;
                     int iLastPOC = -1;
@@ -52,10 +51,11 @@ namespace HEVCDemo.Parsers
                             var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
 
                             var frame = videoSequence.FramesInDecodeOrder[iDecOrder];
+
                             var pcLCU = frame.GetCUByAddress(iAddr);
 
                             var index = 0;
-                            XReadPredictionMode(tokens, pcLCU, ref index);
+                            XReadMotionVectors(tokens, pcLCU, ref index);
 
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
@@ -68,7 +68,7 @@ namespace HEVCDemo.Parsers
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show($"{"ErrorParsingPredictionEx,Text".Localize()}\n\n{e.Message}");
+                    MessageBox.Show($"{"ErrorParsingVectorsEx,Text".Localize()}\n\n{e.Message}");
                     return false;
                 }
 
@@ -76,41 +76,49 @@ namespace HEVCDemo.Parsers
             });
         }
 
-        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap)
+        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap, bool isStartEnabled)
         {
             foreach (var sCu in cu.SCUs)
             {
-                WriteBitmaps(sCu, writeableBitmap);
+                WriteBitmaps(sCu, writeableBitmap, isStartEnabled);
             }
 
             foreach (var pu in cu.PUs)
             {
-                using (writeableBitmap.GetBitmapContext())
+                if (pu.PredictionMode != PredictionMode.MODE_INTER) continue;
+
+                if (pu.InterDir == 0)
                 {
-                    var rect = new Rectangle(pu.X, pu.Y, pu.Width, pu.Height);
-                    System.Windows.Media.Color color = Colors.Transparent;
-
-                    switch (pu.PredictionMode)
-                    {
-                        case PredictionMode.MODE_SKIP:
-                            continue;
-                        case PredictionMode.MODE_INTER:
-                            color = System.Windows.Media.Color.FromArgb(100, 0, 100, 200);
-                            break;
-                        case PredictionMode.MODE_INTRA:
-                            color = System.Windows.Media.Color.FromArgb(100, 0, 200, 100);
-                            break;
-                        case PredictionMode.MODE_NONE:
-                            continue;
-                    }
-
-                    writeableBitmap.FillRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, color);
-                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Black);
+                    // Do nothing
                 }
+                else if(pu.InterDir == 1)
+                {
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Red);
+                }
+                else if (pu.InterDir == 2)
+                {
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Blue);
+                }
+                else if (pu.InterDir == 3)
+                {
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Red);
+                    DrawMotionVector(pu, pu.MotionVectors[1], Colors.Blue);
+                }
+            }
+
+            void DrawMotionVector(ComPU pu, MotionVector mv, Color color)
+            {
+                var centerX = pu.X + (pu.Width / 2);
+                var centerY = pu.Y + (pu.Height / 2);
+                if (isStartEnabled)
+                {
+                    writeableBitmap.FillEllipse(centerX - 2, centerY - 2, centerX + 2, centerY + 2, color);
+                }
+                writeableBitmap.DrawLine(centerX, centerY, centerX + mv.Horizontal / 4, centerY + mv.Vertical / 4, color);
             }
         }
 
-        public bool XReadPredictionMode(string[] tokens, ComCU pcLCU, ref int index)
+        public bool XReadMotionVectors(string[] tokens, ComCU pcLCU, ref int index)
         {
             if (index > tokens.Length - 1)
             {
@@ -120,19 +128,38 @@ namespace HEVCDemo.Parsers
             if (pcLCU.SCUs.Count > 0)
             {
                 /// non-leaf node : recursive reading for children
-                XReadPredictionMode(tokens, pcLCU.SCUs[0], ref index);
-                XReadPredictionMode(tokens, pcLCU.SCUs[1], ref index);
-                XReadPredictionMode(tokens, pcLCU.SCUs[2], ref index);
-                XReadPredictionMode(tokens, pcLCU.SCUs[3], ref index);
+                XReadMotionVectors(tokens, pcLCU.SCUs[0], ref index);
+                XReadMotionVectors(tokens, pcLCU.SCUs[1], ref index);
+                XReadMotionVectors(tokens, pcLCU.SCUs[2], ref index);
+                XReadMotionVectors(tokens, pcLCU.SCUs[3], ref index);
             }
             else
             {
                 /// leaf node : read data
-                int iPredMode;
                 foreach(var pcPU in pcLCU.PUs)
                 {
-                    iPredMode = int.Parse(tokens[index++]);
-                    pcPU.PredictionMode = (PredictionMode)iPredMode;
+                    pcPU.InterDir = int.Parse(tokens[index++]);
+                    int vectorsCount = 0;
+
+                    if (pcPU.InterDir == 1 || pcPU.InterDir == 2)   //uni-prediction, 1 MV
+                    {
+                        vectorsCount = 1;
+                    }
+                    else if (pcPU.InterDir == 3)                    //bi-prediction, 2 MVs
+                    {
+                        vectorsCount = 2;
+                    }
+
+                    for (int i = 0; i < vectorsCount; i++)
+                    {
+                        var motionVector = new MotionVector
+                        {
+                            RefPoc = int.Parse(tokens[index++]),
+                            Horizontal = int.Parse(tokens[index++]),
+                            Vertical = int.Parse(tokens[index++])
+                        };
+                        pcPU.MotionVectors.Add(motionVector);
+                    }
                 }
             }
             return true;

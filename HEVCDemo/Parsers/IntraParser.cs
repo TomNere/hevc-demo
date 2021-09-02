@@ -33,8 +33,7 @@ namespace HEVCDemo.Parsers
                     {
                         if (strOneLine[0] != '<')
                         {
-                            // Line must start with <
-                            throw new FormatException("InvalidPredictionFormatEx,Text".Localize());
+                            throw new FormatException("Line must start with <");
                         }
 
                         int frameNumber = int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1));

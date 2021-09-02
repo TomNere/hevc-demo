@@ -79,12 +79,8 @@
       "Text": "Výška nebo šířka video sekvence je neplatná."
     },
     {
-      "Id": "InvalidCupuFormatEx",
-      "Text": "Formát souboru cupu.txt je neplatný."
-    },
-    {
       "Id": "ErrorParsingCupuEx",
-      "Text": "Problém při parsování CUPU souboru."
+      "Text": "Problém při parsování cupu.txt"
     },
     {
       "Id": "ErrorOccuredState",
@@ -136,11 +132,11 @@
     },
     {
       "Id": "ErrorParsingPredictionEx",
-      "Text": "Problém při parsování prediction souboru."
+      "Text": "Problém při parsování prediction.txt"
     },
     {
       "Id": "ErrorParsingIntraEx",
-      "Text": "Problém při parsování intra souboru."
+      "Text": "Problém při parsování intra.txt"
     },
     {
       "Id": "PredictionLabel",
@@ -153,6 +149,18 @@
     {
       "Id": "FileAlreadyLoadedMsg",
       "Text": "Vybraný soubor je již otevřen."
+    },
+    {
+      "Id": "ErrorParsingVectorsEx",
+      "Text": "Problém při parsování vectors.txt"
+    }
+    {
+      "Id": "MotionVectorsLabel",
+      "Content": "Vektory pohybu"
+    },
+    {
+      "Id": "VectorsStartLabel",
+      "Content": "Počáteční bod vektoru"
     }
   ]
 }

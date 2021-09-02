@@ -80,6 +80,13 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref currentIntraImage, value);
         }
 
+        private WriteableBitmap currentMotionVectorsImage;
+        public WriteableBitmap CurrentMotionVectorsImage
+        {
+            get => currentMotionVectorsImage;
+            set => SetProperty(ref currentMotionVectorsImage, value);
+        }
+
         private int currentFrameIndex;
         public int CurrentFrameIndex
         {
@@ -147,7 +154,7 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isPredictionEnabled, value);
                 RaisePropertyChanged(nameof(PredictionVisibility));
-                _ =SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
@@ -160,6 +167,30 @@ namespace HEVCDemo.ViewModels
             {
                 SetProperty(ref isIntraEnabled, value);
                 RaisePropertyChanged(nameof(IntraVisibility));
+                _ = SetCurrentFrame(CurrentFrameIndex);
+            }
+        }
+
+        public Visibility MotionVectorsVisibility => IsMotionVectorsEnabled ? Visibility.Visible : Visibility.Hidden;
+        private bool isMotionVectorsEnabled = true;
+        public bool IsMotionVectorsEnabled
+        {
+            get => isMotionVectorsEnabled;
+            set
+            {
+                SetProperty(ref isMotionVectorsEnabled, value);
+                RaisePropertyChanged(nameof(MotionVectorsVisibility));
+                _ = SetCurrentFrame(CurrentFrameIndex);
+            }
+        }
+
+        private bool isVectorsStartEnabled = true;
+        public bool IsVectorsStartEnabled
+        {
+            get => isVectorsStartEnabled;
+            set
+            {
+                SetProperty(ref isVectorsStartEnabled, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
@@ -268,6 +299,10 @@ namespace HEVCDemo.ViewModels
             if (IntraVisibility == Visibility.Visible)
             {
                 Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.GetIntraFrame(index));
+            }
+            if (MotionVectorsVisibility == Visibility.Visible)
+            {
+                Dispatcher.CurrentDispatcher.Invoke(() => CurrentMotionVectorsImage = cacheProvider.GetMotionVectorsFrame(index, isVectorsStartEnabled));
             }
 
             ForwardClick.RaiseCanExecuteChanged();

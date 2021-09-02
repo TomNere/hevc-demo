@@ -28,6 +28,7 @@ namespace HEVCDemo.Helpers
         public string PropsFilePath;
         public string PredictionFilePath;
         public string IntraFilePath;
+        public string MotionVectorsFilePath;
         public string AnnexBFilePath;
         public string YuvFilePath;
         public string YuvFramesDirPath;
@@ -50,6 +51,7 @@ namespace HEVCDemo.Helpers
             PropsFilePath = $@"{StatsDirPath}\props{textExtension}";
             PredictionFilePath = $@"{StatsDirPath}\prediction{textExtension}";
             IntraFilePath = $@"{StatsDirPath}\intra{textExtension}";
+            MotionVectorsFilePath = $@"{StatsDirPath}\motionVectors{textExtension}";
 
             // Images
             YuvFramesDirPath = $@"{cacheDirPath}\yuvFrames";
@@ -98,10 +100,18 @@ namespace HEVCDemo.Helpers
             await cupuParser.ParseFile(this);
 
             var predictionParser = new PredictionParser(videoSequence);
-            var intraParser = new IntraParser(videoSequence);
-
             await predictionParser.ParseFile(this);
-            await intraParser.ParseFile(this);
+
+            var intraParser = new IntraParser(videoSequence);
+            var motionVectorsParser = new MotionVectorsParser(videoSequence);
+
+            var tasks = new List<Task>
+            {
+                intraParser.ParseFile(this),
+                motionVectorsParser.ParseFile(this)
+            };
+
+            await Task.WhenAll(tasks);
         }
 
         public void ParseProps()
@@ -213,6 +223,19 @@ namespace HEVCDemo.Helpers
             foreach (var cu in frame.CodingUnits)
             {
                 CupuParser.WriteBitmaps(cu, writeableBitmap);
+            }
+
+            return writeableBitmap;
+        }
+
+        public WriteableBitmap GetMotionVectorsFrame(int index, bool isStartEnabled)
+        {
+            var frame = videoSequence.GetFrameByPoc(index);
+
+            var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
+            foreach (var cu in frame.CodingUnits)
+            {
+                MotionVectorsParser.WriteBitmaps(cu, writeableBitmap, isStartEnabled);
             }
 
             return writeableBitmap;

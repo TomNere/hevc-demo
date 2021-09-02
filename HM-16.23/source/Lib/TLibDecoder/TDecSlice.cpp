@@ -69,7 +69,7 @@ Void TDecSlice::init(TDecEntropy* pcEntropyDecoder, TDecCu* pcCuDecoder, TDecCon
 }
 
 // hevc_demo
-Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcPic, TDecSbac* pcSbacDecoder, ofstream& cupuOutput, ofstream& predictionOutput, ofstream& intraOutput)
+Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcPic, TDecSbac* pcSbacDecoder, ofstream& cupuOutput, ofstream& predictionOutput, ofstream& intraOutput, ofstream& motionVectorsOutput)
 {
   TComSlice* pcSlice                 = pcPic->getSlice(pcPic->getCurrSliceIdx());
 
@@ -225,13 +225,15 @@ Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcP
     // hevc_demo
     predictionOutput << "<" << pCtu->getSlice()->getPOC() << "," << pCtu->getCtuRsAddr() << ">" << " ";
     intraOutput << "<" << pCtu->getSlice()->getPOC() << "," << pCtu->getCtuRsAddr() << ">" << " ";
+    motionVectorsOutput << "<" << pCtu->getSlice()->getPOC() << "," << pCtu->getCtuRsAddr() << ">" << " ";
 
     m_pcCuDecoder->decompressCtu ( pCtu );
     
     // hevc_demo
-    WriteCUStats(pCtu, pCtu->getTotalNumPart(), 0, 0, predictionOutput, intraOutput);
+    WriteCUStats(pCtu, pCtu->getTotalNumPart(), 0, 0, predictionOutput, intraOutput, motionVectorsOutput);
     predictionOutput << endl;
     intraOutput << endl;
+    motionVectorsOutput << endl;
 
 #if ENC_DEC_TRACE
     g_bJustDoIt = g_bEncDecTraceDisable;
@@ -281,7 +283,7 @@ Void TDecSlice::decompressSlice(TComInputBitstream** ppcSubstreams, TComPic* pcP
 }
 
 // hevc_demo
-Void TDecSlice::WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iDepth, ofstream& predictionOutput, ofstream& intraOutput)
+Void TDecSlice::WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iDepth, ofstream& predictionOutput, ofstream& intraOutput, ofstream& motionVectorsOutput)
 {
     UChar* puhDepth = pcCU->getDepth();
     SChar* puhPartSize = pcCU->getPartitionSize();
@@ -350,45 +352,37 @@ Void TDecSlice::WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iD
                 iPred = 15;*/
             predictionOutput << iPred << " ";
 
-            /// Write merge info
-            /*Bool bMergeFlag = pcCU->getMergeFlag(iOffset + iPartAddOffset);
-            Int iMergeIndex = pcCU->getMergeIndex(iOffset + iPartAddOffset);
-            if (bMergeFlag)
-                m_cMergeOutput << iMergeIndex << " ";
-            else
-                m_cMergeOutput << -1 << " ";*/
+            // Write MV info
+            int iInterDir = pcCU->getInterDir(iOffset + iPartAddOffset);   ///< Inter direction: 0--Invalid, 1--List 0 only, 2--List 1 only, 3--List 0&1(bi-direction)
+            int iRefIdx = -1;
+            motionVectorsOutput << iInterDir << " ";
+            if (iInterDir == 0)
+            {
+                // do nothing
+            }
+            else if (iInterDir == 1)
+            {
+                rcMV = pcCU->getCUMvField(REF_PIC_LIST_0)->getMv(iOffset + iPartAddOffset);
+                iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_0)->getRefIdx(iOffset + iPartAddOffset);
+                motionVectorsOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_0, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
+            }
+            else if (iInterDir == 2)
+            {
+                rcMV = pcCU->getCUMvField(REF_PIC_LIST_1)->getMv(iOffset + iPartAddOffset);
+                iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_1)->getRefIdx(iOffset + iPartAddOffset);
+                motionVectorsOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_1, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
+            }
+            else if (iInterDir == 3)
+            {
+                rcMV = pcCU->getCUMvField(REF_PIC_LIST_0)->getMv(iOffset + iPartAddOffset);
+                iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_0)->getRefIdx(iOffset + iPartAddOffset);
+                motionVectorsOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_0, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
+                rcMV = pcCU->getCUMvField(REF_PIC_LIST_1)->getMv(iOffset + iPartAddOffset);
+                iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_1)->getRefIdx(iOffset + iPartAddOffset);
+                motionVectorsOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_1, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
+            }
 
-                /// Write MV info
-                //Int iInterDir = pcCU->getInterDir(iOffset + iPartAddOffset);   ///< Inter direction: 0--Invalid, 1--List 0 only, 2--List 1 only, 3--List 0&1(bi-direction)
-                //int iRefIdx = -1;
-                //m_cMVOutput << iInterDir << " ";
-                //if (iInterDir == 0)
-                //{
-                //    // do nothing
-                //}
-                //else if (iInterDir == 1)
-                //{
-                //    rcMV = pcCU->getCUMvField(REF_PIC_LIST_0)->getMv(iOffset + iPartAddOffset);
-                //    iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_0)->getRefIdx(iOffset + iPartAddOffset);
-                //    m_cMVOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_0, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
-                //}
-                //else if (iInterDir == 2)
-                //{
-                //    rcMV = pcCU->getCUMvField(REF_PIC_LIST_1)->getMv(iOffset + iPartAddOffset);
-                //    iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_1)->getRefIdx(iOffset + iPartAddOffset);
-                //    m_cMVOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_1, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
-                //}
-                //else if (iInterDir == 3)
-                //{
-                //    rcMV = pcCU->getCUMvField(REF_PIC_LIST_0)->getMv(iOffset + iPartAddOffset);
-                //    iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_0)->getRefIdx(iOffset + iPartAddOffset);
-                //    m_cMVOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_0, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
-                //    rcMV = pcCU->getCUMvField(REF_PIC_LIST_1)->getMv(iOffset + iPartAddOffset);
-                //    iRefIdx = pcCU->getCUMvField(REF_PIC_LIST_1)->getRefIdx(iOffset + iPartAddOffset);
-                //    m_cMVOutput << pcCU->getSlice()->getRefPOC(REF_PIC_LIST_1, iRefIdx) << " " << rcMV.getHor() << " " << rcMV.getVer() << " ";
-                //}
-
-                /// Write Intra info
+            /// Write Intra info
             Int iLumaIntraDir = pcCU->getIntraDir(CHANNEL_TYPE_LUMA, iOffset + iPartAddOffset);
             Int iChromaIntraDir = pcCU->getIntraDir(CHANNEL_TYPE_CHROMA, iOffset + iPartAddOffset);
             intraOutput << iLumaIntraDir << " " << iChromaIntraDir << " ";
@@ -400,7 +394,7 @@ Void TDecSlice::WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iD
         //m_cCUPUOutput << "99" << " ";     ///< CU info
         for (UInt i = 0; i < 4; i++)
         {
-            WriteCUStats(pcCU, iLength / 4, iOffset + iLength / 4 * i, iDepth + 1, predictionOutput, intraOutput);
+            WriteCUStats(pcCU, iLength / 4, iOffset + iLength / 4 * i, iDepth + 1, predictionOutput, intraOutput, motionVectorsOutput);
         }
     }
 }
