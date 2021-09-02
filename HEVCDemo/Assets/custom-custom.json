@@ -154,5 +154,13 @@
       "Id": "ErrorParsingVectorsEx",
       "Text": "Error parsing vectors.txt"
     }
+    {
+      "Id": "MotionVectorsLabel",
+      "Content": "Motion Vectors"
+    },
+    {
+      "Id": "VectorsStartLabel",
+      "Content": "Vectors starting point"
+    }
   ]
 }

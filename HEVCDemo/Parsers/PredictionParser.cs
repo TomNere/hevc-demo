@@ -104,8 +104,8 @@ namespace HEVCDemo.Parsers
                             continue;
                     }
 
-                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Black);
                     writeableBitmap.FillRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, color);
+                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Black);
                 }
             }
         }

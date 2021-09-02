@@ -4,6 +4,7 @@ using Rasyidf.Localization;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
@@ -75,16 +76,45 @@ namespace HEVCDemo.Parsers
             });
         }
 
-        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap)
+        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap, bool isStartEnabled)
         {
             foreach (var sCu in cu.SCUs)
             {
-                WriteBitmaps(sCu, writeableBitmap);
+                WriteBitmaps(sCu, writeableBitmap, isStartEnabled);
             }
 
             foreach (var pu in cu.PUs)
             {
-                //TODO   
+                if (pu.PredictionMode != PredictionMode.MODE_INTER) continue;
+
+                if (pu.InterDir == 0)
+                {
+                    // Do nothing
+                }
+                else if(pu.InterDir == 1)
+                {
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Red);
+                }
+                else if (pu.InterDir == 2)
+                {
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Blue);
+                }
+                else if (pu.InterDir == 3)
+                {
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Red);
+                    DrawMotionVector(pu, pu.MotionVectors[1], Colors.Blue);
+                }
+            }
+
+            void DrawMotionVector(ComPU pu, MotionVector mv, Color color)
+            {
+                var centerX = pu.X + (pu.Width / 2);
+                var centerY = pu.Y + (pu.Height / 2);
+                if (isStartEnabled)
+                {
+                    writeableBitmap.FillEllipse(centerX - 2, centerY - 2, centerX + 2, centerY + 2, color);
+                }
+                writeableBitmap.DrawLine(centerX, centerY, centerX + mv.Horizontal / 4, centerY + mv.Vertical / 4, color);
             }
         }
 

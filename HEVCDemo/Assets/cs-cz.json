@@ -154,5 +154,13 @@
       "Id": "ErrorParsingVectorsEx",
       "Text": "Problém při parsování vectors.txt"
     }
+    {
+      "Id": "MotionVectorsLabel",
+      "Content": "Vektory pohybu"
+    },
+    {
+      "Id": "VectorsStartLabel",
+      "Content": "Počáteční bod vektoru"
+    }
   ]
 }
