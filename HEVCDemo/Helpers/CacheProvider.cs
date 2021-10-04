@@ -7,6 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Windows;
+using System.Text;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace HEVCDemo.Helpers
 {
@@ -239,6 +243,81 @@ namespace HEVCDemo.Helpers
             }
 
             return writeableBitmap;
+        }
+
+        public InfoPopupParameters GetUnitDescriptionByLocation(int index, Point location, Grid grid)
+        {
+            var frame = videoSequence.GetFrameByPoc(index);
+            var pu = TraverseCUs(frame.CodingUnits, location);
+
+            var parameters = new InfoPopupParameters
+            {
+                Location = $"{pu.X}x{pu.Y}",
+                Size = $"{pu.Width}x{pu.Height}",
+                PredictionMode = $"{pu.PredictionMode},Content".Localize()
+            };
+
+            if (pu.PredictionMode == PredictionMode.MODE_INTRA)
+            {
+                
+                parameters.InterMode = "-";
+                parameters.MotionVectors = "-";
+
+                string intraMode;
+                if (pu.IntraDirLuma == 0)
+                {
+                    intraMode = "PredictionPlanar,Content".Localize();
+                    
+                }
+                else if (pu.IntraDirLuma == 1)
+                {
+                    intraMode = "PredictionDC,Content".Localize();
+                }
+                else
+                {
+                    intraMode = $"{"PredictionAngular,Content".Localize()} ({pu.IntraDirLuma})";
+                }
+
+                parameters.IntraMode = $"{intraMode}";
+            }
+            else if (pu.PredictionMode == PredictionMode.MODE_INTER)
+            {
+                parameters.IntraMode = "-";
+                parameters.InterMode = $"{pu.InterDir}";
+                parameters.MotionVectors = $"{pu.MotionVectors.Count}";
+            }
+
+            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)grid.ActualWidth, (int)grid.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            renderTargetBitmap.Render(grid);
+            parameters.Image = new CroppedBitmap(renderTargetBitmap, new Int32Rect(pu.X, pu.Y, pu.Width, pu.Height));
+
+            return parameters;
+        }
+
+        public ComPU TraverseCUs(List<ComCU> CUs, Point location)
+        {
+            foreach (var unit in CUs)
+            {
+                if (unit.SCUs.Count > 0)
+                {
+                    var subUnit = TraverseCUs(unit.SCUs, location);
+                    if (subUnit != null)
+                    {
+                        return subUnit;
+                    }
+                }
+
+                foreach(var punit in unit.PUs)
+                {
+                    var rectangle = new Rect(punit.X, punit.Y, punit.Width, punit.Height);
+                    if (rectangle.Contains(location))
+                    {
+                        return punit;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

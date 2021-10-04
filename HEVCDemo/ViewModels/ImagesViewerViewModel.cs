@@ -1,11 +1,18 @@
-﻿using HEVCDemo.Helpers;
+using GalaSoft.MvvmLight.CommandWpf;
+using HEVCDemo.Helpers;
+using HEVCDemo.Types;
+using HEVCDemo.Views;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -22,6 +29,13 @@ namespace HEVCDemo.ViewModels
         {
             get => enabled;
             set => SetProperty(ref enabled, value);
+        }
+
+        private bool viewOptionsEnabled = false;
+        public bool ViewOptionsEnabled
+        {
+            get => viewOptionsEnabled;
+            set => SetProperty(ref viewOptionsEnabled, value);
         }
 
         private string appState;
@@ -342,6 +356,8 @@ namespace HEVCDemo.ViewModels
 
         private async void ExecuteSelectVideoClick()
         {
+            ViewOptionsEnabled = false;
+
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin";
 
@@ -354,6 +370,7 @@ namespace HEVCDemo.ViewModels
                     if (cacheProvider?.LoadedFilePath == filePath)
                     {
                         MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
+                        ViewOptionsEnabled = true;
                         return;
                     }
 
@@ -388,10 +405,130 @@ namespace HEVCDemo.ViewModels
                     MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
                     CurrentFrameIndex = 0;
                     StartButtonVisibility = Visibility.Hidden;
+                    ViewOptionsEnabled = true;
                 }, "CreateCacheTitle,Title".Localize(), HandleError);
             }
         }
 
         #endregion Select video
+
+        #region Info
+
+        private DelegateCommand resolutionClick;
+        public DelegateCommand ResolutionClick => resolutionClick ?? (resolutionClick = new DelegateCommand(ExecuteResolutionClick));
+        private void ExecuteResolutionClick()
+        {
+            var infoDialog = new InfoDialog("VideoResolutionTitle,Title".Localize(), "VideoResolution");
+            infoDialog.Show();
+        }
+
+        private DelegateCommand fileSizeClick;
+        public DelegateCommand FileSizeClick => fileSizeClick ?? (fileSizeClick = new DelegateCommand(ExecuteFileSizeClick));
+        private void ExecuteFileSizeClick()
+        {
+            var infoDialog = new InfoDialog("FileSizeTitle,Title".Localize(), "FileSize");
+            infoDialog.Show();
+        }
+
+        private DelegateCommand decodedFramesInfoClick;
+        public DelegateCommand DecodedFramesInfoClick => decodedFramesInfoClick ?? (decodedFramesInfoClick = new DelegateCommand(ExecuteDecodedFramesInfoClick));
+        private void ExecuteDecodedFramesInfoClick()
+        {
+            var infoDialog = new InfoDialog("DecodedFramesLabel,Content".Localize(), "DecodedFrames");
+            infoDialog.Show();
+        }
+
+        private DelegateCommand codingUnitsInfoClick;
+        public DelegateCommand CodingUnitsInfoClick => codingUnitsInfoClick ?? (codingUnitsInfoClick = new DelegateCommand(ExecuteCodingUnitsInfoClick));
+        private void ExecuteCodingUnitsInfoClick()
+        {
+            var infoDialog = new InfoDialog("CodingUnitsLabel,Content".Localize(), "CodingUnits");
+            infoDialog.Show();
+        }
+
+        private DelegateCommand predictionTypeInfoClick;
+        public DelegateCommand PredictionTypeInfoClick => predictionTypeInfoClick ?? (predictionTypeInfoClick = new DelegateCommand(ExecutePredictionTypeInfoClick));
+        private void ExecutePredictionTypeInfoClick()
+        {
+            var infoDialog = new InfoDialog("PredictionLabel,Content".Localize(), "PredictionType");
+            infoDialog.Show();
+        }
+
+        private DelegateCommand intraPredictionInfoClick;
+        public DelegateCommand IntraPredictionInfoClick => intraPredictionInfoClick ?? (intraPredictionInfoClick = new DelegateCommand(ExecuteIntraPredictionInfoClick));
+        private void ExecuteIntraPredictionInfoClick()
+        {
+            var infoDialog = new InfoDialog("IntraLabel,Content".Localize(), "IntraPrediction");
+            infoDialog.Show();
+        }
+
+        #endregion
+
+        #region Tooltips
+
+        private int imageViewerX;
+        public int ScrollViewerX
+        {
+            get => imageViewerX;
+            set 
+            {
+                SetProperty(ref imageViewerX, value);
+            }
+        }
+
+        private int imageViewerY;
+        public int ScrollViewerY
+        {
+            get => imageViewerY;
+            set
+            {
+                SetProperty(ref imageViewerY, value);
+            }
+        }
+
+        private bool isPopupOpen;
+        public bool IsPopupOpen
+        {
+            get => isPopupOpen;
+            set
+            {
+                SetProperty(ref isPopupOpen, value);
+            }
+        }
+
+        private InfoPopupParameters popupContent;
+        public InfoPopupParameters PopupContent
+        {
+            get => popupContent;
+            set
+            {
+                SetProperty(ref popupContent, value);
+            }
+        }
+
+        private DelegateCommand<object> scrollViewerRightClick;
+        public DelegateCommand<object> ScrollViewerRightClick => scrollViewerRightClick ?? (scrollViewerRightClick = new DelegateCommand<object>(ExecuteImageRightClick));
+        private void ExecuteImageRightClick(object scrollV)
+        {
+            if (scrollV is ScrollViewer scrollViewer)
+            {
+                var grid = scrollViewer.Content as Grid;
+
+                // Reset position
+                IsPopupOpen = false;
+                IsPopupOpen = true;
+
+                PopupContent = cacheProvider.GetUnitDescriptionByLocation(currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid);
+            }
+        }
+
+        private DelegateCommand closePopupClick;
+        public DelegateCommand ClosePopupClick => closePopupClick ?? (closePopupClick = new DelegateCommand(ExecuteClosePopupClick));
+        private void ExecuteClosePopupClick()
+        {
+            IsPopupOpen = false;
+        }
+
+        #endregion
     }
 }

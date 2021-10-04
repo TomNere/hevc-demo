@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using Rasyidf.Localization;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace HEVCDemo.ViewModels
@@ -54,9 +55,10 @@ namespace HEVCDemo.ViewModels
 
         private void PopulateLanguageComboBox()
         {
-            LocalizationService.ScanLanguagesInFolder("Assets");
+            LocalizationService.ScanLanguagesInFolder("Assets\\Translations");
             var packs = LocalizationService.RegisteredPacks;
             var cultures = packs.Keys;
+            LocalizationService.Current.ChangeLanguage(LocalizationDictionary.GetResources(cultures.First()));
             foreach (var culture in cultures)
             {
                 var pack = LocalizationDictionary.GetResources(culture);

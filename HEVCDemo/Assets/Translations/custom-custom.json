@@ -2,9 +2,9 @@
   "AppId": "HEVCDemo",
   "Version": "0.1",
   "Type": "Single",
-  "EnglishName": "Custom",
-  "CultureName": "Custom",
-  "Culture": "en-uk",
+  "EnglishName": "English",
+  "CultureName": "English",
+  "Culture": "en-us",
   "Data": [
     {
       "Id": "LanguageHeader",
@@ -40,7 +40,7 @@
     },
     {
       "Id": "CodingUnitsLabel",
-      "Content": "Coding Units"
+      "Content": "Coding and Prediction Units"
     },
     {
       "Id": "CurrentFrameLabel",
@@ -140,11 +140,15 @@
     },
     {
       "Id": "PredictionLabel",
-      "Content": "Prediction type"
+      "Content": "Prediction Type"
     },
     {
       "Id": "IntraLabel",
       "Content": "Intra prediction mode"
+    },
+    {
+      "Id": "InterLabel",
+      "Content": "Inter prediction mode"
     },
     {
       "Id": "FileAlreadyLoadedMsg",
@@ -153,7 +157,7 @@
     {
       "Id": "ErrorParsingVectorsEx",
       "Text": "Error parsing vectors.txt"
-    }
+    },
     {
       "Id": "MotionVectorsLabel",
       "Content": "Motion Vectors"
@@ -161,6 +165,62 @@
     {
       "Id": "VectorsStartLabel",
       "Content": "Vectors starting point"
+    },
+    {
+      "Id": "InfoDialogTitle",
+      "Title": "Info"
+    },
+    {
+      "Id": "VideoResolutionTitle",
+      "Title": "Video resolution"
+    },
+    {
+      "Id": "FileSizeTitle",
+      "Title": "File size"
+    },
+    {
+      "Id": "FileSizeText",
+      "Content": "H.265 was designed for the newest generation of high-resolution video. Compared to H.264, this newer standard offers from 25% to 50% better data compression at the same level of video quality. It basically delivers high-quality videos at the same bitrate. Additionally, H.265/HEVC supports resolutions up to 8192x4320, which includes 8K UHD as well."
+    },
+    {
+      "Id": "PredictionAngular",
+      "Content": "Angular"
+    },
+    {
+      "Id": "PredictionPlanar",
+      "Content": "Planar"
+    },
+    {
+      "Id": "PredictionDC",
+      "Content": "DC"
+    },
+    {
+      "Id": "PredictionUnitAt",
+      "Content": "Prediction unit at "
+    },
+    {
+      "Id": "MODE_SKIP",
+      "Content": "-"
+    },
+    {
+      "Id": "MODE_INTRA",
+      "Content": "Intra"
+    },
+    {
+      "Id": "MODE_INTER",
+      "Content": "Inter"
+    },
+    {
+      "Id": "MODE_NONE",
+      "Content": "None"
+    },
+    {
+      "Id": "Size",
+      "Content": "Size"
+    },
+    {
+      "Id": "Ok",
+      "Content": "Ok"
     }
   ]
 }

@@ -153,7 +153,7 @@
     {
       "Id": "ErrorParsingVectorsEx",
       "Text": "Problém při parsování vectors.txt"
-    }
+    },
     {
       "Id": "MotionVectorsLabel",
       "Content": "Vektory pohybu"
@@ -161,6 +161,62 @@
     {
       "Id": "VectorsStartLabel",
       "Content": "Počáteční bod vektoru"
+    },
+    {
+      "Id": "InfoDialogTitle",
+      "Title": "Info"
+    },
+    {
+      "Id": "VideoResolutionTitle",
+      "Title": "Rozlišení videa"
+    },
+    {
+      "Id": "FileSizeTitle",
+      "Title": "Velikost souboru"
+    },
+    {
+      "Id": "PredictionAngular",
+      "Content": "Angular"
+    },
+    {
+      "Id": "PredictionPlanar",
+      "Content": "Planar"
+    },
+    {
+      "Id": "PredictionDC",
+      "Content": "DC"
+    },
+    {
+      "Id": "PredictionUnitAt",
+      "Content": "Jednotka predikce v pozici"
+    },
+    {
+      "Id": "MODE_SKIP",
+      "Content": "-"
+    },
+    {
+      "Id": "MODE_INTRA",
+      "Content": "Vnitřní"
+    },
+    {
+      "Id": "MODE_INTER",
+      "Content": "Mezisnímková"
+    },
+    {
+      "Id": "MODE_NONE",
+      "Content": "Žádná"
+    },
+    {
+      "Id": "Size",
+      "Content": "Velikost"
+    },
+    {
+      "Id": "InterLabel",
+      "Content": "Mód mezisnímkového kódování"
+    },
+    {
+      "Id": "Ok",
+      "Content": "Ok"
     }
   ]
 }

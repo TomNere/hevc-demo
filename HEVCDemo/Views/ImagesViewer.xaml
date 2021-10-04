@@ -2,8 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:views="clr-namespace:HEVCDemo.Views"
-             xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+             xmlns:b="clr-namespace:HEVCDemo.Behaviors"
+             xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:views="clr-namespace:HEVCDemo.Views"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid Margin="0">
         <Grid.RowDefinitions>
@@ -16,7 +17,16 @@
         </Grid.ColumnDefinitions>
 
         <!--Image viewer-->
-        <ScrollViewer Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
+        <ScrollViewer x:Name="ImageScrollViewer" Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
+            <i:Interaction.Behaviors>
+                <b:ScrollViewerMouseBehavior MouseX="{Binding ScrollViewerX, Mode=OneWayToSource}" MouseY="{Binding ScrollViewerY, Mode=OneWayToSource}" />
+            </i:Interaction.Behaviors>
+            <ScrollViewer.InputBindings>
+                <MouseBinding Gesture="RightClick" Command="{Binding ScrollViewerRightClick}" CommandParameter="{Binding RelativeSource=
+                                   {RelativeSource
+                                    Mode=FindAncestor,
+                                    AncestorType={x:Type ScrollViewer}}}"/>
+            </ScrollViewer.InputBindings>
             <Grid>
                 <Button Command="{Binding SelectVideoClick}" FontSize="20" Visibility="{Binding StartButtonVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
                 <!--Frame Image-->
@@ -31,6 +41,13 @@
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentMotionVectorsImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding MotionVectorsVisibility}" Stretch="Fill" />
             </Grid>
         </ScrollViewer>
+
+        <Popup Placement="MousePoint" IsOpen="{Binding IsPopupOpen}">
+            <StackPanel Margin="4">
+                <views:InfoPopup Parameters="{Binding PopupContent}"/>
+                <Button Command="{Binding ClosePopupClick}" Width="100" Content="{rf:Tr Uid='Ok'}" />
+            </StackPanel>
+        </Popup>
 
         <!--Video info-->
         <Grid Grid.Row="0" Grid.Column="1" Margin="4,0,0,0" IsEnabled="{Binding Enabled}">
@@ -51,18 +68,18 @@
             <Label Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="{rf:Tr Uid='VideoPropertiesLabel'}"/>
             <Label Grid.Row="2" VerticalAlignment="Center" Content="{rf:Tr Uid='ResolutionLabel'}"/>
             <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Resolution}"/>
-            <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="30" Width="30">
+            <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding ResolutionClick}">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
             <Label Grid.Row="3" VerticalAlignment="Center" Content="{rf:Tr Uid='FileSizeLabel'}"/>
             <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{Binding FileSize}"/>
-            <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="30" Width="30">
+            <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding FileSizeClick}">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
 
             <!--View options-->
             <Label Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="{rf:Tr Uid='ViewOptionsLabel'}"/>
-            <Grid Grid.Row="5" Grid.ColumnSpan="2" IsEnabled="{Binding Enabled}" Margin="8">
+            <Grid Grid.Row="5" Grid.ColumnSpan="3" Margin="8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="38"/>
                     <RowDefinition Height="38"/>
@@ -73,16 +90,29 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox IsChecked="{Binding IsDecodedFramesEnabled}" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding IsDecodedFramesEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
                 <Label Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='DecodedFramesLabel'}"/>
-                <CheckBox Grid.Row="1" IsChecked="{Binding IsCupuEnabled}" VerticalAlignment="Center"/>
+                <Button Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding DecodedFramesInfoClick}">
+                    <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </Button>
+                <CheckBox Grid.Row="1" IsChecked="{Binding IsCupuEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
                 <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='CodingUnitsLabel'}"/>
-                <CheckBox Grid.Row="2" IsChecked="{Binding IsPredictionEnabled}" VerticalAlignment="Center"/>
+                <Button Grid.Row="1" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding CodingUnitsInfoClick}">
+                    <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </Button>
+                <CheckBox Grid.Row="2" IsChecked="{Binding IsPredictionEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
                 <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='PredictionLabel'}"/>
-                <CheckBox Grid.Row="3" IsChecked="{Binding IsIntraEnabled}" VerticalAlignment="Center"/>
+                <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding PredictionTypeInfoClick}">
+                    <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </Button>
+                <CheckBox Grid.Row="3" IsChecked="{Binding IsIntraEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
                 <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='IntraLabel'}"/>
-                <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding IntraPredictionInfoClick}">
+                    <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </Button>
+                <Grid Grid.Row="4" Grid.ColumnSpan="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="38"/>
                     </Grid.RowDefinitions>
@@ -91,11 +121,12 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <CheckBox IsChecked="{Binding IsMotionVectorsEnabled}" VerticalAlignment="Center"/>
+                    <CheckBox IsChecked="{Binding IsMotionVectorsEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
                     <Label Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='MotionVectorsLabel'}"/>
-                    <CheckBox Grid.Column="2" IsChecked="{Binding IsVectorsStartEnabled}" VerticalAlignment="Center"/>
-                    <Label Grid.Column="3" VerticalAlignment="Center" Content="{rf:Tr Uid='VectorsStartLabel'}"/>
+                    <CheckBox Grid.Column="2" IsChecked="{Binding IsVectorsStartEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
+                    <Label Grid.Column="3" VerticalAlignment="Center" Content="{rf:Tr Uid='VectorsStartLabel'}" />
                 </Grid>
             </Grid>
         </Grid>
