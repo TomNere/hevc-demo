@@ -1,4 +1,3 @@
-using GalaSoft.MvvmLight.CommandWpf;
 using HEVCDemo.Helpers;
 using HEVCDemo.Types;
 using HEVCDemo.Views;
@@ -6,12 +5,11 @@ using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
-using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -21,6 +19,9 @@ namespace HEVCDemo.ViewModels
     public class ImagesViewerViewModel : BindableBase
     {
         private CacheProvider cacheProvider;
+        private double zoom = 1;
+        private int realHeight;
+        private int realWidth;
 
         #region Binding properties
 
@@ -101,6 +102,13 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref currentMotionVectorsImage, value);
         }
 
+        private WriteableBitmap currentHighlightImage;
+        public WriteableBitmap CurrentHighlightImage
+        {
+            get => currentHighlightImage;
+            set => SetProperty(ref currentHighlightImage, value);
+        }
+
         private int currentFrameIndex;
         public int CurrentFrameIndex
         {
@@ -117,6 +125,13 @@ namespace HEVCDemo.ViewModels
         {
             get => startButtonVisibility;
             set => SetProperty(ref startButtonVisibility, value);
+        }
+
+        private Visibility highlightVisibility = Visibility.Hidden;
+        public Visibility HighlightVisibility
+        {
+            get => highlightVisibility;
+            set => SetProperty(ref highlightVisibility, value);
         }
 
         private string resolution;
@@ -334,16 +349,20 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteZoomOutClick()
         {
-            Height /= 1.05;
-            Width /= 1.05;
+            zoom -= 0.05;
+
+            Height = (int) realHeight * zoom;
+            Width = (int) realWidth * zoom;
         }
 
         private DelegateCommand zoomInClick;
         public DelegateCommand ZoomInClick => zoomInClick ?? (zoomInClick = new DelegateCommand(ExecuteZoomInClick));
         private void ExecuteZoomInClick()
         {
-            Height *= 1.05;
-            Width *= 1.05;
+            zoom += 0.05;
+
+            Height = (int)realHeight * zoom;
+            Width = (int)realWidth * zoom;
         }
 
         #endregion
@@ -396,8 +415,8 @@ namespace HEVCDemo.ViewModels
                     }
                     await cacheProvider.LoadIntoCache(0);
 
-                    Height = cacheProvider.videoSequence.Height;
-                    Width = cacheProvider.videoSequence.Width;
+                    Height = realHeight = cacheProvider.videoSequence.Height;
+                    Width = realWidth = cacheProvider.videoSequence.Width;
                     Resolution = $"{cacheProvider.videoSequence.Width} x {cacheProvider.videoSequence.Height}";
                     double length = new FileInfo(openFileDialog.FileName).Length / 1024d;
                     FileSize = length < 1000 ? $"{length:0.000} KB" : $"{length / 1024:0.000} MB";
@@ -518,7 +537,17 @@ namespace HEVCDemo.ViewModels
                 IsPopupOpen = false;
                 IsPopupOpen = true;
 
-                PopupContent = cacheProvider.GetUnitDescriptionByLocation(currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid);
+                PopupContent = cacheProvider.GetUnitDescriptionByLocation(currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), scrollViewer, zoom);
+
+                var highlight = BitmapFactory.New((int)Width, (int)Height);
+
+                int x1 = PopupContent.Pu.X;
+                int y1 = popupContent.Pu.Y;
+                int x2 = x1 + PopupContent.Pu.Width;
+                int y2 = y1 + PopupContent.Pu.Height;
+                highlight.FillRectangle((int)(x1 * zoom), (int)(y1 * zoom), (int)(x2 * zoom), (int)(y2 * zoom), Colors.DeepPink);
+                CurrentHighlightImage = highlight;
+                HighlightVisibility = Visibility.Visible;
             }
         }
 
@@ -527,6 +556,7 @@ namespace HEVCDemo.ViewModels
         private void ExecuteClosePopupClick()
         {
             IsPopupOpen = false;
+            HighlightVisibility = Visibility.Hidden;
         }
 
         #endregion

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows;
-using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -245,13 +244,14 @@ namespace HEVCDemo.Helpers
             return writeableBitmap;
         }
 
-        public InfoPopupParameters GetUnitDescriptionByLocation(int index, Point location, Grid grid)
+        public InfoPopupParameters GetUnitDescriptionByLocation(int index, Point location, ScrollViewer scrollViewer, double zoom)
         {
             var frame = videoSequence.GetFrameByPoc(index);
-            var pu = TraverseCUs(frame.CodingUnits, location);
+            var pu = TraverseCUs(frame.CodingUnits, new Point((int)(location.X / zoom), (int)(location.Y / zoom)));
 
             var parameters = new InfoPopupParameters
             {
+                Pu = pu,
                 Location = $"{pu.X}x{pu.Y}",
                 Size = $"{pu.Width}x{pu.Height}",
                 PredictionMode = $"{pu.PredictionMode},Content".Localize()
@@ -286,10 +286,24 @@ namespace HEVCDemo.Helpers
                 parameters.InterMode = $"{pu.InterDir}";
                 parameters.MotionVectors = $"{pu.MotionVectors.Count}";
             }
+            var grid = scrollViewer.Content as Grid;
 
-            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)grid.ActualWidth, (int)grid.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-            renderTargetBitmap.Render(grid);
-            parameters.Image = new CroppedBitmap(renderTargetBitmap, new Int32Rect(pu.X, pu.Y, pu.Width, pu.Height));
+            double actualHeight = grid.RenderSize.Height;
+            double actualWidth = grid.RenderSize.Width;
+
+            var renderTarget = new RenderTargetBitmap((int)actualWidth, (int)actualHeight, 96, 96, PixelFormats.Pbgra32);
+            var sourceBrush = new VisualBrush(grid);
+
+            var drawingVisual = new DrawingVisual();
+            var drawingContext = drawingVisual.RenderOpen();
+
+            using (drawingContext)
+            {
+                drawingContext.DrawRectangle(sourceBrush, null, new Rect(new Point(0, 0), new Point(actualWidth, actualHeight)));
+            }
+            renderTarget.Render(drawingVisual);
+
+            parameters.Image = new CroppedBitmap(renderTarget, new Int32Rect((int)(pu.X * zoom), (int)(pu.Y * zoom), (int)(pu.Width * zoom), (int)(pu.Height * zoom)));
 
             return parameters;
         }

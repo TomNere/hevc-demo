@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="HEVCDemo.Views.ImagesViewer"
+<UserControl x:Class="HEVCDemo.Views.ImagesViewer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
@@ -31,6 +31,8 @@
                 <Button Command="{Binding SelectVideoClick}" FontSize="20" Visibility="{Binding StartButtonVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
                 <!--Frame Image-->
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding DecodedFramesVisibility}" Stretch="Fill"/>
+                <!--Highlighted unit (Overlay)-->
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentHighlightImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding HighlightVisibility}" Stretch="Fill" />
                 <!--CU Structure Image (Overlay)-->
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCupuImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding CupuVisibility}" Stretch="Fill" />
                 <!--Prediction Image (Overlay)-->
@@ -42,7 +44,7 @@
             </Grid>
         </ScrollViewer>
 
-        <Popup Placement="MousePoint" IsOpen="{Binding IsPopupOpen}">
+        <Popup Placement="MousePoint" HorizontalOffset="32" IsOpen="{Binding IsPopupOpen}">
             <StackPanel Margin="4">
                 <views:InfoPopup Parameters="{Binding PopupContent}"/>
                 <Button Command="{Binding ClosePopupClick}" Width="100" Content="{rf:Tr Uid='Ok'}" />
