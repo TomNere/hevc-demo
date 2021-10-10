@@ -437,7 +437,7 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand ResolutionClick => resolutionClick ?? (resolutionClick = new DelegateCommand(ExecuteResolutionClick));
         private void ExecuteResolutionClick()
         {
-            var infoDialog = new InfoDialog("VideoResolutionTitle,Title".Localize(), "VideoResolution");
+            var infoDialog = new InfoDialog("VideoResolutionTitle,Title".Localize(), "VideoResolution", null);
             infoDialog.Show();
         }
 
@@ -445,7 +445,7 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand FileSizeClick => fileSizeClick ?? (fileSizeClick = new DelegateCommand(ExecuteFileSizeClick));
         private void ExecuteFileSizeClick()
         {
-            var infoDialog = new InfoDialog("FileSizeTitle,Title".Localize(), "FileSize");
+            var infoDialog = new InfoDialog("FileSizeTitle,Title".Localize(), "FileSize", null);
             infoDialog.Show();
         }
 
@@ -453,7 +453,7 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand DecodedFramesInfoClick => decodedFramesInfoClick ?? (decodedFramesInfoClick = new DelegateCommand(ExecuteDecodedFramesInfoClick));
         private void ExecuteDecodedFramesInfoClick()
         {
-            var infoDialog = new InfoDialog("DecodedFramesLabel,Content".Localize(), "DecodedFrames");
+            var infoDialog = new InfoDialog("DecodedFramesLabel,Content".Localize(), "DecodedFrames", null);
             infoDialog.Show();
         }
 
@@ -461,7 +461,7 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand CodingUnitsInfoClick => codingUnitsInfoClick ?? (codingUnitsInfoClick = new DelegateCommand(ExecuteCodingUnitsInfoClick));
         private void ExecuteCodingUnitsInfoClick()
         {
-            var infoDialog = new InfoDialog("CodingUnitsLabel,Content".Localize(), "CodingUnits");
+            var infoDialog = new InfoDialog("CodingUnitsLabel,Content".Localize(), "CodingUnits", new List<InfoImage> { new InfoImage { Name = "CodingUnitsFig1,Content".Localize(), ImagePath = "../Assets/Images/cupuStructure.png"} });
             infoDialog.Show();
         }
 
@@ -469,7 +469,7 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand PredictionTypeInfoClick => predictionTypeInfoClick ?? (predictionTypeInfoClick = new DelegateCommand(ExecutePredictionTypeInfoClick));
         private void ExecutePredictionTypeInfoClick()
         {
-            var infoDialog = new InfoDialog("PredictionLabel,Content".Localize(), "PredictionType");
+            var infoDialog = new InfoDialog("PredictionLabel,Content".Localize(), "PredictionType", null);
             infoDialog.Show();
         }
 
@@ -477,7 +477,28 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand IntraPredictionInfoClick => intraPredictionInfoClick ?? (intraPredictionInfoClick = new DelegateCommand(ExecuteIntraPredictionInfoClick));
         private void ExecuteIntraPredictionInfoClick()
         {
-            var infoDialog = new InfoDialog("IntraLabel,Content".Localize(), "IntraPrediction");
+            var images = new List<InfoImage>
+            {
+                new InfoImage { Name = "IntraPredictionFig1,Content".Localize(), ImagePath = "../Assets/Images/referencePixels.png"},
+                new InfoImage { Name = "IntraPredictionFig2,Content".Localize(), ImagePath = "../Assets/Images/intraNotation.png"},
+                new InfoImage { Name = "IntraPredictionFig3,Content".Localize(), ImagePath = "../Assets/Images/intraInterpolation.png"},
+                new InfoImage { Name = "IntraPredictionFig4,Content".Localize(), ImagePath = "../Assets/Images/intraModes.png"},
+            };
+
+            var infoDialog = new InfoDialog("IntraLabel,Content".Localize(), "IntraPrediction", images);
+            infoDialog.Show();
+        }
+
+        private DelegateCommand interPredictionInfoClick;
+        public DelegateCommand InterPredictionInfoClick => interPredictionInfoClick ?? (interPredictionInfoClick = new DelegateCommand(ExecuteMotionVectorsInfoClick));
+        private void ExecuteMotionVectorsInfoClick()
+        {
+            var images = new List<InfoImage>
+            {
+                new InfoImage { Name = "InterPredictionFig1,Content".Localize(), ImagePath = "../Assets/Images/vectorsCandidateBlocks.png"},
+            };
+
+            var infoDialog = new InfoDialog("InterPrediction,Content".Localize(), "InterPrediction", images);
             infoDialog.Show();
         }
 

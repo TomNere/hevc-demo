@@ -217,6 +217,34 @@
     {
       "Id": "Ok",
       "Content": "Ok"
+    },
+    {
+      "Id": "CodingUnitsFig1",
+      "Content": "Obr.1: Hranice CTU (hrubá linka), CU (tenká) a PU (tečkovaná). Čísla reprezentují pořadí přístupu k jednotkám při kódování."
+    },
+    {
+      "Id": "IntraPredictionFig1",
+      "Content": "Obr.1: Blok C je kódován pomocí referenčních pixelů (šedá barva) z ostatních bloků"
+    },
+    {
+      "Id": "IntraPredictionFig2",
+      "Content": "Obr.2: Notace pro popis vnitřno-predikčních módů"
+    },
+    {
+      "Id": "IntraPredictionFig3",
+      "Content": "Obr.3: Interpolace v horizontálním a vertikálním směru u MÓDU 1 (Planar)"
+    },
+    {
+      "Id": "IntraPredictionFig4",
+      "Content": "Obr.4: Čísla a směry MÓDŮ 2-34 (Angular)"
+    },
+    {
+      "Id": "InterPrediction",
+      "Content": "Mezisnímková predikce"
+    },
+    {
+      "Id": "InterPredictionFig1",
+      "Content": "Obr.1: šedou barvou je znázorněna aktuálně kódovaná jednotka, CandAx a CandBx jsou kandidáti pro použití vektoru"
     }
   ]
 }

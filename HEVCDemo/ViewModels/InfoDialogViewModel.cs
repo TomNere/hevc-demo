@@ -1,5 +1,6 @@
-﻿using Prism.Mvvm;
-using System.Windows.Media.Imaging;
+﻿using HEVCDemo.Types;
+using Prism.Mvvm;
+using System.Collections.Generic;
 
 namespace HEVCDemo.ViewModels
 {
@@ -25,11 +26,11 @@ namespace HEVCDemo.ViewModels
             }
         }
 
-        private BitmapImage image;
-        public BitmapImage Image
+        private List<InfoImage> images;
+        public List<InfoImage> Images
         {
-            get => image;
-            set { SetProperty(ref image, value); }
+            get => images;
+            set { SetProperty(ref images, value); }
         }
     }
 }
