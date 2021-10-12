@@ -2,7 +2,6 @@
 using HEVCDemo.Types;
 using Rasyidf.Localization;
 using System;
-using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -12,6 +11,9 @@ namespace HEVCDemo.Parsers
 {
     public class PredictionParser
     {
+        private static readonly Color intraColor = Color.FromArgb(100, 255, 66, 151);
+        private static readonly Color interColor = Color.FromArgb(100, 0, 89, 255);
+
         private readonly VideoSequence videoSequence;
 
         public PredictionParser(VideoSequence videoSequence)
@@ -87,25 +89,24 @@ namespace HEVCDemo.Parsers
             {
                 using (writeableBitmap.GetBitmapContext())
                 {
-                    var rect = new Rectangle(pu.X, pu.Y, pu.Width, pu.Height);
-                    System.Windows.Media.Color color = Colors.Transparent;
+                    var rect = new System.Drawing.Rectangle(pu.X, pu.Y, pu.Width, pu.Height);
+                    var color = Colors.Transparent;
 
                     switch (pu.PredictionMode)
                     {
                         case PredictionMode.MODE_SKIP:
                             continue;
                         case PredictionMode.MODE_INTER:
-                            color = System.Windows.Media.Color.FromArgb(100, 0, 100, 200);
+                            color = interColor;
                             break;
                         case PredictionMode.MODE_INTRA:
-                            color = System.Windows.Media.Color.FromArgb(100, 0, 200, 100);
+                            color = intraColor;
                             break;
                         case PredictionMode.MODE_NONE:
                             continue;
                     }
 
                     writeableBitmap.FillRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, color);
-                    writeableBitmap.DrawRectangle(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, Colors.Black);
                 }
             }
         }

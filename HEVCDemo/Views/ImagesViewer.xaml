@@ -12,12 +12,14 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.8*"/>
+            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="0.4*"/>
+            <ColumnDefinition Width="0.2*"/>
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
 
         <!--Image viewer-->
-        <ScrollViewer x:Name="ImageScrollViewer" Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
+        <ScrollViewer x:Name="ImageScrollViewer" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
             <i:Interaction.Behaviors>
                 <b:ScrollViewerMouseBehavior MouseX="{Binding ScrollViewerX, Mode=OneWayToSource}" MouseY="{Binding ScrollViewerY, Mode=OneWayToSource}" />
             </i:Interaction.Behaviors>
@@ -27,7 +29,7 @@
                                     Mode=FindAncestor,
                                     AncestorType={x:Type ScrollViewer}}}"/>
             </ScrollViewer.InputBindings>
-            <Grid>
+            <Grid x:Name="ScrollViewerContent">
                 <Button Command="{Binding SelectVideoClick}" FontSize="20" Visibility="{Binding StartButtonVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
                 <!--Frame Image-->
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding DecodedFramesVisibility}" Stretch="Fill"/>
@@ -52,7 +54,7 @@
         </Popup>
 
         <!--Video info-->
-        <Grid Grid.Row="0" Grid.Column="1" Margin="4,0,0,0" IsEnabled="{Binding Enabled}">
+        <Grid Grid.Row="0" Grid.Column="3" Margin="4,0,0,0" IsEnabled="{Binding Enabled}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="38"/>
                 <RowDefinition Height="38"/>
@@ -85,9 +87,13 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="38"/>
                     <RowDefinition Height="38"/>
+                    <RowDefinition Height="120"/>
                     <RowDefinition Height="38"/>
+                    <RowDefinition Height="120"/>
                     <RowDefinition Height="38"/>
+                    <RowDefinition Height="120"/>
                     <RowDefinition Height="38"/>
+                    <RowDefinition Height="150"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -104,17 +110,65 @@
                 <Button Grid.Row="1" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding CodingUnitsInfoClick}">
                     <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 </Button>
-                <CheckBox Grid.Row="2" IsChecked="{Binding IsPredictionEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
-                <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='PredictionLabel'}"/>
-                <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding PredictionTypeInfoClick}">
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/cu.png" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewCu'}"/>
+                    <Image Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/pu.png" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewPu'}"/>
+                </Grid>
+                <CheckBox Grid.Row="3" IsChecked="{Binding IsPredictionEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
+                <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='PredictionLabel'}"/>
+                <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding PredictionTypeInfoClick}">
                     <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 </Button>
-                <CheckBox Grid.Row="3" IsChecked="{Binding IsIntraEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
-                <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='IntraLabel'}"/>
-                <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding IntraPredictionInfoClick}">
+                <Grid Grid.Row="4" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/intra.png" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewIntra'}"/>
+                    <Image Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/inter.png" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewInter'}"/>
+                </Grid>
+                <CheckBox Grid.Row="5" IsChecked="{Binding IsIntraEnabled}" VerticalAlignment="Center" IsEnabled="{Binding ViewOptionsEnabled}"/>
+                <Label Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Content="{rf:Tr Uid='IntraLabel'}"/>
+                <Button Grid.Row="5" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding IntraPredictionInfoClick}">
                     <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 </Button>
-                <Grid Grid.Row="4" Grid.ColumnSpan="3">
+                <Grid Grid.Row="6" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/planar.png" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewPlanar'}"/>
+                    <Image Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/dc.png" />
+                    <TextBlock Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewDc'}"/>
+                    <Image Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/angular2.png" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewAngular2'}"/>
+                    <Image Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/angular18.png" />
+                    <TextBlock Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewAngular18'}"/>
+                </Grid>
+                <Grid Grid.Row="7" Grid.ColumnSpan="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="38"/>
                     </Grid.RowDefinitions>
@@ -133,12 +187,26 @@
                         <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
                     </Button>
                 </Grid>
+                <Grid Grid.Row="8" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/uniPrediction.png" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewUniPrediction'}"/>
+                    <Image Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="8" Source="../Assets/Images/View/biPrediction.png" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,4,10,4" TextWrapping="Wrap" Text="{rf:Tr Uid='ViewBiPrediction'}"/>
+                </Grid>
             </Grid>
         </Grid>
 
-        <!--Image Viewer Controls-->
-        <Grid Grid.Row="1" Grid.Column="0" IsEnabled="{Binding Enabled}">
-            <!--Frame index-->
+        <!--Frame index-->
+        <Grid Grid.Row="1" Grid.Column="0" IsEnabled="{Binding Enabled}" >
+           
             <Grid Margin="6,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -152,33 +220,33 @@
             <DockPanel Grid.Column="2" Width="400" Margin="10,26,0,6" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Slider Margin="4,0,0,0" Maximum="{Binding MaxSliderValue}" TickFrequency="30" TickPlacement="BottomRight" Value="{Binding CurrentFrameIndex}"/>
             </DockPanel>
-            <!--Buttons-->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="38">
-                <!--Navigate-->
-                <Button Grid.Column="0" Command="{Binding BackwardClick}">
-                    <iconPacks:PackIconModern Kind="NavigatePrevious"
-                                     VerticalAlignment="Center"
-                                     HorizontalAlignment="Center" />
-                </Button>
-                <Button Grid.Column="1" Margin="4,0,0,0" Command="{Binding ForwardClick}">
-                    <iconPacks:PackIconModern Kind="NavigateNext"
-                                     VerticalAlignment="Center"
-                                     HorizontalAlignment="Center" />
-                </Button>
-                <!--Zoom-->
-                <Button Grid.Column="7" Margin="10,0,0,0" Command="{Binding ZoomOutClick}">
-                    <iconPacks:PackIconModern Kind="MagnifyMinus"
-                                     VerticalAlignment="Center"
-                                     HorizontalAlignment="Center" />
-                </Button>
-                <Button Grid.Column="8" Margin="4,0,0,0" Command="{Binding ZoomInClick}">
-                    <iconPacks:PackIconModern Kind="MagnifyAdd"
-                                     VerticalAlignment="Center"
-                                     HorizontalAlignment="Center" />
-                </Button>
-            </StackPanel>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="1" Margin="10,0,0,0">
+        <!--Buttons-->
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Height="38">
+            <!--Navigate-->
+            <Button Grid.Column="0" Command="{Binding BackwardClick}">
+                <iconPacks:PackIconModern Kind="NavigatePrevious"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+            </Button>
+            <Button Grid.Column="1" Margin="4,0,0,0" Command="{Binding ForwardClick}">
+                <iconPacks:PackIconModern Kind="NavigateNext"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+            </Button>
+            <!--Zoom-->
+            <Button Grid.Column="7" Margin="10,0,0,0" Command="{Binding ZoomOutClick}">
+                <iconPacks:PackIconModern Kind="MagnifyMinus"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+            </Button>
+            <Button Grid.Column="8" Margin="4,0,0,0" Command="{Binding ZoomInClick}">
+                <iconPacks:PackIconModern Kind="MagnifyAdd"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="1" Grid.Column="2" Margin="10,0,0,0" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -190,5 +258,7 @@
     <UserControl.InputBindings>
         <KeyBinding Key="Left" Command="{Binding BackwardClick}"/>
         <KeyBinding Key="Right" Command="{Binding ForwardClick}"/>
+        <KeyBinding Key="Add" Command="{Binding ZoomInClick}"/>
+        <KeyBinding Key="Subtract" Command="{Binding ZoomOutClick}"/>
     </UserControl.InputBindings>
 </UserControl>

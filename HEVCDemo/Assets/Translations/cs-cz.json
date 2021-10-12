@@ -40,7 +40,7 @@
     },
     {
       "Id": "CodingUnitsLabel",
-      "Content": "Kódovací jednotky"
+      "Content": "Kódovací a predikční jednotky"
     },
     {
       "Id": "CurrentFrameLabel",
@@ -245,6 +245,46 @@
     {
       "Id": "InterPredictionFig1",
       "Content": "Obr.1: šedou barvou je znázorněna aktuálně kódovaná jednotka, CandAx a CandBx jsou kandidáti pro použití vektoru"
+    },
+    {
+      "Id": "ViewCu",
+      "Text": "Modrými čtverci jsou znázorněny kódovací jednotky."
+    },
+    {
+      "Id": "ViewPu",
+      "Text": "Žlutou barvou je znázorněno rozdělení na jednotky predikce."
+    },
+    {
+      "Id": "ViewIntra",
+      "Text": "Růžovým podbarvením je znázorněna vnitřní predikce."
+    },
+    {
+      "Id": "ViewInter",
+      "Text": "Modrým podbarvením je znázorněna mezisnímková predikce."
+    },
+    {
+      "Id": "ViewPlanar",
+      "Text": "Planar (0)"
+    },
+    {
+      "Id": "ViewDc",
+      "Text": "DC (1)"
+    },
+    {
+      "Id": "ViewAngular2",
+      "Text": "Angular (2-17)"
+    },
+    {
+      "Id": "ViewAngular18",
+      "Text": "Angular (18-34)"
+    },
+    {
+      "Id": "ViewUniPrediction",
+      "Text": "1 vektor (uni-predikce). Tečka znázorňuje počáteční bod vektoru. Modrá barva znamená, že vektor je na první pozici v listu."
+    },
+    {
+      "Id": "ViewBiPrediction",
+      "Text": "2 vektory (bi-predikce). Barva opět znázorňuje pozici vektoru v listu. Červená barva je druhá pozice v listu."
     }
   ]
 }

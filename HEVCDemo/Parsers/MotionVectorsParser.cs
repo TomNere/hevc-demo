@@ -93,16 +93,16 @@ namespace HEVCDemo.Parsers
                 }
                 else if(pu.InterDir == 1)
                 {
-                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Red);
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Blue);
                 }
                 else if (pu.InterDir == 2)
                 {
-                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Blue);
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Red);
                 }
                 else if (pu.InterDir == 3)
                 {
-                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Red);
-                    DrawMotionVector(pu, pu.MotionVectors[1], Colors.Blue);
+                    DrawMotionVector(pu, pu.MotionVectors[0], Colors.Blue);
+                    DrawMotionVector(pu, pu.MotionVectors[1], Colors.Red);
                 }
             }
 

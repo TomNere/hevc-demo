@@ -92,10 +92,10 @@ namespace HEVCDemo.Parsers
                     switch (pu.IntraDirLuma)
                     {
                         case 0: // Planar
-                            writeableBitmap.DrawEllipse(pu.X, pu.Y, pu.X + pu.Width, pu.Y + pu.Height, Colors.Yellow);
+                            writeableBitmap.DrawEllipse(pu.X, pu.Y, pu.X + pu.Width, pu.Y + pu.Height, Colors.Green);
                             break;
                         case 1: // DC
-                            writeableBitmap.DrawLine(pu.X, pu.Y + pu.Height / 2, pu.X + pu.Width / 2, pu.Y, Colors.Yellow);
+                            writeableBitmap.DrawLine(pu.X, pu.Y + pu.Height / 2, pu.X + pu.Width / 2, pu.Y, Colors.Green);
                             break;
                         default:
                             if (pu.IntraDirLuma >= 2 && pu.IntraDirLuma <= 17)

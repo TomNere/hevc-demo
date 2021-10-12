@@ -170,10 +170,10 @@ namespace HEVCDemo.Parsers
 
             using (writeableBitmap.GetBitmapContext())
             {
-                //foreach (var pu in cu.PUs)
-                //{
-                //    writeableBitmap.DrawRectangle(pu.X, pu.Y, pu.X + pu.Width, pu.Y + pu.Height, Colors.Yellow);
-                //}
+                foreach (var pu in cu.PUs)
+                {
+                    writeableBitmap.DrawRectangle(pu.X, pu.Y, pu.X + pu.Width, pu.Y + pu.Height, Colors.Yellow);
+                }
 
                 writeableBitmap.DrawRectangle(cu.iPixelX, cu.iPixelY, cu.iPixelX + cu.Size, cu.iPixelY + cu.Size, Colors.Blue);
             }
