@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using HEVCDemo.Helpers;
+using System.Windows.Controls;
 
 namespace HEVCDemo.Views
 {
@@ -7,9 +8,12 @@ namespace HEVCDemo.Views
     /// </summary>
     public partial class ImagesViewer : UserControl
     {
+        private readonly ScrollDragger scrollDragger;
+
         public ImagesViewer()
         {
             InitializeComponent();
+            scrollDragger = new ScrollDragger(ScrollViewerContent, ImageScrollViewer);
         }
     }
 }
