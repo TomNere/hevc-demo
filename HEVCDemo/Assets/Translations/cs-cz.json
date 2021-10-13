@@ -1,4 +1,4 @@
-﻿{
+{
   "AppId": "HEVCDemo",
   "Version": "0.1",
   "Type": "Single",
@@ -285,6 +285,26 @@
     {
       "Id": "ViewBiPrediction",
       "Text": "2 vektory (bi-predikce). Barva opět znázorňuje pozici vektoru v listu. Červená barva je druhá pozice v listu."
+    },
+    {
+      "Id": "HelpHeader",
+      "Header": "Nápověda"
+    },
+    {
+      "Id": "FileHeader",
+      "Header": "Soubor"
+    },
+    {
+      "Id": "UniPrediction1",
+      "Content": "uni-predikce, vektor 1"
+    },
+    {
+      "Id": "UniPrediction2",
+      "Content": "uni-predikce, vektor 2"
+    },
+    {
+      "Id": "BiPrediction",
+      "Content": "bi-predikce"
     }
   ]
 }

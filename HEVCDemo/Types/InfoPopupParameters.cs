@@ -10,7 +10,6 @@ namespace HEVCDemo.Types
         public string PredictionMode { get; set; }
         public string IntraMode { get; set; }
         public string InterMode { get; set; }
-        public string MotionVectors { get; set; }
         public BitmapSource Image { get; set; }
     }
 }

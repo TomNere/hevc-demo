@@ -259,9 +259,7 @@ namespace HEVCDemo.Helpers
 
             if (pu.PredictionMode == PredictionMode.MODE_INTRA)
             {
-                
                 parameters.InterMode = "-";
-                parameters.MotionVectors = "-";
 
                 string intraMode;
                 if (pu.IntraDirLuma == 0)
@@ -283,9 +281,21 @@ namespace HEVCDemo.Helpers
             else if (pu.PredictionMode == PredictionMode.MODE_INTER)
             {
                 parameters.IntraMode = "-";
-                parameters.InterMode = $"{pu.InterDir}";
-                parameters.MotionVectors = $"{pu.MotionVectors.Count}";
+
+                switch (pu.InterDir)
+                {
+                    case 1:
+                        parameters.InterMode = "UniPrediction1,Content".Localize();
+                        break;
+                    case 2:
+                        parameters.InterMode = "UniPrediction2,Content".Localize();
+                        break;
+                    case 3:
+                        parameters.InterMode = "BiPrediction,Content".Localize();
+                        break;
+                }
             }
+
             var grid = scrollViewer.Content as Grid;
 
             double actualHeight = grid.RenderSize.Height;

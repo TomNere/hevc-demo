@@ -1,8 +1,11 @@
-﻿using Prism.Commands;
+﻿using HEVCDemo.Views;
+using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace HEVCDemo.ViewModels
@@ -47,6 +50,16 @@ namespace HEVCDemo.ViewModels
         private DelegateCommand<LocalizationDictionary> changeLanguageCommand;
         public DelegateCommand<LocalizationDictionary> ChangeLanguageCommand
             => changeLanguageCommand ?? (changeLanguageCommand = new DelegateCommand<LocalizationDictionary>(OnChangeLanguage));
+
+        private DelegateCommand showHelpCommand;
+        public DelegateCommand ShowHelpCommand
+            => showHelpCommand ?? (showHelpCommand = new DelegateCommand(ExecuteShowHelp));
+
+        private void ExecuteShowHelp()
+        {
+            var infoDialog = new InfoDialog("HelpHeader,Header".Localize(), "Help", null);
+            infoDialog.Show();
+        }
 
         public MainWindowViewModel()
         {

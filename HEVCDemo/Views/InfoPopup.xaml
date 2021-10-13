@@ -17,12 +17,11 @@
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="210"/>
+                <ColumnDefinition Width="140"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
@@ -57,17 +56,11 @@
             <!--Inter mode-->
             <Label Grid.Row="4" Grid.Column="0" Content="{rf:Tr Uid='InterLabel'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Path=Parameters.InterMode, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center"/>
-            <Button Grid.Row="4" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding DecodedFramesInfoClick}">
+            <Button Grid.Row="4" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding InterPredictionInfoClick}">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
-            <!--Motion Vectors-->
-            <Label Grid.Row="5" Grid.Column="0" Content="{rf:Tr Uid='MotionVectorsLabel'}" VerticalAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Path=Parameters.MotionVectors, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center"/>
-            <!--<Button Grid.Row="5" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding DecodedFramesInfoClick}">
-                <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
-            </Button>-->
             <!--Unit image-->
-            <Image Grid.Row="6" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="64" Source="{Binding Path=Parameters.Image, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="10"/>
+            <Image Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="64" Source="{Binding Path=Parameters.Image, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="10"/>
         </Grid>
     </StackPanel>
 </UserControl>

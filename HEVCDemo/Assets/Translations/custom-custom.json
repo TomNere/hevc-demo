@@ -2,9 +2,9 @@
   "AppId": "HEVCDemo",
   "Version": "0.1",
   "Type": "Single",
-  "EnglishName": "English",
-  "CultureName": "English",
-  "Culture": "en-us",
+  "EnglishName": "Custom",
+  "CultureName": "Custom",
+  "Culture": "en-uk",
   "Data": [
     {
       "Id": "LanguageHeader",

@@ -19,6 +19,8 @@
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
+            <MenuItem Header="{rf:Tr Uid='HelpHeader'}"
+                      Command="{Binding ShowHelpCommand}"/>
         </Menu>
         <views:ImagesViewer />
     </DockPanel>

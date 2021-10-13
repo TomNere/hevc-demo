@@ -1,0 +1,11 @@
+﻿- Obecné informace:
+	- aplikace podporuje pouze video soubory kódované kodekem H.265
+	- aplikace pro svůj běh potřebuje dostatek volného místa na disku a operační paměti
+- Ovládání prohlížeče video snímků:
+	- prohlížeč video snímků lze kromě tlačítek ovládat i klavesami ←,→,+,−
+	- taháním myši lze posouvat snímky v horizontálním a vertikálním směru
+	- rolováním myši lze přibližovat
+	- pravým tlačítkem lze otevřít dialog s informacemi o dané predikční jednotce
+- Pravý panel:
+	- jednotlivé složky algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole
+	- kliknutím na ikonu informace v pravém panelu lze zobrazit detailní popis jednotlivých složek algoritmu H.265
