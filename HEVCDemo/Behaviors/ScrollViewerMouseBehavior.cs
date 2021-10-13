@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace HEVCDemo.Behaviors
 {
-    // Mouse behavior for getting mouse position on ScrollViewer
+    // Mouse behavior for getting mouse position on ScrollViewer and handling mouse wheel
     public class ScrollViewerMouseBehavior : System.Windows.Interactivity.Behavior<FrameworkElement>
     {
         public static readonly DependencyProperty MouseXProperty = DependencyProperty.Register(
@@ -25,14 +25,25 @@ namespace HEVCDemo.Behaviors
             set => SetValue(MouseYProperty, value);
         }
 
+        public static readonly DependencyProperty MouseWheelDirectionProperty = DependencyProperty.Register(
+            nameof(MouseWheelDirection), typeof(bool), typeof(ScrollViewerMouseBehavior), new PropertyMetadata(default(bool)));
+
+        public bool MouseWheelDirection
+        {
+            get => (bool)GetValue(MouseWheelDirectionProperty);
+            set => SetValue(MouseWheelDirectionProperty, value);
+        }
+
         protected override void OnAttached()
         {
             AssociatedObject.MouseMove += AssociatedObjectOnMouseMove;
+            AssociatedObject.PreviewMouseWheel += AssociatedObjectOnMouseWheel;
         }
 
         protected override void OnDetaching()
         {
             AssociatedObject.MouseMove -= AssociatedObjectOnMouseMove;
+            AssociatedObject.PreviewMouseWheel -= AssociatedObjectOnMouseWheel;
         }
 
         private void AssociatedObjectOnMouseMove(object sender, MouseEventArgs mouseEventArgs)
@@ -42,6 +53,11 @@ namespace HEVCDemo.Behaviors
             var pos = mouseEventArgs.GetPosition(AssociatedObject);
             MouseX = pos.X + scrollViewer.HorizontalOffset;
             MouseY = pos.Y + scrollViewer.VerticalOffset;
+        }
+
+        private void AssociatedObjectOnMouseWheel(object sender, MouseWheelEventArgs args)
+        {
+            MouseWheelDirection = args.Delta > 0;
         }
     }
 }

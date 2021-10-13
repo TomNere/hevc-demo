@@ -21,8 +21,13 @@
         <!--Image viewer-->
         <ScrollViewer x:Name="ImageScrollViewer" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
             <i:Interaction.Behaviors>
-                <b:ScrollViewerMouseBehavior MouseX="{Binding ScrollViewerX, Mode=OneWayToSource}" MouseY="{Binding ScrollViewerY, Mode=OneWayToSource}" />
+                <b:ScrollViewerMouseBehavior MouseX="{Binding ScrollViewerX, Mode=OneWayToSource}" MouseY="{Binding ScrollViewerY, Mode=OneWayToSource}" MouseWheelDirection="{Binding MouseWheelDirection, Mode=OneWayToSource}" />
             </i:Interaction.Behaviors>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PreviewMouseWheel">
+                    <i:InvokeCommandAction Command="{Binding MouseScrolled}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <ScrollViewer.InputBindings>
                 <MouseBinding Gesture="RightClick" Command="{Binding ScrollViewerRightClick}" CommandParameter="{Binding RelativeSource=
                                    {RelativeSource

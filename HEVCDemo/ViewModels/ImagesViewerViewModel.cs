@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -526,6 +527,16 @@ namespace HEVCDemo.ViewModels
             }
         }
 
+        private bool mouseWheelDirection;
+        public bool MouseWheelDirection
+        {
+            get => mouseWheelDirection;
+            set
+            {
+                SetProperty(ref mouseWheelDirection, value);
+            }
+        }
+
         private bool isPopupOpen;
         public bool IsPopupOpen
         {
@@ -543,6 +554,20 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref popupContent, value);
+            }
+        }
+
+        private DelegateCommand mouseScrolled;
+        public DelegateCommand MouseScrolled => mouseScrolled ?? (mouseScrolled = new DelegateCommand(ExecuteMouseScrolled));
+        private void ExecuteMouseScrolled()
+        {
+            if (MouseWheelDirection)
+            {
+                ExecuteZoomInClick();
+            }
+            else
+            {
+                ExecuteZoomOutClick();
             }
         }
 
