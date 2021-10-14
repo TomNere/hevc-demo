@@ -305,6 +305,34 @@
     {
       "Id": "BiPrediction",
       "Content": "bi-predikce"
+    },
+    {
+      "Id": "PopupHelp1",
+      "Content": "Prohlížeč video snímků lze kromě tlačítek ovládat i klavesami ←,→,+,−."
+    },
+    {
+      "Id": "PopupHelp2",
+      "Content": "Taháním myši lze posouvat snímky v horizontálním a vertikálním směru."
+    },
+    {
+      "Id": "PopupHelp3",
+      "Content": "Rolováním myši lze přibližovat."
+    },
+    {
+      "Id": "PopupHelp4",
+      "Content": "Pravým tlačítkem lze otevřít dialog s informacemi o dané predikční jednotce."
+    },
+    {
+      "Id": "PopupHelp5",
+      "Content": "Jednotlivé složky algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole."
+    },
+    {
+      "Id": "PopupHelp6",
+      "Content": "Kliknutím na ikonu informace v pravém panelu lze zobrazit detailní popis jednotlivých složek algoritmu H.265."
+    },
+    {
+      "Id": "DidYouKnow",
+      "Content": "Věděli jste, že..."
     }
   ]
 }

@@ -167,6 +167,7 @@
     <Resource Include="Assets\Images\View\planar.png" />
     <Resource Include="Assets\Images\View\biPrediction.png" />
     <Resource Include="Assets\Images\View\uniPrediction.png" />
+    <Resource Include="Assets\Images\Bulb.png" />
     <Content Include="Assets\Translations\en-us.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

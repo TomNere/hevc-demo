@@ -5,8 +5,10 @@ using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -230,6 +232,7 @@ namespace HEVCDemo.ViewModels
         public ImagesViewerViewModel()
         {
             CheckFFmpeg(true);
+            InitializeHelpPopup();
         }
 
         private void HandleError(string actionDescription, string message)
@@ -603,6 +606,63 @@ namespace HEVCDemo.ViewModels
         {
             IsPopupOpen = false;
             HighlightVisibility = Visibility.Hidden;
+        }
+
+        #endregion
+
+        #region HelpPopup
+
+        private readonly TimeSpan helpPopupInterval = TimeSpan.FromMinutes(1);
+        private readonly TimeSpan helpPopupTimeout = TimeSpan.FromSeconds(20);
+        private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(5);
+        private Timer helpPopupTimer;
+        private int helpPopupIndex;
+        private List<string> helpPopupTexts;
+
+        private void InitializeHelpPopup()
+        {
+            helpPopupTimer = new Timer(DoHelpPopupTimerTick, null, helpPopupInitialDelay, helpPopupInterval);
+            helpPopupIndex = 0;
+            helpPopupTexts = new List<string>
+            {
+                "PopupHelp1,Content".Localize(),
+                "PopupHelp2,Content".Localize(),
+                "PopupHelp3,Content".Localize(),
+                "PopupHelp4,Content".Localize(),
+                "PopupHelp5,Content".Localize(),
+                "PopupHelp6,Content".Localize(),
+            };
+        }
+
+        private async void DoHelpPopupTimerTick(object state)
+        {
+            HelpPopupText = helpPopupTexts[helpPopupIndex];
+            IsHelpPopupOpen = true;
+            helpPopupIndex = helpPopupIndex + 1 >= helpPopupTexts.Count ? 0 : helpPopupIndex + 1;
+
+            await Task.Delay(helpPopupTimeout);
+            IsHelpPopupOpen = false;
+        }
+
+        private bool isHelpPopupOpen;
+        public bool IsHelpPopupOpen
+        {
+            get => isHelpPopupOpen;
+            set => SetProperty(ref isHelpPopupOpen, value);
+        }
+
+        private string helpPopupText;
+        public string HelpPopupText
+        {
+            get => helpPopupText;
+            set => SetProperty(ref helpPopupText, value);
+        }
+
+        private DelegateCommand closeHelpPopupCommand;
+        public DelegateCommand CloseHelpPopupCommand => closeHelpPopupCommand ?? (closeHelpPopupCommand = new DelegateCommand(ExecuteCloseHelpPopupClick));
+        private void ExecuteCloseHelpPopupClick()
+        {
+            IsHelpPopupOpen = false;
         }
 
         #endregion
