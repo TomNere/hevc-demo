@@ -21,5 +21,10 @@ namespace HEVCDemo.Views
             e.Handled = true;
             MessageBox.Show($"{"UnhandledEx,Text".Localize()}\n\n{e.Exception.Message}");
         }
+
+        private void WindowPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            e.Handled = ImagesViewer.ProcessPreviewKeyDown(e.Key);
+        }
     }
 }

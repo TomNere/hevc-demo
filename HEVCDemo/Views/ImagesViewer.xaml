@@ -4,8 +4,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
              xmlns:b="clr-namespace:HEVCDemo.Behaviors"
-             xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:views="clr-namespace:HEVCDemo.Views"
-             prism:ViewModelLocator.AutoWireViewModel="True">
+             xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:views="clr-namespace:HEVCDemo.Views">
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -286,10 +285,4 @@
             <Button Grid.Row="1" Grid.ColumnSpan="2" Width="200" Margin="2" Command="{Binding SelectVideoClick}" Content="{rf:Tr Uid='SelectVideoButton'}"/>
         </Grid>
     </Grid>
-    <UserControl.InputBindings>
-        <KeyBinding Key="Left" Command="{Binding BackwardClick}"/>
-        <KeyBinding Key="Right" Command="{Binding ForwardClick}"/>
-        <KeyBinding Key="Add" Command="{Binding ZoomInClick}"/>
-        <KeyBinding Key="Subtract" Command="{Binding ZoomOutClick}"/>
-    </UserControl.InputBindings>
 </UserControl>

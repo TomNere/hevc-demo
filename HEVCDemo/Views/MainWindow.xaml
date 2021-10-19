@@ -7,7 +7,8 @@
                  xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization"
                  prism:ViewModelLocator.AutoWireViewModel="True"
                  Title="{Binding Title}"
-                 WindowState="Maximized">
+                 WindowState="Maximized"
+                 PreviewKeyDown="WindowPreviewKeyDown">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{rf:Tr Uid='LanguageHeader'}"
@@ -22,6 +23,6 @@
             <MenuItem Header="{rf:Tr Uid='HelpHeader'}"
                       Command="{Binding ShowHelpCommand}"/>
         </Menu>
-        <views:ImagesViewer />
+        <views:ImagesViewer x:Name="ImagesViewer" />
     </DockPanel>
 </mah:MetroWindow>
