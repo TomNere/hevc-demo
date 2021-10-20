@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:HEVCDemo.Views" xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:HEVCDemo.Views" 
+             xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization" 
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
@@ -32,31 +34,28 @@
             <!--Location-->
             <Label Grid.Row="0" Grid.Column="0" Content="{rf:Tr Uid='PredictionUnitAt'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Parameters.Location, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" />
-            <Button Grid.Row="0" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding ResolutionClick}">
-                <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
-            </Button>
             <!--Size-->
             <Label Grid.Row="1" Grid.Column="0" Content="{rf:Tr Uid='Size'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=Parameters.Size, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" />
-            <Button Grid.Row="1" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding CodingUnitsInfoClick}">
+            <Button Grid.Row="1" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Click="ShowCodingUnitsInfo_Click">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
             <!--Prediction type-->
             <Label Grid.Row="2" Grid.Column="0" Content="{rf:Tr Uid='PredictionLabel'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=Parameters.PredictionMode, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center"/>
-            <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding PredictionTypeInfoClick}">
+            <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Click="ShowPredictionTypeInfo_Click">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
             <!--Intra mode-->
             <Label Grid.Row="3" Grid.Column="0" Content="{rf:Tr Uid='IntraLabel'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Path=Parameters.IntraMode, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" />
-            <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding IntraPredictionInfoClick}">
+            <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Click="ShowIntraPredictionInfo_Click">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
             <!--Inter mode-->
             <Label Grid.Row="4" Grid.Column="0" Content="{rf:Tr Uid='InterLabel'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Path=Parameters.InterMode, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center"/>
-            <Button Grid.Row="4" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Command="{Binding InterPredictionInfoClick}">
+            <Button Grid.Row="4" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Click="ShowInterPredictionInfo_Click">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
             <!--Unit image-->

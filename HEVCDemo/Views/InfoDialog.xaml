@@ -9,7 +9,7 @@
                  mc:Ignorable="d"
                  Title="{rf:Tr Uid='InfoDialogTitle'}"
                  SizeToContent="Height"
-                 MinHeight="300" MinWidth="600" Width="600" MaxHeight="900">
+                 MinHeight="300" MinWidth="600" Width="600" MaxHeight="768" MaxWidth="1024">
     <ScrollViewer  VerticalScrollBarVisibility="Auto">
         <Grid Margin="30,0,30,10">
             <Grid.RowDefinitions>

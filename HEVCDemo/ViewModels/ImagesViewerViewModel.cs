@@ -1,6 +1,5 @@
 using HEVCDemo.Helpers;
 using HEVCDemo.Types;
-using HEVCDemo.Views;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -12,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -26,6 +24,8 @@ namespace HEVCDemo.ViewModels
         private int realHeight;
         private int realWidth;
 
+        private bool isVectorsStartEnabled = true;
+
         #region Binding properties
 
         private bool enabled = false;
@@ -33,13 +33,6 @@ namespace HEVCDemo.ViewModels
         {
             get => enabled;
             set => SetProperty(ref enabled, value);
-        }
-
-        private bool viewOptionsEnabled = false;
-        public bool ViewOptionsEnabled
-        {
-            get => viewOptionsEnabled;
-            set => SetProperty(ref viewOptionsEnabled, value);
         }
 
         private string appState;
@@ -151,78 +144,62 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref fileSize, value);
         }
 
-        public Visibility DecodedFramesVisibility => IsDecodedFramesEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isDecodedFramesEnabled = true;
-        public bool IsDecodedFramesEnabled
+
+        private Visibility decodedFramesVisibility = Visibility.Visible;
+        public Visibility DecodedFramesVisibility
         {
-            get => isDecodedFramesEnabled;
+            get => decodedFramesVisibility;
             set
             {
-                SetProperty(ref isDecodedFramesEnabled, value);
-                RaisePropertyChanged(nameof(DecodedFramesVisibility));
+                SetProperty(ref decodedFramesVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
-        public Visibility CupuVisibility => IsCupuEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isCupuEnabled = true;
-        public bool IsCupuEnabled
+
+        private Visibility codingUnitsVisibility = Visibility.Visible;
+        public Visibility CodingUnitsVisibility
         {
-            get => isCupuEnabled;
+            get => codingUnitsVisibility;
             set
             {
-                SetProperty(ref isCupuEnabled, value);
-                RaisePropertyChanged(nameof(CupuVisibility));
+                SetProperty(ref codingUnitsVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
-        public Visibility PredictionVisibility => IsPredictionEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isPredictionEnabled = true;
-        public bool IsPredictionEnabled
+
+        private Visibility predictionTypeVisibility = Visibility.Visible;
+        public Visibility PredictionTypeVisibility
         {
-            get => isPredictionEnabled;
+            get => predictionTypeVisibility;
             set
             {
-                SetProperty(ref isPredictionEnabled, value);
-                RaisePropertyChanged(nameof(PredictionVisibility));
+                SetProperty(ref predictionTypeVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
-        public Visibility IntraVisibility => IsIntraEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isIntraEnabled = true;
-        public bool IsIntraEnabled
+
+        private Visibility intraPredictionVisibility = Visibility.Visible;
+        public Visibility IntraPredictionVisibility
         {
-            get => isIntraEnabled;
+            get => intraPredictionVisibility;
             set
             {
-                SetProperty(ref isIntraEnabled, value);
-                RaisePropertyChanged(nameof(IntraVisibility));
+                SetProperty(ref intraPredictionVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
 
-        public Visibility MotionVectorsVisibility => IsMotionVectorsEnabled ? Visibility.Visible : Visibility.Hidden;
-        private bool isMotionVectorsEnabled = true;
-        public bool IsMotionVectorsEnabled
-        {
-            get => isMotionVectorsEnabled;
-            set
-            {
-                SetProperty(ref isMotionVectorsEnabled, value);
-                RaisePropertyChanged(nameof(MotionVectorsVisibility));
-                _ = SetCurrentFrame(CurrentFrameIndex);
-            }
-        }
 
-        private bool isVectorsStartEnabled = true;
-        public bool IsVectorsStartEnabled
+        private Visibility interPredictionVisibility = Visibility.Visible;
+        public Visibility InterPredictionVisibility
         {
-            get => isVectorsStartEnabled;
+            get => interPredictionVisibility;
             set
             {
-                SetProperty(ref isVectorsStartEnabled, value);
+                SetProperty(ref interPredictionVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
@@ -232,8 +209,53 @@ namespace HEVCDemo.ViewModels
         public ImagesViewerViewModel()
         {
             CheckFFmpeg(true);
-            InitializeHelpPopup();
+            BindEventHandlers();
         }
+
+        #region Event handlers
+
+        private void BindEventHandlers()
+        {
+            ViewOptionsHelper.DecodedFramesVisibilityChanged += DecodedFramesVisibilityChanged;
+            ViewOptionsHelper.CodingUnitsVisibilityChanged += CodingUnitsVisibilityChanged;
+            ViewOptionsHelper.PredictionTypeVisibilityChanged += PredictionTypeVisibilityChanged;
+            ViewOptionsHelper.IntraPredictionVisibilityChanged += IntraPredictionVisibilityChanged;
+            ViewOptionsHelper.InterPredictionVisibilityChanged += InterPredictionVisibilityChanged;
+            ViewOptionsHelper.VectorsStartVisibilityChanged += VectorsStartVisibilityChanged;
+        }
+
+        private void DecodedFramesVisibilityChanged(object sender, VisibilityChangedEventArgs e)
+        {
+            DecodedFramesVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+        }
+
+        private void CodingUnitsVisibilityChanged(object sender, VisibilityChangedEventArgs e)
+        {
+            CodingUnitsVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+        }
+
+        private void PredictionTypeVisibilityChanged(object sender, VisibilityChangedEventArgs e)
+        {
+            PredictionTypeVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+        }
+
+        private void IntraPredictionVisibilityChanged(object sender, VisibilityChangedEventArgs e)
+        {
+            IntraPredictionVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+        }
+
+        private void InterPredictionVisibilityChanged(object sender, VisibilityChangedEventArgs e)
+        {
+            InterPredictionVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+        }
+
+        private void VectorsStartVisibilityChanged(object sender, VisibilityChangedEventArgs e)
+        {
+            isVectorsStartEnabled = e.IsVisible;
+            _ = SetCurrentFrame(CurrentFrameIndex);
+        }
+
+        #endregion
 
         private void HandleError(string actionDescription, string message)
         {
@@ -315,25 +337,27 @@ namespace HEVCDemo.ViewModels
 
         private async Task SetCurrentFrame(int index)
         {
+            if (cacheProvider == null) return;
+
             SetAppState("LoadingIntoCacheState,Text".Localize(), false);
 
             if (DecodedFramesVisibility == Visibility.Visible)
             {
                 await Dispatcher.CurrentDispatcher.Invoke(async() => CurrentFrameImage = await cacheProvider.GetYuvFrame(index, HandleError));
             }
-            if (CupuVisibility == Visibility.Visible)
+            if (CodingUnitsVisibility == Visibility.Visible)
             {
                 Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.GetCuPuFrame(index));
             }
-            if (PredictionVisibility == Visibility.Visible)
+            if (PredictionTypeVisibility == Visibility.Visible)
             {
                 Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.GetPredictionFrame(index));
             }
-            if (IntraVisibility == Visibility.Visible)
+            if (IntraPredictionVisibility == Visibility.Visible)
             {
                 Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.GetIntraFrame(index));
             }
-            if (MotionVectorsVisibility == Visibility.Visible)
+            if (InterPredictionVisibility == Visibility.Visible)
             {
                 Dispatcher.CurrentDispatcher.Invoke(() => CurrentMotionVectorsImage = cacheProvider.GetMotionVectorsFrame(index, isVectorsStartEnabled));
             }
@@ -379,8 +403,6 @@ namespace HEVCDemo.ViewModels
 
         private async void ExecuteSelectVideoClick()
         {
-            ViewOptionsEnabled = false;
-
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin";
 
@@ -393,7 +415,6 @@ namespace HEVCDemo.ViewModels
                     if (cacheProvider?.LoadedFilePath == filePath)
                     {
                         MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
-                        ViewOptionsEnabled = true;
                         return;
                     }
 
@@ -428,85 +449,11 @@ namespace HEVCDemo.ViewModels
                     MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
                     CurrentFrameIndex = 0;
                     StartButtonVisibility = Visibility.Hidden;
-                    ViewOptionsEnabled = true;
                 }, "CreateCacheTitle,Title".Localize(), HandleError);
             }
         }
 
         #endregion Select video
-
-        #region Info
-
-        private DelegateCommand resolutionClick;
-        public DelegateCommand ResolutionClick => resolutionClick ?? (resolutionClick = new DelegateCommand(ExecuteResolutionClick));
-        private void ExecuteResolutionClick()
-        {
-            var infoDialog = new InfoDialog("VideoResolutionTitle,Title".Localize(), "VideoResolution", null);
-            infoDialog.Show();
-        }
-
-        private DelegateCommand fileSizeClick;
-        public DelegateCommand FileSizeClick => fileSizeClick ?? (fileSizeClick = new DelegateCommand(ExecuteFileSizeClick));
-        private void ExecuteFileSizeClick()
-        {
-            var infoDialog = new InfoDialog("FileSizeTitle,Title".Localize(), "FileSize", null);
-            infoDialog.Show();
-        }
-
-        private DelegateCommand decodedFramesInfoClick;
-        public DelegateCommand DecodedFramesInfoClick => decodedFramesInfoClick ?? (decodedFramesInfoClick = new DelegateCommand(ExecuteDecodedFramesInfoClick));
-        private void ExecuteDecodedFramesInfoClick()
-        {
-            var infoDialog = new InfoDialog("DecodedFramesLabel,Content".Localize(), "DecodedFrames", null);
-            infoDialog.Show();
-        }
-
-        private DelegateCommand codingUnitsInfoClick;
-        public DelegateCommand CodingUnitsInfoClick => codingUnitsInfoClick ?? (codingUnitsInfoClick = new DelegateCommand(ExecuteCodingUnitsInfoClick));
-        private void ExecuteCodingUnitsInfoClick()
-        {
-            var infoDialog = new InfoDialog("CodingUnitsLabel,Content".Localize(), "CodingUnits", new List<InfoImage> { new InfoImage { Name = "CodingUnitsFig1,Content".Localize(), ImagePath = "../Assets/Images/cupuStructure.png"} });
-            infoDialog.Show();
-        }
-
-        private DelegateCommand predictionTypeInfoClick;
-        public DelegateCommand PredictionTypeInfoClick => predictionTypeInfoClick ?? (predictionTypeInfoClick = new DelegateCommand(ExecutePredictionTypeInfoClick));
-        private void ExecutePredictionTypeInfoClick()
-        {
-            var infoDialog = new InfoDialog("PredictionLabel,Content".Localize(), "PredictionType", null);
-            infoDialog.Show();
-        }
-
-        private DelegateCommand intraPredictionInfoClick;
-        public DelegateCommand IntraPredictionInfoClick => intraPredictionInfoClick ?? (intraPredictionInfoClick = new DelegateCommand(ExecuteIntraPredictionInfoClick));
-        private void ExecuteIntraPredictionInfoClick()
-        {
-            var images = new List<InfoImage>
-            {
-                new InfoImage { Name = "IntraPredictionFig1,Content".Localize(), ImagePath = "../Assets/Images/referencePixels.png"},
-                new InfoImage { Name = "IntraPredictionFig2,Content".Localize(), ImagePath = "../Assets/Images/intraNotation.png"},
-                new InfoImage { Name = "IntraPredictionFig3,Content".Localize(), ImagePath = "../Assets/Images/intraInterpolation.png"},
-                new InfoImage { Name = "IntraPredictionFig4,Content".Localize(), ImagePath = "../Assets/Images/intraModes.png"},
-            };
-
-            var infoDialog = new InfoDialog("IntraLabel,Content".Localize(), "IntraPrediction", images);
-            infoDialog.Show();
-        }
-
-        private DelegateCommand interPredictionInfoClick;
-        public DelegateCommand InterPredictionInfoClick => interPredictionInfoClick ?? (interPredictionInfoClick = new DelegateCommand(ExecuteMotionVectorsInfoClick));
-        private void ExecuteMotionVectorsInfoClick()
-        {
-            var images = new List<InfoImage>
-            {
-                new InfoImage { Name = "InterPredictionFig1,Content".Localize(), ImagePath = "../Assets/Images/vectorsCandidateBlocks.png"},
-            };
-
-            var infoDialog = new InfoDialog("InterPrediction,Content".Localize(), "InterPrediction", images);
-            infoDialog.Show();
-        }
-
-        #endregion
 
         #region Tooltips
 
@@ -606,63 +553,6 @@ namespace HEVCDemo.ViewModels
         {
             IsPopupOpen = false;
             HighlightVisibility = Visibility.Hidden;
-        }
-
-        #endregion
-
-        #region HelpPopup
-
-        private readonly TimeSpan helpPopupInterval = TimeSpan.FromMinutes(1);
-        private readonly TimeSpan helpPopupTimeout = TimeSpan.FromSeconds(20);
-        private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(5);
-        private Timer helpPopupTimer;
-        private int helpPopupIndex;
-        private List<string> helpPopupTexts;
-
-        private void InitializeHelpPopup()
-        {
-            helpPopupTimer = new Timer(DoHelpPopupTimerTick, null, helpPopupInitialDelay, helpPopupInterval);
-            helpPopupIndex = 0;
-            helpPopupTexts = new List<string>
-            {
-                "PopupHelp1,Content".Localize(),
-                "PopupHelp2,Content".Localize(),
-                "PopupHelp3,Content".Localize(),
-                "PopupHelp4,Content".Localize(),
-                "PopupHelp5,Content".Localize(),
-                "PopupHelp6,Content".Localize(),
-            };
-        }
-
-        private async void DoHelpPopupTimerTick(object state)
-        {
-            HelpPopupText = helpPopupTexts[helpPopupIndex];
-            IsHelpPopupOpen = true;
-            helpPopupIndex = helpPopupIndex + 1 >= helpPopupTexts.Count ? 0 : helpPopupIndex + 1;
-
-            await Task.Delay(helpPopupTimeout);
-            IsHelpPopupOpen = false;
-        }
-
-        private bool isHelpPopupOpen;
-        public bool IsHelpPopupOpen
-        {
-            get => isHelpPopupOpen;
-            set => SetProperty(ref isHelpPopupOpen, value);
-        }
-
-        private string helpPopupText;
-        public string HelpPopupText
-        {
-            get => helpPopupText;
-            set => SetProperty(ref helpPopupText, value);
-        }
-
-        private DelegateCommand closeHelpPopupCommand;
-        public DelegateCommand CloseHelpPopupCommand => closeHelpPopupCommand ?? (closeHelpPopupCommand = new DelegateCommand(ExecuteCloseHelpPopupClick));
-        private void ExecuteCloseHelpPopupClick()
-        {
-            IsHelpPopupOpen = false;
         }
 
         #endregion

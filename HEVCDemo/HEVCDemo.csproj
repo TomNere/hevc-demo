@@ -73,6 +73,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Styles\CustomStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\InfoDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,6 +84,10 @@
     <Page Include="Views\ImagesViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\InfoPopup.xaml">
       <SubType>Designer</SubType>
@@ -94,10 +102,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviors\ScrollViewerMouseBehavior.cs" />
+    <Compile Include="Helpers\InfoDialogHelper.cs" />
     <Compile Include="Helpers\MarkdownLoader.cs" />
     <Compile Include="Helpers\ScrollDragger.cs" />
+    <Compile Include="Helpers\ViewOptionsHelper.cs" />
     <Compile Include="Types\InfoImage.cs" />
     <Compile Include="Types\InfoPopupParameters.cs" />
+    <Compile Include="Types\VisibilityChangedEventArgs.cs" />
+    <Compile Include="ViewModels\SettingsPanelViewModel.cs" />
     <Compile Include="ViewModels\InfoDialogViewModel.cs" />
     <Compile Include="Views\InfoDialog.xaml.cs">
       <DependentUpon>InfoDialog.xaml</DependentUpon>
@@ -123,6 +135,9 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\ImagesViewer.xaml.cs">
       <DependentUpon>ImagesViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsPanel.xaml.cs">
+      <DependentUpon>SettingsPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\InfoPopup.xaml.cs">
       <DependentUpon>InfoPopup.xaml</DependentUpon>

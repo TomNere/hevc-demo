@@ -1,4 +1,5 @@
-﻿using HEVCDemo.Types;
+﻿using HEVCDemo.Helpers;
+using HEVCDemo.Types;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,6 +20,26 @@ namespace HEVCDemo.Views
         public InfoPopup()
         {
             InitializeComponent();
+        }
+
+        private void ShowCodingUnitsInfo_Click(object sender, RoutedEventArgs e)
+        {
+            InfoDialogHelper.ShowCodingUnitsInfoDialog();
+        }
+
+        private void ShowPredictionTypeInfo_Click(object sender, RoutedEventArgs e)
+        {
+            InfoDialogHelper.ShowPredictionTypeInfoDialog();
+        }
+
+        private void ShowIntraPredictionInfo_Click(object sender, RoutedEventArgs e)
+        {
+            InfoDialogHelper.ShowIntraPredictionInfoDialog();
+        }
+
+        private void ShowInterPredictionInfo_Click(object sender, RoutedEventArgs e)
+        {
+            InfoDialogHelper.ShowInterPredictionInfoDialog();
         }
     }
 }
