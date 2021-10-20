@@ -1,4 +1,5 @@
-﻿using HEVCDemo.Views;
+﻿using HEVCDemo.Helpers;
+using HEVCDemo.Views;
 using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
@@ -86,6 +87,13 @@ namespace HEVCDemo.ViewModels
             {
                 LocalizationService.Current.ChangeLanguage(value);
             }
+        }
+
+        private DelegateCommand selectVideoCommand;
+        public DelegateCommand SelectVideoCommand => selectVideoCommand ?? (selectVideoCommand = new DelegateCommand(ExecuteSelectVideo));
+        private void ExecuteSelectVideo()
+        {
+            GlobalActionsHelper.OnSelectVideoClicked();
         }
     }
 }

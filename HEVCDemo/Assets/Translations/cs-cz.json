@@ -15,8 +15,8 @@
       "Content": "Začněte volbou HEVC (h.265) video souboru"
     },
     {
-      "Id": "SelectVideoButton",
-      "Content": "Vybrat video soubor"
+      "Id": "SelectVideoHeader",
+      "Header": "Vybrat video soubor"
     },
     {
       "Id": "VideoPropertiesLabel",
@@ -333,6 +333,14 @@
     {
       "Id": "DidYouKnow",
       "Content": "Věděli jste, že..."
+    },
+    {
+      "Id": "FileHeader",
+      "Header": "File"
+    },
+    {
+      "Id": "ClearCacheHeader",
+      "Header": "Vyčistit cache"
     }
   ]
 }

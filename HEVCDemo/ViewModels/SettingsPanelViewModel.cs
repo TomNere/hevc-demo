@@ -25,8 +25,8 @@ namespace HEVCDemo.ViewModels
             Section1ButtonKind = ChevronUp;
             Section1Height = smallSectionHeight;
 
-            Section2ButtonKind = ChevronUp;
-            Section2Height = smallSectionHeight;
+            Section2ButtonKind = ChevronDown;
+            Section2Height = hiddenSectionHeight;
 
             Section3ButtonKind = ChevronDown;
             Section3Height = hiddenSectionHeight;
@@ -99,7 +99,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isDecodedFramesEnabled, value);
-                ViewOptionsHelper.OnDecodedFramesVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                GlobalActionsHelper.OnDecodedFramesVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
             }
         }
 
@@ -110,7 +110,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isCodingUnitsEnabled, value);
-                ViewOptionsHelper.OnCodingUnitsVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                GlobalActionsHelper.OnCodingUnitsVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
             }
         }
 
@@ -121,7 +121,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isPredictionTypeEnabled, value);
-                ViewOptionsHelper.OnPredictionTypeVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                GlobalActionsHelper.OnPredictionTypeVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
             }
         }
 
@@ -132,7 +132,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isIntraPredictionEnabled, value);
-                ViewOptionsHelper.OnIntraPredictionVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                GlobalActionsHelper.OnIntraPredictionVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
             }
         }
 
@@ -143,7 +143,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isInterPredictionEnabled, value);
-                ViewOptionsHelper.OnInterPredictionVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                GlobalActionsHelper.OnInterPredictionVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
             }
         }
 
@@ -154,7 +154,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isVectorsStartEnabled, value);
-                ViewOptionsHelper.OnVectorsStartVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                GlobalActionsHelper.OnVectorsStartVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
             }
         }
 

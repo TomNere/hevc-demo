@@ -216,37 +216,43 @@ namespace HEVCDemo.ViewModels
 
         private void BindEventHandlers()
         {
-            ViewOptionsHelper.DecodedFramesVisibilityChanged += DecodedFramesVisibilityChanged;
-            ViewOptionsHelper.CodingUnitsVisibilityChanged += CodingUnitsVisibilityChanged;
-            ViewOptionsHelper.PredictionTypeVisibilityChanged += PredictionTypeVisibilityChanged;
-            ViewOptionsHelper.IntraPredictionVisibilityChanged += IntraPredictionVisibilityChanged;
-            ViewOptionsHelper.InterPredictionVisibilityChanged += InterPredictionVisibilityChanged;
-            ViewOptionsHelper.VectorsStartVisibilityChanged += VectorsStartVisibilityChanged;
+            GlobalActionsHelper.SelectVideoClicked += GlobalActionsHelper_SelectVideoClicked;
+            GlobalActionsHelper.DecodedFramesVisibilityChanged += DecodedFramesVisibilityChanged;
+            GlobalActionsHelper.CodingUnitsVisibilityChanged += CodingUnitsVisibilityChanged;
+            GlobalActionsHelper.PredictionTypeVisibilityChanged += PredictionTypeVisibilityChanged;
+            GlobalActionsHelper.IntraPredictionVisibilityChanged += IntraPredictionVisibilityChanged;
+            GlobalActionsHelper.InterPredictionVisibilityChanged += InterPredictionVisibilityChanged;
+            GlobalActionsHelper.VectorsStartVisibilityChanged += VectorsStartVisibilityChanged;
+        }
+
+        private void GlobalActionsHelper_SelectVideoClicked(object sender, EventArgs e)
+        {
+            SelectVideo();
         }
 
         private void DecodedFramesVisibilityChanged(object sender, VisibilityChangedEventArgs e)
         {
-            DecodedFramesVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+            DecodedFramesVisibility = ConvertBoolToVisibility(e.IsVisible);
         }
 
         private void CodingUnitsVisibilityChanged(object sender, VisibilityChangedEventArgs e)
         {
-            CodingUnitsVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+            CodingUnitsVisibility = ConvertBoolToVisibility(e.IsVisible);
         }
 
         private void PredictionTypeVisibilityChanged(object sender, VisibilityChangedEventArgs e)
         {
-            PredictionTypeVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+            PredictionTypeVisibility = ConvertBoolToVisibility(e.IsVisible);
         }
 
         private void IntraPredictionVisibilityChanged(object sender, VisibilityChangedEventArgs e)
         {
-            IntraPredictionVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+            IntraPredictionVisibility = ConvertBoolToVisibility(e.IsVisible);
         }
 
         private void InterPredictionVisibilityChanged(object sender, VisibilityChangedEventArgs e)
         {
-            InterPredictionVisibility = ViewOptionsHelper.ConvertBoolToVisibility(e.IsVisible);
+            InterPredictionVisibility = ConvertBoolToVisibility(e.IsVisible);
         }
 
         private void VectorsStartVisibilityChanged(object sender, VisibilityChangedEventArgs e)
@@ -398,10 +404,13 @@ namespace HEVCDemo.ViewModels
         #region Select Video
 
         private DelegateCommand selectVideoClick;
-        public DelegateCommand SelectVideoClick =>
-            selectVideoClick ?? (selectVideoClick = new DelegateCommand(ExecuteSelectVideoClick));
+        public DelegateCommand SelectVideoClick => selectVideoClick ?? (selectVideoClick = new DelegateCommand(ExecuteSelectVideoClick));
+        private void ExecuteSelectVideoClick()
+        {
+            SelectVideo();
+        }
 
-        private async void ExecuteSelectVideoClick()
+        private async void SelectVideo()
         {
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin";
@@ -556,5 +565,10 @@ namespace HEVCDemo.ViewModels
         }
 
         #endregion
+
+        private Visibility ConvertBoolToVisibility(bool isVisible)
+        {
+            return isVisible ? Visibility.Visible : Visibility.Hidden;
+        }
     }
 }
