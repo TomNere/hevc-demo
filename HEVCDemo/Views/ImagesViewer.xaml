@@ -78,25 +78,42 @@
             </DockPanel>
         </Grid>
         <!--Buttons-->
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Height="38">
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Height="32">
             <!--Navigate-->
-            <Button Grid.Column="0" Command="{Binding BackwardClick}">
+            <Button Command="{Binding BackwardClick}">
                 <iconPacks:PackIconModern Kind="NavigatePrevious"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />
             </Button>
-            <Button Grid.Column="1" Margin="4,0,0,0" Command="{Binding ForwardClick}">
+            <Button Margin="4,0,0,0" Command="{Binding ForwardClick}">
                 <iconPacks:PackIconModern Kind="NavigateNext"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />
             </Button>
+            <!--Player-->
+            <Button Margin="10,0,0,0" Command="{Binding PlayBackwardCommand}">
+                <iconPacks:PackIconModern Kind="ControlPlay"
+                                          RotationAngle="180"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center" />
+            </Button>
+            <Button Margin="4,0,0,0" Command="{Binding PlayForwardCommand}">
+                <iconPacks:PackIconModern Kind="ControlPlay"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+            </Button>
+            <Button Margin="4,0,0,0" Command="{Binding PauseCommand}">
+                <iconPacks:PackIconModern Kind="ControlPause"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center" />
+            </Button>
             <!--Zoom-->
-            <Button Grid.Column="7" Margin="10,0,0,0" Command="{Binding ZoomOutClick}">
+            <Button Margin="10,0,0,0" Command="{Binding ZoomOutClick}">
                 <iconPacks:PackIconModern Kind="MagnifyMinus"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />
             </Button>
-            <Button Grid.Column="8" Margin="4,0,0,0" Command="{Binding ZoomInClick}">
+            <Button Margin="4,0,0,0" Command="{Binding ZoomInClick}">
                 <iconPacks:PackIconModern Kind="MagnifyAdd"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />

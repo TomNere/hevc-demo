@@ -202,6 +202,7 @@ namespace HEVCDemo.Helpers
                 IntraParser.WriteBitmaps(cu, writeableBitmap);
             }
 
+            writeableBitmap.Freeze();
             return writeableBitmap;
         }
 
@@ -215,6 +216,7 @@ namespace HEVCDemo.Helpers
                 PredictionParser.WriteBitmaps(cu, writeableBitmap);
             }
 
+            writeableBitmap.Freeze();
             return writeableBitmap;
         }
 
@@ -228,6 +230,7 @@ namespace HEVCDemo.Helpers
                 CupuParser.WriteBitmaps(cu, writeableBitmap);
             }
 
+            writeableBitmap.Freeze();
             return writeableBitmap;
         }
 
@@ -241,6 +244,7 @@ namespace HEVCDemo.Helpers
                 MotionVectorsParser.WriteBitmaps(cu, writeableBitmap, isStartEnabled);
             }
 
+            writeableBitmap.Freeze();
             return writeableBitmap;
         }
 

@@ -566,6 +566,89 @@ namespace HEVCDemo.ViewModels
 
         #endregion
 
+        #region Player
+
+        private Timer playerTimer;
+        private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
+
+        private bool isPlayBackwardEnabled;
+        public bool IsPlayBackwardEnabled
+        {
+            get => isPlayBackwardEnabled;
+            set => SetProperty(ref isPlayBackwardEnabled, value);
+        }
+
+        private bool isPlayForwardEnabled;
+        public bool IsPlayForwardEnabled
+        {
+            get => isPlayForwardEnabled;
+            set => SetProperty(ref isPlayForwardEnabled, value);
+        }
+
+        private DelegateCommand playBackwardCommand;
+        public DelegateCommand PlayBackwardCommand => playBackwardCommand ?? (playBackwardCommand = new DelegateCommand(ExecutePlayBackward, CanExecutePlay));
+        private void ExecutePlayBackward()
+        {
+            playerTimer = new Timer((parameter) => 
+            {
+                if (CurrentFrameIndex > 0)
+                {
+                    CurrentFrameIndex--;
+                }
+                else
+                {
+                    StopPlayer();
+                }
+            }, null, TimeSpan.Zero, playerInterval);
+
+            PlayBackwardCommand.RaiseCanExecuteChanged();
+            PlayForwardCommand.RaiseCanExecuteChanged();
+        }
+
+        private DelegateCommand playForwardCommand;
+        public DelegateCommand PlayForwardCommand => playForwardCommand ?? (playForwardCommand = new DelegateCommand(ExecutePlayForward, CanExecutePlay));
+
+        private bool CanExecutePlay()
+        {
+            return playerTimer == null;
+        }
+
+        private void ExecutePlayForward()
+        {
+            playerTimer = new Timer((parameter) =>
+            {
+                if (cacheProvider?.videoSequence.FramesCount > CurrentFrameIndex + 1)
+                {
+                    CurrentFrameIndex++;
+                }
+                else
+                {
+                    StopPlayer();
+                }
+            }, null, playerInterval, playerInterval);
+
+            PlayBackwardCommand.RaiseCanExecuteChanged();
+            PlayForwardCommand.RaiseCanExecuteChanged();
+        }
+
+        private DelegateCommand pauseCommand;
+        public DelegateCommand PauseCommand => pauseCommand ?? (pauseCommand = new DelegateCommand(ExecutePause));
+
+        private void ExecutePause()
+        {
+            StopPlayer();
+        }
+
+        private void StopPlayer()
+        {
+            playerTimer?.Dispose();
+            playerTimer = null;
+            PlayBackwardCommand.RaiseCanExecuteChanged();
+            PlayForwardCommand.RaiseCanExecuteChanged();
+        }
+
+        #endregion
+
         private Visibility ConvertBoolToVisibility(bool isVisible)
         {
             return isVisible ? Visibility.Visible : Visibility.Hidden;
