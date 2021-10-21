@@ -25,19 +25,19 @@ namespace HEVCDemo.Views
         {
             if (key == Key.Left)
             {
-                viewModel.BackwardClick.Execute();
+                viewModel.StepBackwardCommand.Execute();
             }
             else if (key == Key.Right)
             {
-                viewModel.ForwardClick.Execute();
+                viewModel.StepForwardCommand.Execute();
             }
             else if (key == Key.Add)
             {
-                viewModel.ZoomInClick.Execute();
+                viewModel.ZoomInCommand.Execute();
             }
             else if (key == Key.Subtract)
             {
-                viewModel.ZoomOutClick.Execute();
+                viewModel.ZoomOutCommand.Execute();
             }
             else
             {

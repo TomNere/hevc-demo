@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Rasyidf.Localization;
+using System;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace HEVCDemo.Helpers
 {
     public static class ActionsHelper
     {
-        public static async Task InvokeSafelyAsync(Func<Task> action, string actionDescription, Action<string, string> errorHandler)
+        public static async Task InvokeSafelyAsync(Func<Task> action, string actionDescription, bool allowEnableViewer)
         {
             try
             {
@@ -15,7 +17,8 @@ namespace HEVCDemo.Helpers
             }
             catch (Exception e)
             {
-                errorHandler(actionDescription, e.Message);
+                GlobalActionsHelper.OnAppStateChanged("ErrorOccuredState,Text".Localize(), allowEnableViewer ? true : (bool?) null);
+                MessageBox.Show($"{actionDescription}\n\n{"ErrorMessageMsg,Text".Localize()}\n{e.Message}", "ErrorOccuredTitle,Title".Localize());
             }
             finally
             {

@@ -21,40 +21,40 @@
         <!--Image viewer-->
         <ScrollViewer x:Name="ImageScrollViewer" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
             <i:Interaction.Behaviors>
-                <b:ScrollViewerMouseBehavior MouseX="{Binding ScrollViewerX, Mode=OneWayToSource}" MouseY="{Binding ScrollViewerY, Mode=OneWayToSource}" MouseWheelDirection="{Binding MouseWheelDirection, Mode=OneWayToSource}" />
+                <b:ScrollViewerMouseBehavior MouseX="{Binding ScrollViewerX, Mode=OneWayToSource}" MouseY="{Binding ScrollViewerY, Mode=OneWayToSource}" MouseWheelDirection="{Binding IsMouseWheelPositiveDirection, Mode=OneWayToSource}" />
             </i:Interaction.Behaviors>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PreviewMouseWheel">
-                    <i:InvokeCommandAction Command="{Binding MouseScrolled}"/>
+                    <i:InvokeCommandAction Command="{Binding MouseScrolledCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ScrollViewer.InputBindings>
-                <MouseBinding Gesture="RightClick" Command="{Binding ScrollViewerRightClick}" CommandParameter="{Binding RelativeSource=
+                <MouseBinding Gesture="RightClick" Command="{Binding ScrollViewerRightClickCommand}" CommandParameter="{Binding RelativeSource=
                                    {RelativeSource
                                     Mode=FindAncestor,
                                     AncestorType={x:Type ScrollViewer}}}"/>
             </ScrollViewer.InputBindings>
             <Grid x:Name="ScrollViewerContent">
-                <Button Command="{Binding SelectVideoClick}" FontSize="20" Visibility="{Binding StartButtonVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
+                <Button Command="{Binding SelectVideoCommand}" FontSize="20" Visibility="{Binding StartButtonVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
                 <!--Frame Image-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding DecodedFramesVisibility}" Stretch="Fill"/>
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrameImage}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding DecodedFramesVisibility}" Stretch="Fill"/>
                 <!--Highlighted unit (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentHighlightImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding HighlightVisibility}" Stretch="Fill" />
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentHighlightImage}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding HighlightVisibility}" Stretch="Fill" />
                 <!--CU Structure Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCupuImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding CodingUnitsVisibility}" Stretch="Fill" />
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentCodingUnitsImage}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding CodingUnitsVisibility}" Stretch="Fill" />
                 <!--Prediction Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentPredictionImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding PredictionTypeVisibility}" Stretch="Fill" />
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentPredictionTypeImage}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding PredictionTypeVisibility}" Stretch="Fill" />
                 <!--Intra Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentIntraImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding IntraPredictionVisibility}" Stretch="Fill" />
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentIntraPredictionImage}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding IntraPredictionVisibility}" Stretch="Fill" />
                 <!--Motion Vectors Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentMotionVectorsImage}" Height="{Binding Height}" Width="{Binding Width}" Visibility="{Binding InterPredictionVisibility}" Stretch="Fill" />
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentInterPredictionImage}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding InterPredictionVisibility}" Stretch="Fill" />
             </Grid>
         </ScrollViewer>
 
         <Popup Placement="MousePoint" HorizontalOffset="32" IsOpen="{Binding IsPopupOpen}">
             <StackPanel Margin="4">
                 <views:InfoPopup Parameters="{Binding PopupContent}"/>
-                <Button Command="{Binding ClosePopupClick}" Width="100" Content="{rf:Tr Uid='Ok'}" />
+                <Button Command="{Binding ClosePopupCommand}" Width="100" Content="{rf:Tr Uid='Ok'}" />
             </StackPanel>
         </Popup>
 
@@ -80,12 +80,12 @@
         <!--Buttons-->
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Height="32">
             <!--Navigate-->
-            <Button Command="{Binding BackwardClick}">
+            <Button Command="{Binding StepBackwardCommand}">
                 <iconPacks:PackIconModern Kind="NavigatePrevious"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />
             </Button>
-            <Button Margin="4,0,0,0" Command="{Binding ForwardClick}">
+            <Button Margin="4,0,0,0" Command="{Binding StepForwardCommand}">
                 <iconPacks:PackIconModern Kind="NavigateNext"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />
@@ -108,12 +108,12 @@
                                      HorizontalAlignment="Center" />
             </Button>
             <!--Zoom-->
-            <Button Margin="10,0,0,0" Command="{Binding ZoomOutClick}">
+            <Button Margin="10,0,0,0" Command="{Binding ZoomOutCommand}">
                 <iconPacks:PackIconModern Kind="MagnifyMinus"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />
             </Button>
-            <Button Margin="4,0,0,0" Command="{Binding ZoomInClick}">
+            <Button Margin="4,0,0,0" Command="{Binding ZoomInCommand}">
                 <iconPacks:PackIconModern Kind="MagnifyAdd"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />

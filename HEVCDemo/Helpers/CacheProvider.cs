@@ -64,7 +64,7 @@ namespace HEVCDemo.Helpers
             YuvFilePath = $@"{cacheDirPath}\yuvFile{yuvExtension}";
         }
 
-        public async Task CreateCache(Action<string, bool> setAppState)
+        public async Task CreateCache()
         {
             // Clear at first
             if (Directory.Exists(cacheDirPath))
@@ -186,7 +186,7 @@ namespace HEVCDemo.Helpers
             });
         }
 
-        public async Task<BitmapImage> GetYuvFrame(int index, Action<string, string> handleError)
+        public async Task<BitmapImage> GetYuvFrame(int index)
         {
             await EnsureFrameInCache(index, handleError);
             return YuvFramesBitmaps[index];
