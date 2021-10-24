@@ -104,6 +104,7 @@
     <Compile Include="Behaviors\ScrollViewerMouseBehavior.cs" />
     <Compile Include="Helpers\FormattingHelper.cs" />
     <Compile Include="Helpers\InfoDialogHelper.cs" />
+    <Compile Include="Helpers\InfoPopupHelper.cs" />
     <Compile Include="Helpers\MarkdownLoader.cs" />
     <Compile Include="Helpers\ScrollDragger.cs" />
     <Compile Include="Helpers\GlobalActionsHelper.cs" />

@@ -19,6 +19,7 @@ namespace HEVCDemo.ViewModels
     public class ImagesViewerViewModel : BindableBase
     {
         private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
+        private readonly Color highlightColor = Colors.DeepPink;
         private Timer playerTimer;
 
         private CacheProvider cacheProvider;
@@ -228,7 +229,7 @@ namespace HEVCDemo.ViewModels
         }
 
         private InfoPopupParameters popupContent;
-        public InfoPopupParameters PopupContent
+        public InfoPopupParameters InfoParameters
         {
             get => popupContent;
             set => SetProperty(ref popupContent, value);
@@ -463,21 +464,24 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteScrollViewerRightClick(object scrollViewer)
         {
-            if (scrollViewer is ScrollViewer validScrollViewer)
+            if ((scrollViewer as ScrollViewer)?.Content is Grid grid)
             {
                 // Reset position
                 IsPopupOpen = false;
                 IsPopupOpen = true;
 
-                PopupContent = cacheProvider.GetUnitDescriptionByLocation(currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), validScrollViewer, zoom);
+                // Get parameters
+                InfoParameters = InfoPopupHelper.GetInfo(cacheProvider.videoSequence, currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid, zoom);
 
+                // Highlight unit
                 var highlightImage = BitmapFactory.New((int)ViewerContentWidth, (int)ViewerContentHeight);
 
-                int x1 = PopupContent.Pu.X;
+                int x1 = InfoParameters.Pu.X;
                 int y1 = popupContent.Pu.Y;
-                int x2 = x1 + PopupContent.Pu.Width;
-                int y2 = y1 + PopupContent.Pu.Height;
-                highlightImage.FillRectangle((int)(x1 * zoom), (int)(y1 * zoom), (int)(x2 * zoom), (int)(y2 * zoom), Colors.DeepPink);
+                int x2 = x1 + InfoParameters.Pu.Width;
+                int y2 = y1 + InfoParameters.Pu.Height;
+
+                highlightImage.FillRectangle((int)(x1 * zoom), (int)(y1 * zoom), (int)(x2 * zoom), (int)(y2 * zoom), highlightColor);
                 CurrentHighlightImage = highlightImage;
                 HighlightVisibility = Visibility.Visible;
             }
@@ -563,19 +567,19 @@ namespace HEVCDemo.ViewModels
             }
             if (CodingUnitsVisibility == Visibility.Visible)
             {
-                CurrentCodingUnitsImage = cacheProvider.GetCuPuFrame(index);
+                CurrentCodingUnitsImage = cacheProvider.GetCodingUnitsFrame(index);
             }
             if (PredictionTypeVisibility == Visibility.Visible)
             {
-                CurrentPredictionTypeImage = cacheProvider.GetPredictionFrame(index);
+                CurrentPredictionTypeImage = cacheProvider.GetPredictionTypeFrame(index);
             }
             if (IntraPredictionVisibility == Visibility.Visible)
             {
-                CurrentIntraPredictionImage = cacheProvider.GetIntraFrame(index);
+                CurrentIntraPredictionImage = cacheProvider.GetIntraPredictionFrame(index);
             }
             if (InterPredictionVisibility == Visibility.Visible)
             {
-                CurrentInterPredictionImage = cacheProvider.GetMotionVectorsFrame(index, isVectorsStartEnabled);
+                CurrentInterPredictionImage = cacheProvider.GetInterPredictionFrame(index, isVectorsStartEnabled);
             }
 
             StepForwardCommand.RaiseCanExecuteChanged();
