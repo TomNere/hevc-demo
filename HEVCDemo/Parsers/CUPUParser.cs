@@ -32,7 +32,7 @@ namespace HEVCDemo.Parsers
 
                 try
                 {
-                    var file = new System.IO.StreamReader(cacheProvider.CupuFilePath);
+                    var file = new System.IO.StreamReader(cacheProvider.CodingUnitsFilePath);
                     string strOneLine = file.ReadLine();
                     int iDecOrder = -1;
                     int iLastPOC = -1;

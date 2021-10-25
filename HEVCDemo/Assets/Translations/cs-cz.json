@@ -124,7 +124,7 @@
     },
     {
       "Id": "ErrorOccuredTitle",
-      "Title": "Nastal problém"
+      "Title": "Nastal problém:"
     },
     {
       "Id": "ErrorMessageMsg",
@@ -341,6 +341,10 @@
     {
       "Id": "ClearCacheHeader",
       "Header": "Vyčistit cache"
+    },
+    {
+      "Id": "ErrorCreatingDemoData",
+      "Text": "Error creating demo data. Either the cache is corrupted or format of the given file is invalid."
     }
   ]
 }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Rasyidf.Localization;
+using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 
@@ -8,11 +10,43 @@ namespace HEVCDemo.Helpers
 {
     public static class FFmpegHelper
     {
-        public static bool FFmpegExists => File.Exists(@"ffmpeg.exe");
+        public static bool IsFFmpegDownloaded => File.Exists(@"ffmpeg.exe");
 
-        public async static Task DownloadFFmpeg()
+        public static async Task EnsureFFmpegIsDownloaded()
         {
-            if (!FFmpegExists)
+            await ActionsHelper.InvokeSafelyAsync(async () =>
+            {
+                GlobalActionsHelper.OnAppStateChanged("CheckingFFmpegState,Text".Localize(), false);
+
+                if (!IsFFmpegDownloaded)
+                {
+                    var result = MessageBox.Show("FFmpegNotFoundMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        GlobalActionsHelper.OnAppStateChanged("DownloadingFFmpegState,Text".Localize(), false);
+                        await DownloadFFmpeg();
+                        MessageBox.Show("FFmpegDownloadedMsg,Text".Localize());
+                    }
+                    else
+                    {
+                        GlobalActionsHelper.OnAppStateChanged("FFmpegMissingState,Text".Localize(), false);
+                        return;
+                    }
+                }
+
+                SetReadyState();
+            }, "DownloadFFmpegTitle,Title".Localize(), false);
+
+            void SetReadyState()
+            {
+                // Enable to allow invoking download by clicking on "Select video"
+                GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
+            }
+        }
+
+        private async static Task DownloadFFmpeg()
+        {
+            if (!IsFFmpegDownloaded)
             {
                 // By default, FFmpeg executable (and download) path is "."
                 await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Full);

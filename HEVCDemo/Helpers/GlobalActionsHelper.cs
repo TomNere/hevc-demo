@@ -1,6 +1,5 @@
 ﻿using HEVCDemo.Types;
 using System;
-using System.Windows;
 
 namespace HEVCDemo.Helpers
 {
@@ -13,6 +12,7 @@ namespace HEVCDemo.Helpers
         public static event EventHandler<VisibilityChangedEventArgs> InterPredictionVisibilityChanged;
         public static event EventHandler<VisibilityChangedEventArgs> VectorsStartVisibilityChanged;
         public static event EventHandler SelectVideoClicked;
+        public static event EventHandler<AppStateChangedEventArgs> AppStateChanged;
 
         public static void OnDecodedFramesVisibilityChanged(VisibilityChangedEventArgs e)
         {
@@ -47,6 +47,17 @@ namespace HEVCDemo.Helpers
         public static void OnSelectVideoClicked()
         {
             SelectVideoClicked?.Invoke(new object(), new EventArgs());
+        }
+
+        public static void OnAppStateChanged(string stateText, bool? isViewerEnabled)
+        {
+            var e = new AppStateChangedEventArgs
+            {
+                StateText = stateText,
+                IsViewerEnabled = isViewerEnabled
+            };
+
+            AppStateChanged?.Invoke(new object(), e);
         }
     }
 }

@@ -5,7 +5,6 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,20 +18,22 @@ namespace HEVCDemo.ViewModels
 {
     public class ImagesViewerViewModel : BindableBase
     {
-        private CacheProvider cacheProvider;
-        private double zoom = 1;
-        private int realHeight;
-        private int realWidth;
+        private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
+        private readonly Color highlightColor = Colors.DeepPink;
+        private Timer playerTimer;
 
+        private CacheProvider cacheProvider;
+
+        private double zoom = 1;
         private bool isVectorsStartEnabled = true;
 
         #region Binding properties
 
-        private bool enabled = false;
-        public bool Enabled
+        private bool isEnabled = false;
+        public bool IsEnabled
         {
-            get => enabled;
-            set => SetProperty(ref enabled, value);
+            get => isEnabled;
+            set => SetProperty(ref isEnabled, value);
         }
 
         private string appState;
@@ -42,24 +43,24 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref appState, value);
         }
 
-        private double height;
-        public double Height
+        private double viewerContentHeight;
+        public double ViewerContentHeight
         {
-            get => height;
-            set => SetProperty(ref height, value);
+            get => viewerContentHeight;
+            set => SetProperty(ref viewerContentHeight, value);
         }
 
-        private double width;
-        public double Width
+        private double viewerContentWidth;
+        public double ViewerContentWidth
         {
-            get => width;
-            set => SetProperty(ref width, value);
+            get => viewerContentWidth;
+            set => SetProperty(ref viewerContentWidth, value);
         }
 
         private int maxSliderValue;
         public int MaxSliderValue
         {
-            get { return maxSliderValue; }
+            get => maxSliderValue;
             set => SetProperty(ref maxSliderValue, value);
         }
 
@@ -70,32 +71,32 @@ namespace HEVCDemo.ViewModels
             set { SetProperty(ref currentFrameImage, value); }
         }
 
-        private WriteableBitmap currentCupuImage;
-        public WriteableBitmap CurrentCupuImage
+        private WriteableBitmap currentCodingUnitsImage;
+        public WriteableBitmap CurrentCodingUnitsImage
         {
-            get => currentCupuImage;
-            set => SetProperty(ref currentCupuImage, value);
+            get => currentCodingUnitsImage;
+            set => SetProperty(ref currentCodingUnitsImage, value);
         }
 
-        private WriteableBitmap currentPredictionImage;
-        public WriteableBitmap CurrentPredictionImage
+        private WriteableBitmap currentPredictionTypeImage;
+        public WriteableBitmap CurrentPredictionTypeImage
         {
-            get => currentPredictionImage;
-            set => SetProperty(ref currentPredictionImage, value);
+            get => currentPredictionTypeImage;
+            set => SetProperty(ref currentPredictionTypeImage, value);
         }
 
-        private WriteableBitmap currentIntraImage;
-        public WriteableBitmap CurrentIntraImage
+        private WriteableBitmap currentIntraPredictionImage;
+        public WriteableBitmap CurrentIntraPredictionImage
         {
-            get => currentIntraImage;
-            set => SetProperty(ref currentIntraImage, value);
+            get => currentIntraPredictionImage;
+            set => SetProperty(ref currentIntraPredictionImage, value);
         }
 
-        private WriteableBitmap currentMotionVectorsImage;
-        public WriteableBitmap CurrentMotionVectorsImage
+        private WriteableBitmap currentInterPredictionImage;
+        public WriteableBitmap CurrentInterPredictionImage
         {
-            get => currentMotionVectorsImage;
-            set => SetProperty(ref currentMotionVectorsImage, value);
+            get => currentInterPredictionImage;
+            set => SetProperty(ref currentInterPredictionImage, value);
         }
 
         private WriteableBitmap currentHighlightImage;
@@ -112,7 +113,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 _ = SetCurrentFrame(value);
-                SetProperty(ref currentFrameIndex, value);
+                _ = SetProperty(ref currentFrameIndex, value);
             }
         }
 
@@ -144,18 +145,16 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref fileSize, value);
         }
 
-
         private Visibility decodedFramesVisibility = Visibility.Visible;
         public Visibility DecodedFramesVisibility
         {
             get => decodedFramesVisibility;
             set
             {
-                SetProperty(ref decodedFramesVisibility, value);
+                _ = SetProperty(ref decodedFramesVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
-
 
         private Visibility codingUnitsVisibility = Visibility.Visible;
         public Visibility CodingUnitsVisibility
@@ -163,11 +162,10 @@ namespace HEVCDemo.ViewModels
             get => codingUnitsVisibility;
             set
             {
-                SetProperty(ref codingUnitsVisibility, value);
+                _ = SetProperty(ref codingUnitsVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
-
 
         private Visibility predictionTypeVisibility = Visibility.Visible;
         public Visibility PredictionTypeVisibility
@@ -175,11 +173,10 @@ namespace HEVCDemo.ViewModels
             get => predictionTypeVisibility;
             set
             {
-                SetProperty(ref predictionTypeVisibility, value);
+                _ = SetProperty(ref predictionTypeVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
-
 
         private Visibility intraPredictionVisibility = Visibility.Visible;
         public Visibility IntraPredictionVisibility
@@ -187,11 +184,10 @@ namespace HEVCDemo.ViewModels
             get => intraPredictionVisibility;
             set
             {
-                SetProperty(ref intraPredictionVisibility, value);
+                _ = SetProperty(ref intraPredictionVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
-
 
         private Visibility interPredictionVisibility = Visibility.Visible;
         public Visibility InterPredictionVisibility
@@ -199,16 +195,89 @@ namespace HEVCDemo.ViewModels
             get => interPredictionVisibility;
             set
             {
-                SetProperty(ref interPredictionVisibility, value);
+                _ = SetProperty(ref interPredictionVisibility, value);
                 _ = SetCurrentFrame(CurrentFrameIndex);
             }
         }
+
+        private int scrollViewerX;
+        public int ScrollViewerX
+        {
+            get => scrollViewerX;
+            set => SetProperty(ref scrollViewerX, value);
+        }
+
+        private int scrollViewerY;
+        public int ScrollViewerY
+        {
+            get => scrollViewerY;
+            set => SetProperty(ref scrollViewerY, value);
+        }
+
+        private bool isMouseWheelPositiveDirection;
+        public bool IsMouseWheelPositiveDirection
+        {
+            get => isMouseWheelPositiveDirection;
+            set => SetProperty(ref isMouseWheelPositiveDirection, value);
+        }
+
+        private bool isPopupOpen;
+        public bool IsPopupOpen
+        {
+            get => isPopupOpen;
+            set => SetProperty(ref isPopupOpen, value);
+        }
+
+        private InfoPopupParameters popupContent;
+        public InfoPopupParameters InfoParameters
+        {
+            get => popupContent;
+            set => SetProperty(ref popupContent, value);
+        }
+
+        #endregion
+
+        #region Commands
+
+        private DelegateCommand stepBackwardCommand;
+        public DelegateCommand StepBackwardCommand => stepBackwardCommand ?? (stepBackwardCommand = new DelegateCommand(ExecuteStepBackward, CanExecuteStepBackward));
+
+        private DelegateCommand stepforwardCommand;
+        public DelegateCommand StepForwardCommand => stepforwardCommand ?? (stepforwardCommand = new DelegateCommand(ExecuteStepForward, CanExecuteStepForward));
+
+        private DelegateCommand zoomOutCommand;
+        public DelegateCommand ZoomOutCommand => zoomOutCommand ?? (zoomOutCommand = new DelegateCommand(ExecuteZoomOut));
+
+        private DelegateCommand zoomInCommand;
+        public DelegateCommand ZoomInCommand => zoomInCommand ?? (zoomInCommand = new DelegateCommand(ExecuteZoomIn));
+
+        private DelegateCommand selectVideoCommand;
+        public DelegateCommand SelectVideoCommand => selectVideoCommand ?? (selectVideoCommand = new DelegateCommand(ExecuteSelectVideo));
+
+        private DelegateCommand mouseScrolledCommand;
+        public DelegateCommand MouseScrolledCommand => mouseScrolledCommand ?? (mouseScrolledCommand = new DelegateCommand(ExecuteMouseScrolled));
+
+        private DelegateCommand<object> scrollViewerRightClickCommand;
+        public DelegateCommand<object> ScrollViewerRightClickCommand
+            => scrollViewerRightClickCommand ?? (scrollViewerRightClickCommand = new DelegateCommand<object>(ExecuteScrollViewerRightClick));
+
+        private DelegateCommand closePopupCommand;
+        public DelegateCommand ClosePopupCommand => closePopupCommand ?? (closePopupCommand = new DelegateCommand(ExecuteClosePopup));
+
+        private DelegateCommand playBackwardCommand;
+        public DelegateCommand PlayBackwardCommand => playBackwardCommand ?? (playBackwardCommand = new DelegateCommand(ExecutePlayBackward, CanExecutePlay));
+
+        private DelegateCommand playForwardCommand;
+        public DelegateCommand PlayForwardCommand => playForwardCommand ?? (playForwardCommand = new DelegateCommand(ExecutePlayForward, CanExecutePlay));
+
+        private DelegateCommand pauseCommand;
+        public DelegateCommand PauseCommand => pauseCommand ?? (pauseCommand = new DelegateCommand(ExecutePause));
 
         #endregion
 
         public ImagesViewerViewModel()
         {
-            CheckFFmpeg(true);
+            _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
             BindEventHandlers();
         }
 
@@ -216,16 +285,22 @@ namespace HEVCDemo.ViewModels
 
         private void BindEventHandlers()
         {
-            GlobalActionsHelper.SelectVideoClicked += GlobalActionsHelper_SelectVideoClicked;
+            GlobalActionsHelper.SelectVideoClicked += SelectVideoClicked;
             GlobalActionsHelper.DecodedFramesVisibilityChanged += DecodedFramesVisibilityChanged;
             GlobalActionsHelper.CodingUnitsVisibilityChanged += CodingUnitsVisibilityChanged;
             GlobalActionsHelper.PredictionTypeVisibilityChanged += PredictionTypeVisibilityChanged;
             GlobalActionsHelper.IntraPredictionVisibilityChanged += IntraPredictionVisibilityChanged;
             GlobalActionsHelper.InterPredictionVisibilityChanged += InterPredictionVisibilityChanged;
             GlobalActionsHelper.VectorsStartVisibilityChanged += VectorsStartVisibilityChanged;
+            GlobalActionsHelper.AppStateChanged += AppStateChanged;
         }
 
-        private void GlobalActionsHelper_SelectVideoClicked(object sender, EventArgs e)
+        private void AppStateChanged(object sender, AppStateChangedEventArgs e)
+        {
+            SetAppState(e.StateText, e.IsViewerEnabled);
+        }
+
+        private void SelectVideoClicked(object sender, EventArgs e)
         {
             SelectVideo();
         }
@@ -263,157 +338,78 @@ namespace HEVCDemo.ViewModels
 
         #endregion
 
-        private void HandleError(string actionDescription, string message)
-        {
-            Enabled = true;
-            AppState = "ErrorOccuredState,Text".Localize();
-            MessageBox.Show($"{actionDescription}\n\n{"ErrorMessageMsg,Text".Localize()}\n{message}", "ErrorOccuredTitle,Title".Localize());
-        }
+        #region Backward and Forward
 
-        private void SetAppState(string state, bool enabled)
-        {
-            AppState = state;
-            Enabled = enabled;
-        }
-
-        private async void CheckFFmpeg(bool changeState)
-        {
-            await ActionsHelper.InvokeSafelyAsync(async () =>
-            {
-                if (changeState)
-                {
-                    AppState = "CheckingFFmpegState,Text".Localize();
-                }
-
-                if (!FFmpegHelper.FFmpegExists)
-                {
-                    var result = MessageBox.Show("FFmpegNotFoundMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        AppState = "DownloadingFFmpegState,Text".Localize();
-                        await FFmpegHelper.DownloadFFmpeg();
-                        MessageBox.Show("FFmpegDownloadedMsg,Text".Localize());
-                        AppState = "ReadyState,Text".Localize();
-                    }
-                    else
-                    {
-                        AppState = "FFmpegMissingState,Text".Localize();
-                    }
-                }
-                else if (changeState)
-                {
-                    AppState = "ReadyState,Text".Localize();
-                }
-
-                // Enable to allow invoking download by clicking on "Select video"
-                Enabled = true;
-
-            }, "DownloadFFmpegTitle,Title".Localize(), HandleError);
-        }
-
-        #region Backward Forward controls
-
-        private DelegateCommand backwardClick;
-        public DelegateCommand BackwardClick =>
-            backwardClick ?? (backwardClick = new DelegateCommand(ExecuteBackwardClick, CanExecuteBackward));
-
-        private void ExecuteBackwardClick()
+        private void ExecuteStepBackward()
         {
             CurrentFrameIndex--;
         }
 
-        private bool CanExecuteBackward()
+        private bool CanExecuteStepBackward()
         {
-            return this.CurrentFrameIndex > 0;
+            return CurrentFrameIndex > 0;
         }
 
-        private DelegateCommand forwardClick;
-        public DelegateCommand ForwardClick =>
-            forwardClick ?? (forwardClick = new DelegateCommand(ExecuteForwardClick, CanExecuteForward));
-
-        private void ExecuteForwardClick()
+        private void ExecuteStepForward()
         {
             CurrentFrameIndex++;
         }
 
-        private bool CanExecuteForward()
+        private bool CanExecuteStepForward()
         {
             return cacheProvider?.videoSequence.FramesCount > CurrentFrameIndex + 1;
         }
 
-        private async Task SetCurrentFrame(int index)
-        {
-            if (cacheProvider == null) return;
-
-            SetAppState("LoadingIntoCacheState,Text".Localize(), false);
-
-            if (DecodedFramesVisibility == Visibility.Visible)
-            {
-                await Dispatcher.CurrentDispatcher.Invoke(async() => CurrentFrameImage = await cacheProvider.GetYuvFrame(index, HandleError));
-            }
-            if (CodingUnitsVisibility == Visibility.Visible)
-            {
-                Dispatcher.CurrentDispatcher.Invoke(() => CurrentCupuImage = cacheProvider.GetCuPuFrame(index));
-            }
-            if (PredictionTypeVisibility == Visibility.Visible)
-            {
-                Dispatcher.CurrentDispatcher.Invoke(() => CurrentPredictionImage = cacheProvider.GetPredictionFrame(index));
-            }
-            if (IntraPredictionVisibility == Visibility.Visible)
-            {
-                Dispatcher.CurrentDispatcher.Invoke(() => CurrentIntraImage = cacheProvider.GetIntraFrame(index));
-            }
-            if (InterPredictionVisibility == Visibility.Visible)
-            {
-                Dispatcher.CurrentDispatcher.Invoke(() => CurrentMotionVectorsImage = cacheProvider.GetMotionVectorsFrame(index, isVectorsStartEnabled));
-            }
-
-            ForwardClick.RaiseCanExecuteChanged();
-            BackwardClick.RaiseCanExecuteChanged();
-
-            SetAppState("ReadyState,Text".Localize(), true);
-        }
-
         #endregion
 
-        #region Zoom controls
+        #region Zoom
 
-        private DelegateCommand zoomOutClick;
-        public DelegateCommand ZoomOutClick => zoomOutClick ?? (zoomOutClick = new DelegateCommand(ExecuteZoomOutClick));
-
-        private void ExecuteZoomOutClick()
+        private void ExecuteZoomOut()
         {
             zoom -= 0.05;
 
-            Height = (int) realHeight * zoom;
-            Width = (int) realWidth * zoom;
+            ViewerContentHeight = cacheProvider.videoSequence.Height * zoom;
+            ViewerContentWidth = cacheProvider.videoSequence.Width * zoom;
         }
-
-        private DelegateCommand zoomInClick;
-        public DelegateCommand ZoomInClick => zoomInClick ?? (zoomInClick = new DelegateCommand(ExecuteZoomInClick));
-        private void ExecuteZoomInClick()
+        
+        private void ExecuteZoomIn()
         {
             zoom += 0.05;
 
-            Height = (int)realHeight * zoom;
-            Width = (int)realWidth * zoom;
+            ViewerContentHeight = cacheProvider.videoSequence.Height * zoom;
+            ViewerContentWidth = cacheProvider.videoSequence.Width * zoom;
+        }
+
+        private void ExecuteMouseScrolled()
+        {
+            if (IsMouseWheelPositiveDirection)
+            {
+                ExecuteZoomIn();
+            }
+            else
+            {
+                ExecuteZoomOut();
+            }
         }
 
         #endregion
 
         #region Select Video
 
-        private DelegateCommand selectVideoClick;
-        public DelegateCommand SelectVideoClick => selectVideoClick ?? (selectVideoClick = new DelegateCommand(ExecuteSelectVideoClick));
-        private void ExecuteSelectVideoClick()
+        private void ExecuteSelectVideo()
         {
-            SelectVideo();
+            _ = SelectVideo();
         }
 
-        private async void SelectVideo()
+        private async Task SelectVideo()
         {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin";
+            await FFmpegHelper.EnsureFFmpegIsDownloaded();
+            if (!FFmpegHelper.IsFFmpegDownloaded) return;
+
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin"
+            };
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -433,132 +429,65 @@ namespace HEVCDemo.ViewModels
                         var result = MessageBox.Show("CacheExistsMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
                         if (result == MessageBoxResult.Yes)
                         {
-                            await cacheProvider.CreateCache(SetAppState);
+                            await cacheProvider.CreateCache();
                         }
                         else
                         {
                             SetAppState("CreatingDemoState,Text".Localize(), false);
-                            cacheProvider.InitFramesCount();
                             cacheProvider.ParseProps();
                             await cacheProvider.ProcessFiles();
+                            cacheProvider.CheckFramesCount();
                         }
                     }
                     else
                     {
-                        await cacheProvider.CreateCache(SetAppState);
+                        await cacheProvider.CreateCache();
                     }
+
                     await cacheProvider.LoadIntoCache(0);
 
-                    Height = realHeight = cacheProvider.videoSequence.Height;
-                    Width = realWidth = cacheProvider.videoSequence.Width;
+                    ViewerContentHeight = cacheProvider.videoSequence.Height;
+                    ViewerContentWidth = cacheProvider.videoSequence.Width;
                     Resolution = $"{cacheProvider.videoSequence.Width} x {cacheProvider.videoSequence.Height}";
-                    double length = new FileInfo(openFileDialog.FileName).Length / 1024d;
-                    FileSize = length < 1000 ? $"{length:0.000} KB" : $"{length / 1024:0.000} MB";
+                    FileSize = FormattingHelper.GetFileSize(new FileInfo(openFileDialog.FileName).Length);
 
                     MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
                     CurrentFrameIndex = 0;
                     StartButtonVisibility = Visibility.Hidden;
-                }, "CreateCacheTitle,Title".Localize(), HandleError);
+                }, "CreateCacheTitle,Title".Localize(), false);
             }
         }
 
         #endregion Select video
 
-        #region Tooltips
+        #region Tooltip popup
 
-        private int imageViewerX;
-        public int ScrollViewerX
+        private void ExecuteScrollViewerRightClick(object scrollViewer)
         {
-            get => imageViewerX;
-            set 
+            if ((scrollViewer as ScrollViewer)?.Content is Grid grid)
             {
-                SetProperty(ref imageViewerX, value);
-            }
-        }
-
-        private int imageViewerY;
-        public int ScrollViewerY
-        {
-            get => imageViewerY;
-            set
-            {
-                SetProperty(ref imageViewerY, value);
-            }
-        }
-
-        private bool mouseWheelDirection;
-        public bool MouseWheelDirection
-        {
-            get => mouseWheelDirection;
-            set
-            {
-                SetProperty(ref mouseWheelDirection, value);
-            }
-        }
-
-        private bool isPopupOpen;
-        public bool IsPopupOpen
-        {
-            get => isPopupOpen;
-            set
-            {
-                SetProperty(ref isPopupOpen, value);
-            }
-        }
-
-        private InfoPopupParameters popupContent;
-        public InfoPopupParameters PopupContent
-        {
-            get => popupContent;
-            set
-            {
-                SetProperty(ref popupContent, value);
-            }
-        }
-
-        private DelegateCommand mouseScrolled;
-        public DelegateCommand MouseScrolled => mouseScrolled ?? (mouseScrolled = new DelegateCommand(ExecuteMouseScrolled));
-        private void ExecuteMouseScrolled()
-        {
-            if (MouseWheelDirection)
-            {
-                ExecuteZoomInClick();
-            }
-            else
-            {
-                ExecuteZoomOutClick();
-            }
-        }
-
-        private DelegateCommand<object> scrollViewerRightClick;
-        public DelegateCommand<object> ScrollViewerRightClick => scrollViewerRightClick ?? (scrollViewerRightClick = new DelegateCommand<object>(ExecuteImageRightClick));
-        private void ExecuteImageRightClick(object scrollV)
-        {
-            if (scrollV is ScrollViewer scrollViewer)
-            {
-                var grid = scrollViewer.Content as Grid;
-
                 // Reset position
                 IsPopupOpen = false;
                 IsPopupOpen = true;
 
-                PopupContent = cacheProvider.GetUnitDescriptionByLocation(currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), scrollViewer, zoom);
+                // Get parameters
+                InfoParameters = InfoPopupHelper.GetInfo(cacheProvider.videoSequence, currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid, zoom);
 
-                var highlight = BitmapFactory.New((int)Width, (int)Height);
+                // Highlight unit
+                var highlightImage = BitmapFactory.New((int)ViewerContentWidth, (int)ViewerContentHeight);
 
-                int x1 = PopupContent.Pu.X;
+                int x1 = InfoParameters.Pu.X;
                 int y1 = popupContent.Pu.Y;
-                int x2 = x1 + PopupContent.Pu.Width;
-                int y2 = y1 + PopupContent.Pu.Height;
-                highlight.FillRectangle((int)(x1 * zoom), (int)(y1 * zoom), (int)(x2 * zoom), (int)(y2 * zoom), Colors.DeepPink);
-                CurrentHighlightImage = highlight;
+                int x2 = x1 + InfoParameters.Pu.Width;
+                int y2 = y1 + InfoParameters.Pu.Height;
+
+                highlightImage.FillRectangle((int)(x1 * zoom), (int)(y1 * zoom), (int)(x2 * zoom), (int)(y2 * zoom), highlightColor);
+                CurrentHighlightImage = highlightImage;
                 HighlightVisibility = Visibility.Visible;
             }
         }
 
-        private DelegateCommand closePopupClick;
-        public DelegateCommand ClosePopupClick => closePopupClick ?? (closePopupClick = new DelegateCommand(ExecuteClosePopupClick));
-        private void ExecuteClosePopupClick()
+        private void ExecuteClosePopup()
         {
             IsPopupOpen = false;
             HighlightVisibility = Visibility.Hidden;
@@ -568,28 +497,14 @@ namespace HEVCDemo.ViewModels
 
         #region Player
 
-        private Timer playerTimer;
-        private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
-
-        private bool isPlayBackwardEnabled;
-        public bool IsPlayBackwardEnabled
+        private bool CanExecutePlay()
         {
-            get => isPlayBackwardEnabled;
-            set => SetProperty(ref isPlayBackwardEnabled, value);
+            return playerTimer == null;
         }
 
-        private bool isPlayForwardEnabled;
-        public bool IsPlayForwardEnabled
-        {
-            get => isPlayForwardEnabled;
-            set => SetProperty(ref isPlayForwardEnabled, value);
-        }
-
-        private DelegateCommand playBackwardCommand;
-        public DelegateCommand PlayBackwardCommand => playBackwardCommand ?? (playBackwardCommand = new DelegateCommand(ExecutePlayBackward, CanExecutePlay));
         private void ExecutePlayBackward()
         {
-            playerTimer = new Timer((parameter) => 
+            playerTimer = new Timer((parameter) =>
             {
                 if (CurrentFrameIndex > 0)
                 {
@@ -599,18 +514,10 @@ namespace HEVCDemo.ViewModels
                 {
                     StopPlayer();
                 }
-            }, null, TimeSpan.Zero, playerInterval);
+            }, null, playerInterval, playerInterval);
 
             PlayBackwardCommand.RaiseCanExecuteChanged();
             PlayForwardCommand.RaiseCanExecuteChanged();
-        }
-
-        private DelegateCommand playForwardCommand;
-        public DelegateCommand PlayForwardCommand => playForwardCommand ?? (playForwardCommand = new DelegateCommand(ExecutePlayForward, CanExecutePlay));
-
-        private bool CanExecutePlay()
-        {
-            return playerTimer == null;
         }
 
         private void ExecutePlayForward()
@@ -631,9 +538,6 @@ namespace HEVCDemo.ViewModels
             PlayForwardCommand.RaiseCanExecuteChanged();
         }
 
-        private DelegateCommand pauseCommand;
-        public DelegateCommand PauseCommand => pauseCommand ?? (pauseCommand = new DelegateCommand(ExecutePause));
-
         private void ExecutePause()
         {
             StopPlayer();
@@ -649,9 +553,56 @@ namespace HEVCDemo.ViewModels
 
         #endregion
 
+        #region Helpers
+
+        private async Task SetCurrentFrame(int index)
+        {
+            if (cacheProvider == null) return;
+
+            SetAppState("LoadingIntoCacheState,Text".Localize(), false);
+
+            if (DecodedFramesVisibility == Visibility.Visible)
+            {
+                CurrentFrameImage = await cacheProvider.GetYuvFrame(index);
+            }
+            if (CodingUnitsVisibility == Visibility.Visible)
+            {
+                CurrentCodingUnitsImage = cacheProvider.GetCodingUnitsFrame(index);
+            }
+            if (PredictionTypeVisibility == Visibility.Visible)
+            {
+                CurrentPredictionTypeImage = cacheProvider.GetPredictionTypeFrame(index);
+            }
+            if (IntraPredictionVisibility == Visibility.Visible)
+            {
+                CurrentIntraPredictionImage = cacheProvider.GetIntraPredictionFrame(index);
+            }
+            if (InterPredictionVisibility == Visibility.Visible)
+            {
+                CurrentInterPredictionImage = cacheProvider.GetInterPredictionFrame(index, isVectorsStartEnabled);
+            }
+
+            StepForwardCommand.RaiseCanExecuteChanged();
+            StepBackwardCommand.RaiseCanExecuteChanged();
+
+            SetAppState("ReadyState,Text".Localize(), true);
+        }
+
         private Visibility ConvertBoolToVisibility(bool isVisible)
         {
             return isVisible ? Visibility.Visible : Visibility.Hidden;
         }
+
+        private void SetAppState(string stateText, bool? enabled)
+        {
+            AppState = stateText;
+
+            if (enabled != null)
+            {
+                IsEnabled = (bool)enabled;
+            }
+        }
+
+        #endregion
     }
 }

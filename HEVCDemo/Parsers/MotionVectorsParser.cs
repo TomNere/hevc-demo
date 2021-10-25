@@ -24,7 +24,7 @@ namespace HEVCDemo.Parsers
             {
                 try
                 {
-                    var file = new System.IO.StreamReader(cacheProvider.MotionVectorsFilePath);
+                    var file = new System.IO.StreamReader(cacheProvider.InterPredictionFilePath);
                     string strOneLine = file.ReadLine();
                     int iDecOrder = -1;
                     int iLastPOC = -1;
