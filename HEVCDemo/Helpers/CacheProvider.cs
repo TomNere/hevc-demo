@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Windows;
 
 namespace HEVCDemo.Helpers
 {
@@ -90,7 +91,7 @@ namespace HEVCDemo.Helpers
 
             await ProcessFiles();
             await framesLoading;
-            InitFramesCount();
+            CheckFramesCount();
         }
 
         public async Task ProcessFiles()
@@ -131,9 +132,14 @@ namespace HEVCDemo.Helpers
             await LoadFramesIntoCache(startIndex);
         }
 
-        public void InitFramesCount()
+        public void CheckFramesCount()
         {
-            videoSequence.FramesCount = new DirectoryInfo(YuvFramesDirPath).GetFiles().Length;
+            int yuvFramesCount = new DirectoryInfo(YuvFramesDirPath).GetFiles().Length;
+
+            if (yuvFramesCount == videoSequence.FramesCount)
+            {
+                throw new Exception("ErrorCreatingDemoData,Text".Localize());
+            }
         }
 
         public async Task LoadFramesIntoCache(int startIndex)

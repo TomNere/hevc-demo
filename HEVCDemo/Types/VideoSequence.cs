@@ -7,9 +7,10 @@ namespace HEVCDemo.Types
     {
         public int Width;
         public int Height;
-        public int FramesCount;
         public int MaxCUSize;
         public int MaxCUDepth;
+
+        public int FramesCount => FramesInDecodeOrder.Count;
 
         public Dictionary<int, ComFrame> FramesInDecodeOrder = new Dictionary<int, ComFrame>();
 

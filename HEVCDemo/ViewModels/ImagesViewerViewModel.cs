@@ -29,11 +29,11 @@ namespace HEVCDemo.ViewModels
 
         #region Binding properties
 
-        private bool enabled = false;
-        public bool Enabled
+        private bool isEnabled = false;
+        public bool IsEnabled
         {
-            get => enabled;
-            set => SetProperty(ref enabled, value);
+            get => isEnabled;
+            set => SetProperty(ref isEnabled, value);
         }
 
         private string appState;
@@ -434,9 +434,9 @@ namespace HEVCDemo.ViewModels
                         else
                         {
                             SetAppState("CreatingDemoState,Text".Localize(), false);
-                            cacheProvider.InitFramesCount();
                             cacheProvider.ParseProps();
                             await cacheProvider.ProcessFiles();
+                            cacheProvider.CheckFramesCount();
                         }
                     }
                     else
@@ -454,7 +454,7 @@ namespace HEVCDemo.ViewModels
                     MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
                     CurrentFrameIndex = 0;
                     StartButtonVisibility = Visibility.Hidden;
-                }, "CreateCacheTitle,Title".Localize(), true);
+                }, "CreateCacheTitle,Title".Localize(), false);
             }
         }
 
@@ -599,7 +599,7 @@ namespace HEVCDemo.ViewModels
 
             if (enabled != null)
             {
-                Enabled = (bool)enabled;
+                IsEnabled = (bool)enabled;
             }
         }
 
