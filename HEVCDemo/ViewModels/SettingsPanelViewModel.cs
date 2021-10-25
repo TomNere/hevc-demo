@@ -35,6 +35,7 @@ namespace HEVCDemo.ViewModels
             Section4Height = hiddenSectionHeight;
 
             InitializeHelpPopup();
+            GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
         }
 
         #region Info dialogs
@@ -271,8 +272,9 @@ namespace HEVCDemo.ViewModels
         #region HelpPopup
 
         private readonly TimeSpan helpPopupInterval = TimeSpan.FromMinutes(1);
-        private readonly TimeSpan helpPopupTimeout = TimeSpan.FromSeconds(20);
+        private readonly TimeSpan helpPopupTimeout = TimeSpan.FromSeconds(15);
         private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(5);
+        private readonly TimeSpan tryLaterDelay = TimeSpan.FromSeconds(30);
         private Timer helpPopupTimer;
         private int helpPopupIndex;
         private List<string> helpPopupTexts;
@@ -294,6 +296,13 @@ namespace HEVCDemo.ViewModels
 
         private async void DoHelpPopupTimerTick(object state)
         {
+            if (!WindowHelper.GetApplicationIsActivated())
+            {
+                // Try later
+                helpPopupTimer.Change(tryLaterDelay, helpPopupInterval);
+                return;
+            }
+
             HelpPopupText = helpPopupTexts[helpPopupIndex];
             IsHelpPopupOpen = true;
             helpPopupIndex = helpPopupIndex + 1 >= helpPopupTexts.Count ? 0 : helpPopupIndex + 1;
@@ -319,6 +328,11 @@ namespace HEVCDemo.ViewModels
         private DelegateCommand closeHelpPopupCommand;
         public DelegateCommand CloseHelpPopupCommand => closeHelpPopupCommand ?? (closeHelpPopupCommand = new DelegateCommand(ExecuteCloseHelpPopupClick));
         private void ExecuteCloseHelpPopupClick()
+        {
+            IsHelpPopupOpen = false;
+        }
+
+        private void MainWindowDeactivated(object sender, EventArgs e)
         {
             IsHelpPopupOpen = false;
         }

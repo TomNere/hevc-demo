@@ -13,6 +13,7 @@ namespace HEVCDemo.Helpers
         public static event EventHandler<VisibilityChangedEventArgs> VectorsStartVisibilityChanged;
         public static event EventHandler SelectVideoClicked;
         public static event EventHandler<AppStateChangedEventArgs> AppStateChanged;
+        public static event EventHandler MainWindowDeactivated;
 
         public static void OnDecodedFramesVisibilityChanged(VisibilityChangedEventArgs e)
         {
@@ -58,6 +59,11 @@ namespace HEVCDemo.Helpers
             };
 
             AppStateChanged?.Invoke(new object(), e);
+        }
+
+        public static void OnMainWindowDeactivated(object sender, EventArgs e)
+        {
+            MainWindowDeactivated?.Invoke(sender, e);
         }
     }
 }

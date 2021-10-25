@@ -108,6 +108,7 @@
     <Compile Include="Helpers\MarkdownLoader.cs" />
     <Compile Include="Helpers\ScrollDragger.cs" />
     <Compile Include="Helpers\GlobalActionsHelper.cs" />
+    <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Types\InfoImage.cs" />
     <Compile Include="Types\InfoPopupParameters.cs" />
     <Compile Include="Types\AppStateChangedEventArgs.cs" />

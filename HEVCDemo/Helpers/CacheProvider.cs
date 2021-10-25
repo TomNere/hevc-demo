@@ -136,7 +136,7 @@ namespace HEVCDemo.Helpers
         {
             int yuvFramesCount = new DirectoryInfo(YuvFramesDirPath).GetFiles().Length;
 
-            if (yuvFramesCount == videoSequence.FramesCount)
+            if (yuvFramesCount != videoSequence.FramesCount)
             {
                 throw new Exception("ErrorCreatingDemoData,Text".Localize());
             }

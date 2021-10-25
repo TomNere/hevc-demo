@@ -12,7 +12,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
 namespace HEVCDemo.ViewModels
 {
@@ -293,6 +292,12 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.InterPredictionVisibilityChanged += InterPredictionVisibilityChanged;
             GlobalActionsHelper.VectorsStartVisibilityChanged += VectorsStartVisibilityChanged;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
+            GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
+        }
+
+        private void MainWindowDeactivated(object sender, EventArgs e)
+        {
+            ClosePopup();
         }
 
         private void AppStateChanged(object sender, AppStateChangedEventArgs e)
@@ -302,7 +307,7 @@ namespace HEVCDemo.ViewModels
 
         private void SelectVideoClicked(object sender, EventArgs e)
         {
-            SelectVideo();
+            _ = SelectVideo();
         }
 
         private void DecodedFramesVisibilityChanged(object sender, VisibilityChangedEventArgs e)
@@ -488,6 +493,11 @@ namespace HEVCDemo.ViewModels
         }
 
         private void ExecuteClosePopup()
+        {
+            ClosePopup();   
+        }
+
+        private void ClosePopup()
         {
             IsPopupOpen = false;
             HighlightVisibility = Visibility.Hidden;

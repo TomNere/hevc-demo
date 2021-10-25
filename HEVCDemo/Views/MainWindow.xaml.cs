@@ -1,6 +1,8 @@
+using HEVCDemo.Helpers;
 using MahApps.Metro.Controls;
 using Rasyidf.Localization;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace HEVCDemo.Views
 {
@@ -13,10 +15,11 @@ namespace HEVCDemo.Views
         {
             InitializeComponent();
 
-            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            Application.Current.DispatcherUnhandledException += HandleUnhandledException;
+            Deactivated += GlobalActionsHelper.OnMainWindowDeactivated;
         }
 
-        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void HandleUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
             MessageBox.Show($"{"UnhandledEx,Text".Localize()}\n\n{e.Exception.Message}");

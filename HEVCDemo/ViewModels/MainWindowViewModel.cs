@@ -3,10 +3,8 @@ using HEVCDemo.Views;
 using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace HEVCDemo.ViewModels
