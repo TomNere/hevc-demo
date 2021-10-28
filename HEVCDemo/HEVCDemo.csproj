@@ -109,8 +109,8 @@
     <Compile Include="Helpers\ScrollDragger.cs" />
     <Compile Include="Helpers\GlobalActionsHelper.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
-    <Compile Include="Types\InfoImage.cs" />
-    <Compile Include="Types\InfoPopupParameters.cs" />
+    <Compile Include="Models\InfoImage.cs" />
+    <Compile Include="Models\InfoPopupParameters.cs" />
     <Compile Include="Types\AppStateChangedEventArgs.cs" />
     <Compile Include="Types\VisibilityChangedEventArgs.cs" />
     <Compile Include="ViewModels\SettingsPanelViewModel.cs" />
@@ -321,8 +321,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

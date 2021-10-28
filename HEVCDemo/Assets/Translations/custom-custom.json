@@ -221,6 +221,10 @@
     {
       "Id": "Ok",
       "Content": "Ok"
+    },
+    {
+      "Id": "ErrorCreatingDemoData",
+      "Text": "Error creating demo data. Either the cache is corrupted or format of the given file is invalid."
     }
   ]
 }

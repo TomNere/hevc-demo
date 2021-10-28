@@ -1,4 +1,5 @@
-﻿using HEVCDemo.Types;
+﻿using HEVCDemo.Models;
+using HEVCDemo.Types;
 using Prism.Mvvm;
 using System.Collections.Generic;
 

@@ -1,4 +1,5 @@
 using HEVCDemo.Helpers;
+using HEVCDemo.Models;
 using HEVCDemo.Types;
 using Microsoft.Win32;
 using Prism.Commands;

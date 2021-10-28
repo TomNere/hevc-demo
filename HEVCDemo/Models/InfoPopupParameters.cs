@@ -1,6 +1,7 @@
-﻿using System.Windows.Media.Imaging;
+﻿using HEVCDemo.Types;
+using System.Windows.Media.Imaging;
 
-namespace HEVCDemo.Types
+namespace HEVCDemo.Models
 {
     public class InfoPopupParameters
     {

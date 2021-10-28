@@ -1,4 +1,4 @@
-﻿namespace HEVCDemo.Types
+﻿namespace HEVCDemo.Models
 {
     public class InfoImage
     {

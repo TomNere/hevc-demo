@@ -344,7 +344,7 @@
     },
     {
       "Id": "ErrorCreatingDemoData",
-      "Text": "Error creating demo data. Either the cache is corrupted or format of the given file is invalid."
+      "Text": "Nastal problém při tvorbě ukázkových dat. Může jít o poškození nacachovaných dat, nebo jste se pokusili otevřít neplatný video soubor."
     }
   ]
 }
