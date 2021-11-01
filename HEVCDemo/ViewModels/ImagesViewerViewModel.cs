@@ -242,8 +242,14 @@ namespace HEVCDemo.ViewModels
         private DelegateCommand stepBackwardCommand;
         public DelegateCommand StepBackwardCommand => stepBackwardCommand ?? (stepBackwardCommand = new DelegateCommand(ExecuteStepBackward, CanExecuteStepBackward));
 
-        private DelegateCommand stepforwardCommand;
-        public DelegateCommand StepForwardCommand => stepforwardCommand ?? (stepforwardCommand = new DelegateCommand(ExecuteStepForward, CanExecuteStepForward));
+        private DelegateCommand stepForwardCommand;
+        public DelegateCommand StepForwardCommand => stepForwardCommand ?? (stepForwardCommand = new DelegateCommand(ExecuteStepForward, CanExecuteStepForward));
+
+        private DelegateCommand stepStartCommand;
+        public DelegateCommand StepStartCommand => stepStartCommand ?? (stepStartCommand = new DelegateCommand(ExecuteStepStart, CanExecuteStepBackward));
+
+        private DelegateCommand stepEndCommand;
+        public DelegateCommand StepEndCommand => stepEndCommand ?? (stepEndCommand = new DelegateCommand(ExecuteStepEnd, CanExecuteStepForward));
 
         private DelegateCommand zoomOutCommand;
         public DelegateCommand ZoomOutCommand => zoomOutCommand ?? (zoomOutCommand = new DelegateCommand(ExecuteZoomOut));
@@ -364,6 +370,16 @@ namespace HEVCDemo.ViewModels
         private bool CanExecuteStepForward()
         {
             return cacheProvider?.videoSequence.FramesCount > CurrentFrameIndex + 1;
+        }
+
+        private void ExecuteStepStart()
+        {
+            CurrentFrameIndex = 0;
+        }
+
+        private void ExecuteStepEnd()
+        {
+            CurrentFrameIndex = cacheProvider.videoSequence.FramesCount - 1;
         }
 
         #endregion
@@ -595,6 +611,8 @@ namespace HEVCDemo.ViewModels
 
             StepForwardCommand.RaiseCanExecuteChanged();
             StepBackwardCommand.RaiseCanExecuteChanged();
+            StepStartCommand.RaiseCanExecuteChanged();
+            StepEndCommand.RaiseCanExecuteChanged();
 
             SetAppState("ReadyState,Text".Localize(), true);
         }

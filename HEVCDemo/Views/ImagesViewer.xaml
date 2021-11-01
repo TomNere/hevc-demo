@@ -107,6 +107,18 @@
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center" />
             </Button>
+            <!--Navigate start end-->
+            <Button Margin="10,0,0,0" Command="{Binding StepStartCommand}">
+                <iconPacks:PackIconModern Kind="ControlFastforward"
+                                          RotationAngle="180"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center" />
+            </Button>
+            <Button Margin="4,0,0,0" Command="{Binding StepEndCommand}">
+                <iconPacks:PackIconModern Kind="ControlFastforward"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center" />
+            </Button>
             <!--Zoom-->
             <Button Margin="10,0,0,0" Command="{Binding ZoomOutCommand}">
                 <iconPacks:PackIconModern Kind="MagnifyMinus"
