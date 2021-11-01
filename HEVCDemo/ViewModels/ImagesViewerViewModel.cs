@@ -227,11 +227,11 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref isPopupOpen, value);
         }
 
-        private InfoPopupParameters popupContent;
-        public InfoPopupParameters InfoParameters
+        private InfoPopupParameters infoPopupParameters;
+        public InfoPopupParameters InfoPopupParameters
         {
-            get => popupContent;
-            set => SetProperty(ref popupContent, value);
+            get => infoPopupParameters;
+            set => SetProperty(ref infoPopupParameters, value);
         }
 
         #endregion
@@ -493,15 +493,15 @@ namespace HEVCDemo.ViewModels
                 IsPopupOpen = true;
 
                 // Get parameters
-                InfoParameters = InfoPopupHelper.GetInfo(cacheProvider.VideoSequence, currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid, zoom);
+                InfoPopupParameters = InfoPopupHelper.GetInfo(cacheProvider.VideoSequence, currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid, zoom);
 
                 // Highlight unit
                 var highlightImage = BitmapFactory.New((int)ViewerContentWidth, (int)ViewerContentHeight);
 
-                int x1 = InfoParameters.Pu.X;
-                int y1 = popupContent.Pu.Y;
-                int x2 = x1 + InfoParameters.Pu.Width;
-                int y2 = y1 + InfoParameters.Pu.Height;
+                int x1 = InfoPopupParameters.Pu.X;
+                int y1 = infoPopupParameters.Pu.Y;
+                int x2 = x1 + InfoPopupParameters.Pu.Width;
+                int y2 = y1 + InfoPopupParameters.Pu.Height;
 
                 highlightImage.FillRectangle((int)(x1 * zoom), (int)(y1 * zoom), (int)(x2 * zoom), (int)(y2 * zoom), highlightColor);
                 CurrentHighlightImage = highlightImage;
@@ -612,6 +612,8 @@ namespace HEVCDemo.ViewModels
 
         private async Task SetCurrentFrame(int index)
         {
+            ClosePopup();
+
             if (cacheProvider == null) return;
 
             if (DecodedFramesVisibility == Visibility.Visible)
