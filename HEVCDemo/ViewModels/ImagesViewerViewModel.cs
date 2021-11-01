@@ -36,13 +36,6 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref isEnabled, value);
         }
 
-        private string appState;
-        public string AppState
-        {
-            get => appState;
-            set => SetProperty(ref appState, value);
-        }
-
         private double viewerContentHeight;
         public double ViewerContentHeight
         {
@@ -309,7 +302,10 @@ namespace HEVCDemo.ViewModels
 
         private void AppStateChanged(object sender, AppStateChangedEventArgs e)
         {
-            SetAppState(e.StateText, e.IsViewerEnabled);
+            if (e.IsViewerEnabled != null)
+            {
+                IsEnabled = (bool)e.IsViewerEnabled;
+            }
         }
 
         private void SelectVideoClicked(object sender, EventArgs e)
@@ -455,7 +451,7 @@ namespace HEVCDemo.ViewModels
                         }
                         else
                         {
-                            SetAppState("CreatingDemoState,Text".Localize(), false);
+                            GlobalActionsHelper.OnAppStateChanged("CreatingDemoState,Text".Localize(), false);
                             cacheProvider.ParseProps();
                             await cacheProvider.ProcessFiles();
                             cacheProvider.CheckFramesCount();
@@ -476,7 +472,7 @@ namespace HEVCDemo.ViewModels
                     MaxSliderValue = cacheProvider.VideoSequence.FramesCount - 1;
                     await SetCurrentFrameIndex(0);
                     StartButtonVisibility = Visibility.Hidden;
-                    SetAppState("ReadyState,Text".Localize(), true);
+                    GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
                 }, "CreateCacheTitle,Title".Localize(), false);
             }
         }
@@ -588,14 +584,14 @@ namespace HEVCDemo.ViewModels
 
         private void StartPlayer()
         {
-            AppState = "PlayingState,Text".Localize();
+            GlobalActionsHelper.OnAppStateChanged("PlayingState,Text".Localize(), null);
             isPlaying = true;
             RaisePlayerControlsExecuteChanged();
         }
 
         private void StopPlayer()
         {
-            AppState = "ReadyState,Text".Localize();
+            GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), null);
             isPlaying = false;
             RaisePlayerControlsExecuteChanged();
         }
@@ -654,16 +650,6 @@ namespace HEVCDemo.ViewModels
         private Visibility ConvertBoolToVisibility(bool isVisible)
         {
             return isVisible ? Visibility.Visible : Visibility.Hidden;
-        }
-
-        private void SetAppState(string stateText, bool? enabled)
-        {
-            AppState = stateText;
-
-            if (enabled != null)
-            {
-                IsEnabled = (bool)enabled;
-            }
         }
 
         #endregion

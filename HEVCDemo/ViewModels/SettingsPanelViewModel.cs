@@ -36,6 +36,7 @@ namespace HEVCDemo.ViewModels
 
             InitializeHelpPopup();
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
+            GlobalActionsHelper.AppStateChanged += AppStateChanged;
         }
 
         #region Info dialogs
@@ -335,6 +336,27 @@ namespace HEVCDemo.ViewModels
         private void MainWindowDeactivated(object sender, EventArgs e)
         {
             IsHelpPopupOpen = false;
+        }
+
+        #endregion
+
+        #region App state
+
+        private string appState;
+        public string AppState
+        {
+            get => appState;
+            set => SetProperty(ref appState, value);
+        }
+
+        private void AppStateChanged(object sender, AppStateChangedEventArgs e)
+        {
+            SetAppState(e.StateText);
+        }
+
+        private void SetAppState(string stateText)
+        {
+            AppState = stateText;
         }
 
         #endregion
