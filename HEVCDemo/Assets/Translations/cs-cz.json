@@ -345,6 +345,10 @@
     {
       "Id": "ErrorCreatingDemoData",
       "Text": "Nastal problém při tvorbě ukázkových dat. Může jít o poškození nacachovaných dat, nebo jste se pokusili otevřít neplatný video soubor."
+    },
+    {
+      "Id": "PlayingState",
+      "Text": "Automatické přehrávání"
     }
   ]
 }

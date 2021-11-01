@@ -38,7 +38,7 @@ namespace HEVCDemo.Helpers
         public string YuvFramesDirPath;
 
         public double FileSize;
-        public VideoSequence videoSequence = new VideoSequence();
+        public VideoSequence VideoSequence = new VideoSequence();
 
         public CacheProvider(string filePath)
         {
@@ -96,14 +96,14 @@ namespace HEVCDemo.Helpers
 
         public async Task ProcessFiles()
         {
-            var cupuParser = new CupuParser(videoSequence);
+            var cupuParser = new CupuParser(VideoSequence);
             _ = await cupuParser.ParseFile(this);
 
-            var predictionParser = new PredictionParser(videoSequence);
+            var predictionParser = new PredictionParser(VideoSequence);
             _ = await predictionParser.ParseFile(this);
 
-            var intraParser = new IntraParser(videoSequence);
-            var motionVectorsParser = new MotionVectorsParser(videoSequence);
+            var intraParser = new IntraParser(VideoSequence);
+            var motionVectorsParser = new MotionVectorsParser(VideoSequence);
 
             var tasks = new List<Task>
             {
@@ -117,7 +117,7 @@ namespace HEVCDemo.Helpers
         public void ParseProps()
         {
             var propsParser = new PropsParser();
-            propsParser.ParseProps(this, videoSequence);
+            propsParser.ParseProps(this, VideoSequence);
         }
 
         private void InitCacheFolders()
@@ -136,7 +136,7 @@ namespace HEVCDemo.Helpers
         {
             int yuvFramesCount = new DirectoryInfo(YuvFramesDirPath).GetFiles().Length;
 
-            if (yuvFramesCount != videoSequence.FramesCount)
+            if (yuvFramesCount != VideoSequence.FramesCount)
             {
                 throw new Exception("ErrorCreatingDemoData,Text".Localize());
             }
@@ -158,7 +158,7 @@ namespace HEVCDemo.Helpers
                     dictionary.Clear();
                     GC.Collect();
 
-                    for (int i = startIndex; i < Math.Min(startIndex + cacheSize, videoSequence.FramesCount); i++)
+                    for (int i = startIndex; i < Math.Min(startIndex + cacheSize, VideoSequence.FramesCount); i++)
                     {
                         var bitmap = new BitmapImage();
 
@@ -177,14 +177,17 @@ namespace HEVCDemo.Helpers
             });
         }
 
-        public async Task<BitmapImage> GetYuvFrame(int index)
+        public async Task<BitmapImage> GetYuvFrame(int index, string afterStateText)
         {
             if (!YuvFramesBitmaps.ContainsKey(index))
             {
+                GlobalActionsHelper.OnAppStateChanged("LoadingIntoCacheState,Text".Localize(), false);
                 await ActionsHelper.InvokeSafelyAsync(async () =>
                 {
                     await LoadIntoCache(index);
                 }, "LoadIntoCacheTitle,Title".Localize(), true);
+
+                GlobalActionsHelper.OnAppStateChanged(afterStateText, true);
             }
 
             return YuvFramesBitmaps[index];
@@ -192,9 +195,9 @@ namespace HEVCDemo.Helpers
 
         public WriteableBitmap GetIntraPredictionFrame(int index)
         {
-            var frame = videoSequence.GetFrameByPoc(index);
+            var frame = VideoSequence.GetFrameByPoc(index);
 
-            var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
+            var writeableBitmap = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
             foreach (var cu in frame.CodingUnits)
             {
                 IntraParser.WriteBitmaps(cu, writeableBitmap);
@@ -206,9 +209,9 @@ namespace HEVCDemo.Helpers
 
         public WriteableBitmap GetPredictionTypeFrame(int index)
         {
-            var frame = videoSequence.GetFrameByPoc(index);
+            var frame = VideoSequence.GetFrameByPoc(index);
 
-            var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
+            var writeableBitmap = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
             foreach (var cu in frame.CodingUnits)
             {
                 PredictionParser.WriteBitmaps(cu, writeableBitmap);
@@ -220,9 +223,9 @@ namespace HEVCDemo.Helpers
 
         public WriteableBitmap GetCodingUnitsFrame(int index)
         {
-            var frame = videoSequence.GetFrameByPoc(index);
+            var frame = VideoSequence.GetFrameByPoc(index);
 
-            var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
+            var writeableBitmap = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
             foreach (var cu in frame.CodingUnits)
             {
                 CupuParser.WriteBitmaps(cu, writeableBitmap);
@@ -234,9 +237,9 @@ namespace HEVCDemo.Helpers
 
         public WriteableBitmap GetInterPredictionFrame(int index, bool isStartEnabled)
         {
-            var frame = videoSequence.GetFrameByPoc(index);
+            var frame = VideoSequence.GetFrameByPoc(index);
 
-            var writeableBitmap = BitmapFactory.New(videoSequence.Width, videoSequence.Height);
+            var writeableBitmap = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
             foreach (var cu in frame.CodingUnits)
             {
                 MotionVectorsParser.WriteBitmaps(cu, writeableBitmap, isStartEnabled);

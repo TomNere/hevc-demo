@@ -61,7 +61,7 @@ namespace HEVCDemo.Helpers
 
         public async static Task ExtractFrames(CacheProvider cacheProvider)
         {
-            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $@"-s {cacheProvider.videoSequence.Width}x{cacheProvider.videoSequence.Height} -i {cacheProvider.YuvFilePath} -preset fast {cacheProvider.YuvFramesDirPath}\%03d.bmp");
+            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $@"-s {cacheProvider.VideoSequence.Width}x{cacheProvider.VideoSequence.Height} -i {cacheProvider.YuvFilePath} -preset fast {cacheProvider.YuvFramesDirPath}\%03d.bmp");
         }
 
         public async static Task ConvertToAnnexB(CacheProvider cacheProvider)

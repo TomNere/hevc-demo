@@ -20,7 +20,7 @@ namespace HEVCDemo.ViewModels
     {
         private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
         private readonly Color highlightColor = Colors.DeepPink;
-        private Timer playerTimer;
+        private bool isPlaying;
 
         private CacheProvider cacheProvider;
 
@@ -112,7 +112,6 @@ namespace HEVCDemo.ViewModels
             get => currentFrameIndex;
             set
             {
-                _ = SetCurrentFrame(value);
                 _ = SetProperty(ref currentFrameIndex, value);
             }
         }
@@ -277,7 +276,7 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand PlayForwardCommand => playForwardCommand ?? (playForwardCommand = new DelegateCommand(ExecutePlayForward, CanExecutePlay));
 
         private DelegateCommand pauseCommand;
-        public DelegateCommand PauseCommand => pauseCommand ?? (pauseCommand = new DelegateCommand(ExecutePause));
+        public DelegateCommand PauseCommand => pauseCommand ?? (pauseCommand = new DelegateCommand(ExecutePause, CanExecutePause));
 
         #endregion
 
@@ -354,7 +353,7 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteStepBackward()
         {
-            CurrentFrameIndex--;
+            _ = SetCurrentFrame(CurrentFrameIndex - 1);
         }
 
         private bool CanExecuteStepBackward()
@@ -364,22 +363,22 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteStepForward()
         {
-            CurrentFrameIndex++;
+            _ = SetCurrentFrame(CurrentFrameIndex + 1);
         }
 
         private bool CanExecuteStepForward()
         {
-            return cacheProvider?.videoSequence.FramesCount > CurrentFrameIndex + 1;
+            return cacheProvider?.VideoSequence.FramesCount > CurrentFrameIndex + 1;
         }
 
         private void ExecuteStepStart()
         {
-            CurrentFrameIndex = 0;
+            _ = SetCurrentFrame(0);
         }
 
         private void ExecuteStepEnd()
         {
-            CurrentFrameIndex = cacheProvider.videoSequence.FramesCount - 1;
+            _ = SetCurrentFrame(cacheProvider.VideoSequence.FramesCount - 1);
         }
 
         #endregion
@@ -390,16 +389,16 @@ namespace HEVCDemo.ViewModels
         {
             zoom -= 0.05;
 
-            ViewerContentHeight = cacheProvider.videoSequence.Height * zoom;
-            ViewerContentWidth = cacheProvider.videoSequence.Width * zoom;
+            ViewerContentHeight = cacheProvider.VideoSequence.Height * zoom;
+            ViewerContentWidth = cacheProvider.VideoSequence.Width * zoom;
         }
         
         private void ExecuteZoomIn()
         {
             zoom += 0.05;
 
-            ViewerContentHeight = cacheProvider.videoSequence.Height * zoom;
-            ViewerContentWidth = cacheProvider.videoSequence.Width * zoom;
+            ViewerContentHeight = cacheProvider.VideoSequence.Height * zoom;
+            ViewerContentWidth = cacheProvider.VideoSequence.Width * zoom;
         }
 
         private void ExecuteMouseScrolled()
@@ -468,14 +467,15 @@ namespace HEVCDemo.ViewModels
 
                     await cacheProvider.LoadIntoCache(0);
 
-                    ViewerContentHeight = cacheProvider.videoSequence.Height;
-                    ViewerContentWidth = cacheProvider.videoSequence.Width;
-                    Resolution = $"{cacheProvider.videoSequence.Width} x {cacheProvider.videoSequence.Height}";
+                    ViewerContentHeight = cacheProvider.VideoSequence.Height;
+                    ViewerContentWidth = cacheProvider.VideoSequence.Width;
+                    Resolution = $"{cacheProvider.VideoSequence.Width} x {cacheProvider.VideoSequence.Height}";
                     FileSize = FormattingHelper.GetFileSize(new FileInfo(openFileDialog.FileName).Length);
 
-                    MaxSliderValue = cacheProvider.videoSequence.FramesCount - 1;
-                    CurrentFrameIndex = 0;
+                    MaxSliderValue = cacheProvider.VideoSequence.FramesCount - 1;
+                    await SetCurrentFrame(0);
                     StartButtonVisibility = Visibility.Hidden;
+                    SetAppState("ReadyState,Text".Localize(), true);
                 }, "CreateCacheTitle,Title".Localize(), false);
             }
         }
@@ -493,7 +493,7 @@ namespace HEVCDemo.ViewModels
                 IsPopupOpen = true;
 
                 // Get parameters
-                InfoParameters = InfoPopupHelper.GetInfo(cacheProvider.videoSequence, currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid, zoom);
+                InfoParameters = InfoPopupHelper.GetInfo(cacheProvider.VideoSequence, currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid, zoom);
 
                 // Highlight unit
                 var highlightImage = BitmapFactory.New((int)ViewerContentWidth, (int)ViewerContentHeight);
@@ -526,43 +526,58 @@ namespace HEVCDemo.ViewModels
 
         private bool CanExecutePlay()
         {
-            return playerTimer == null;
+            return cacheProvider?.VideoSequence != null && !isPlaying;
+        }
+
+        private bool CanExecutePause()
+        {
+            return isPlaying;
         }
 
         private void ExecutePlayBackward()
         {
-            playerTimer = new Timer((parameter) =>
-            {
-                if (CurrentFrameIndex > 0)
-                {
-                    CurrentFrameIndex--;
-                }
-                else
-                {
-                    StopPlayer();
-                }
-            }, null, playerInterval, playerInterval);
+            StartPlayer();
 
-            PlayBackwardCommand.RaiseCanExecuteChanged();
-            PlayForwardCommand.RaiseCanExecuteChanged();
+            _ = Task.Run(async () =>
+            {
+                while (isPlaying)
+                {
+                    Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
+                    if (CurrentFrameIndex > 0)
+                    {
+                        await SetCurrentFrame(CurrentFrameIndex - 1);
+                        await Task.Delay(playerInterval);
+                    }
+                    else
+                    {
+                        StopPlayer();
+                    }
+                }
+            });
         }
 
         private void ExecutePlayForward()
         {
-            playerTimer = new Timer((parameter) =>
-            {
-                if (cacheProvider?.videoSequence.FramesCount > CurrentFrameIndex + 1)
-                {
-                    CurrentFrameIndex++;
-                }
-                else
-                {
-                    StopPlayer();
-                }
-            }, null, playerInterval, playerInterval);
+            StartPlayer();
 
-            PlayBackwardCommand.RaiseCanExecuteChanged();
-            PlayForwardCommand.RaiseCanExecuteChanged();
+            _ = Task.Run(async () =>
+            {
+                while(isPlaying)
+                {
+                    Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
+                    if (cacheProvider?.VideoSequence.FramesCount > CurrentFrameIndex + 1)
+                    {
+                        await SetCurrentFrame(CurrentFrameIndex + 1);
+                        await Task.Delay(playerInterval);
+                    }
+                    else
+                    {
+                        StopPlayer();
+                    }
+                }
+            });
         }
 
         private void ExecutePause()
@@ -570,12 +585,25 @@ namespace HEVCDemo.ViewModels
             StopPlayer();
         }
 
+        private void StartPlayer()
+        {
+            AppState = "PlayingState,Text".Localize();
+            isPlaying = true;
+            RaisePlayerControlsExecuteChanged();
+        }
+
         private void StopPlayer()
         {
-            playerTimer?.Dispose();
-            playerTimer = null;
+            AppState = "ReadyState,Text".Localize();
+            isPlaying = false;
+            RaisePlayerControlsExecuteChanged();
+        }
+
+        private void RaisePlayerControlsExecuteChanged()
+        {
             PlayBackwardCommand.RaiseCanExecuteChanged();
             PlayForwardCommand.RaiseCanExecuteChanged();
+            PauseCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -586,11 +614,9 @@ namespace HEVCDemo.ViewModels
         {
             if (cacheProvider == null) return;
 
-            SetAppState("LoadingIntoCacheState,Text".Localize(), false);
-
             if (DecodedFramesVisibility == Visibility.Visible)
             {
-                CurrentFrameImage = await cacheProvider.GetYuvFrame(index);
+                CurrentFrameImage = await cacheProvider.GetYuvFrame(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize());
             }
             if (CodingUnitsVisibility == Visibility.Visible)
             {
@@ -613,8 +639,9 @@ namespace HEVCDemo.ViewModels
             StepBackwardCommand.RaiseCanExecuteChanged();
             StepStartCommand.RaiseCanExecuteChanged();
             StepEndCommand.RaiseCanExecuteChanged();
+            RaisePlayerControlsExecuteChanged();
 
-            SetAppState("ReadyState,Text".Localize(), true);
+            CurrentFrameIndex = index;
         }
 
         private Visibility ConvertBoolToVisibility(bool isVisible)

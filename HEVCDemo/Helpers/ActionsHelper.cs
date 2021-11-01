@@ -12,7 +12,7 @@ namespace HEVCDemo.Helpers
         {
             try
             {
-                Mouse.OverrideCursor = Cursors.Wait;
+                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
                 await action();
             }
             catch (Exception e)
@@ -22,7 +22,7 @@ namespace HEVCDemo.Helpers
             }
             finally
             {
-                Mouse.OverrideCursor = Cursors.Arrow;
+                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
             }
         }
     }
