@@ -14,18 +14,23 @@
             <MenuItem Header="{rf:Tr Uid='FileHeader'}">
                 <MenuItem Header="{rf:Tr Uid='SelectVideoHeader'}" Command="{Binding SelectVideoCommand}"/>
                 <MenuItem Header="{rf:Tr Uid='ClearCacheHeader'}"/>
+                <MenuItem Header="{rf:Tr Uid='ExitHeader'}"/>
             </MenuItem>
             <MenuItem Header="{rf:Tr Uid='LanguageHeader'}"
                       ItemsSource="{Binding CultureMenuItems, Mode=OneWay}">
                 <MenuItem.ItemContainerStyle>
-                    <Style TargetType="MenuItem">
+                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
                         <Setter Property="Command" Value="{Binding ChangeLanguageCommand}" />
                         <Setter Property="CommandParameter" Value="{Binding Tag, RelativeSource={RelativeSource Self}}" />
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
-            <MenuItem Header="{rf:Tr Uid='HelpHeader'}"
-                      Command="{Binding ShowHelpCommand}"/>
+            <MenuItem Header="{rf:Tr Uid='HelpHeader'}">
+                <MenuItem Header="{rf:Tr Uid='ShowHelpHeader'}"
+                          Command="{Binding ShowHelpCommand}"/>
+                <MenuItem Header="{rf:Tr Uid='LicensesHeader'}"/>
+                <MenuItem Header="{rf:Tr Uid='AboutHeader'}"/>
+            </MenuItem>
         </Menu>
         <views:ImagesViewer x:Name="ImagesViewer" />
     </DockPanel>

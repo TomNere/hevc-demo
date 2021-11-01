@@ -343,8 +343,24 @@
       "Header": "Vyčistit cache"
     },
     {
+      "Id": "ExitHeader",
+      "Header": "Ukončit aplikaci"
+    },
+    {
       "Id": "ErrorCreatingDemoData",
       "Text": "Nastal problém při tvorbě ukázkových dat. Může jít o poškození nacachovaných dat, nebo jste se pokusili otevřít neplatný video soubor."
+    },
+    {
+      "Id": "ShowHelpHeader",
+      "Header": "Zobrazit nápovědu"
+    },
+    {
+      "Id": "LicensesHeader",
+      "Header": "Licence"
+    },
+    {
+      "Id": "AboutHeader",
+      "Header": "O aplikaci"
     },
     {
       "Id": "PlayingState",
