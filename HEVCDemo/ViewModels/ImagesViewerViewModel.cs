@@ -112,6 +112,7 @@ namespace HEVCDemo.ViewModels
             get => currentFrameIndex;
             set
             {
+                _ = SetCurrentFrame(value);
                 _ = SetProperty(ref currentFrameIndex, value);
             }
         }
@@ -151,7 +152,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 _ = SetProperty(ref decodedFramesVisibility, value);
-                _ = SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrameIndex(CurrentFrameIndex);
             }
         }
 
@@ -162,7 +163,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 _ = SetProperty(ref codingUnitsVisibility, value);
-                _ = SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrameIndex(CurrentFrameIndex);
             }
         }
 
@@ -173,7 +174,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 _ = SetProperty(ref predictionTypeVisibility, value);
-                _ = SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrameIndex(CurrentFrameIndex);
             }
         }
 
@@ -184,7 +185,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 _ = SetProperty(ref intraPredictionVisibility, value);
-                _ = SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrameIndex(CurrentFrameIndex);
             }
         }
 
@@ -195,7 +196,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 _ = SetProperty(ref interPredictionVisibility, value);
-                _ = SetCurrentFrame(CurrentFrameIndex);
+                _ = SetCurrentFrameIndex(CurrentFrameIndex);
             }
         }
 
@@ -344,7 +345,7 @@ namespace HEVCDemo.ViewModels
         private void VectorsStartVisibilityChanged(object sender, VisibilityChangedEventArgs e)
         {
             isVectorsStartEnabled = e.IsVisible;
-            _ = SetCurrentFrame(CurrentFrameIndex);
+            _ = SetCurrentFrameIndex(CurrentFrameIndex);
         }
 
         #endregion
@@ -353,7 +354,7 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteStepBackward()
         {
-            _ = SetCurrentFrame(CurrentFrameIndex - 1);
+            _ = SetCurrentFrameIndex(CurrentFrameIndex - 1);
         }
 
         private bool CanExecuteStepBackward()
@@ -363,7 +364,7 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteStepForward()
         {
-            _ = SetCurrentFrame(CurrentFrameIndex + 1);
+            _ = SetCurrentFrameIndex(CurrentFrameIndex + 1);
         }
 
         private bool CanExecuteStepForward()
@@ -373,12 +374,12 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteStepStart()
         {
-            _ = SetCurrentFrame(0);
+            _ = SetCurrentFrameIndex(0);
         }
 
         private void ExecuteStepEnd()
         {
-            _ = SetCurrentFrame(cacheProvider.VideoSequence.FramesCount - 1);
+            _ = SetCurrentFrameIndex(cacheProvider.VideoSequence.FramesCount - 1);
         }
 
         #endregion
@@ -473,7 +474,7 @@ namespace HEVCDemo.ViewModels
                     FileSize = FormattingHelper.GetFileSize(new FileInfo(openFileDialog.FileName).Length);
 
                     MaxSliderValue = cacheProvider.VideoSequence.FramesCount - 1;
-                    await SetCurrentFrame(0);
+                    await SetCurrentFrameIndex(0);
                     StartButtonVisibility = Visibility.Hidden;
                     SetAppState("ReadyState,Text".Localize(), true);
                 }, "CreateCacheTitle,Title".Localize(), false);
@@ -546,7 +547,7 @@ namespace HEVCDemo.ViewModels
 
                     if (CurrentFrameIndex > 0)
                     {
-                        await SetCurrentFrame(CurrentFrameIndex - 1);
+                        await SetCurrentFrameIndex(CurrentFrameIndex - 1);
                         await Task.Delay(playerInterval);
                     }
                     else
@@ -569,7 +570,7 @@ namespace HEVCDemo.ViewModels
 
                     if (cacheProvider?.VideoSequence.FramesCount > CurrentFrameIndex + 1)
                     {
-                        await SetCurrentFrame(CurrentFrameIndex + 1);
+                        await SetCurrentFrameIndex(CurrentFrameIndex + 1);
                         await Task.Delay(playerInterval);
                     }
                     else
@@ -610,6 +611,12 @@ namespace HEVCDemo.ViewModels
 
         #region Helpers
 
+        private async Task SetCurrentFrameIndex(int index)
+        {
+            await SetCurrentFrame(index);
+            CurrentFrameIndex = index;
+        }
+
         private async Task SetCurrentFrame(int index)
         {
             ClosePopup();
@@ -642,8 +649,6 @@ namespace HEVCDemo.ViewModels
             StepStartCommand.RaiseCanExecuteChanged();
             StepEndCommand.RaiseCanExecuteChanged();
             RaisePlayerControlsExecuteChanged();
-
-            CurrentFrameIndex = index;
         }
 
         private Visibility ConvertBoolToVisibility(bool isVisible)
