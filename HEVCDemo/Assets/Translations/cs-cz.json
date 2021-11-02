@@ -365,6 +365,10 @@
     {
       "Id": "PlayingState",
       "Text": "Automatické přehrávání"
+    },
+    {
+      "Id": "ShowDescriptionHeader",
+      "Header": "Popis"
     }
   ]
 }

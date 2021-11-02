@@ -8,4 +8,17 @@
             <Setter Property="Background" Value="Transparent"/>
         </Style.Setters>
     </Style>
+    <Style TargetType="TreeViewItem"
+           BasedOn="{StaticResource {x:Type TreeViewItem}}">
+        <Style.Setters>
+            <Setter Property="mah:ItemHelper.HoverBackgroundBrush"
+                    Value="Transparent" />
+            <Setter Property="mah:ItemHelper.ActiveSelectionBackgroundBrush"
+                    Value="Transparent" />
+            <Setter Property="mah:ItemHelper.HoverSelectedBackgroundBrush"
+                    Value="Transparent" />
+            <Setter Property="mah:ItemHelper.SelectedBackgroundBrush"
+                    Value="Transparent" />
+        </Style.Setters>
+    </Style>
 </ResourceDictionary>

@@ -7,33 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace HEVCDemo.ViewModels
 {
     public class SettingsPanelViewModel : BindableBase
     {
-        private const string ChevronUp = "ChevronUp";
-        private const string ChevronDown = "ChevronDown";
-
-        private readonly GridLength smallSectionHeight = new GridLength(120);
-        private readonly GridLength bigSectionHeight = new GridLength(150);
-        private readonly GridLength hiddenSectionHeight = new GridLength(0);
-
         public SettingsPanelViewModel()
         {
-            Section1ButtonKind = ChevronUp;
-            Section1Height = smallSectionHeight;
-
-            Section2ButtonKind = ChevronDown;
-            Section2Height = hiddenSectionHeight;
-
-            Section3ButtonKind = ChevronDown;
-            Section3Height = hiddenSectionHeight;
-
-            Section4ButtonKind = ChevronDown;
-            Section4Height = hiddenSectionHeight;
-
             InitializeHelpPopup();
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
@@ -158,114 +138,6 @@ namespace HEVCDemo.ViewModels
                 SetProperty(ref isVectorsStartEnabled, value);
                 GlobalActionsHelper.OnVectorsStartVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
             }
-        }
-
-        #endregion
-
-        #region Section 1
-
-        private DelegateCommand showHideSection1Command;
-        public DelegateCommand ShowHideSection1Command => showHideSection1Command ?? (showHideSection1Command = new DelegateCommand(ExecuteShowHideSection1));
-        private void ExecuteShowHideSection1()
-        {
-            bool isHidden = Section1Height == hiddenSectionHeight;
-            Section1Height = isHidden ? smallSectionHeight : hiddenSectionHeight;
-            Section1ButtonKind = isHidden ? ChevronUp : ChevronDown;
-        }
-
-        private GridLength section1Height;
-        public GridLength Section1Height
-        {
-            get => section1Height;
-            set => SetProperty(ref section1Height, value);
-        }
-
-        private string section1ButtonKind;
-        public string Section1ButtonKind
-        {
-            get => section1ButtonKind;
-            set => SetProperty(ref section1ButtonKind, value);
-        }
-
-        #endregion
-
-        #region Section 2
-
-        private DelegateCommand showHideSection2Command;
-        public DelegateCommand ShowHideSection2Command => showHideSection2Command ?? (showHideSection2Command = new DelegateCommand(ExecuteShowHideSection2));
-        private void ExecuteShowHideSection2()
-        {
-            bool isHidden = Section2Height == hiddenSectionHeight;
-            Section2Height = isHidden ? smallSectionHeight : hiddenSectionHeight;
-            Section2ButtonKind = isHidden ? ChevronUp : ChevronDown;
-        }
-
-        private GridLength section2Height;
-        public GridLength Section2Height
-        {
-            get => section2Height;
-            set => SetProperty(ref section2Height, value);
-        }
-
-        private string section2ButtonKind;
-        public string Section2ButtonKind
-        {
-            get => section2ButtonKind;
-            set => SetProperty(ref section2ButtonKind, value);
-        }
-
-        #endregion
-
-        #region Section 3
-
-        private DelegateCommand showHideSection3Command;
-        public DelegateCommand ShowHideSection3Command => showHideSection3Command ?? (showHideSection3Command = new DelegateCommand(ExecuteShowHideSection3));
-        private void ExecuteShowHideSection3()
-        {
-            bool isHidden = Section3Height == hiddenSectionHeight;
-            Section3Height = isHidden ? smallSectionHeight : hiddenSectionHeight;
-            Section3ButtonKind = isHidden ? ChevronUp : ChevronDown;
-        }
-
-        private GridLength section3Height;
-        public GridLength Section3Height
-        {
-            get => section3Height;
-            set => SetProperty(ref section3Height, value);
-        }
-
-        private string section3ButtonKind;
-        public string Section3ButtonKind
-        {
-            get => section3ButtonKind;
-            set => SetProperty(ref section3ButtonKind, value);
-        }
-
-        #endregion
-
-        #region Section 4
-
-        private DelegateCommand showHideSection4Command;
-        public DelegateCommand ShowHideSection4Command => showHideSection4Command ?? (showHideSection4Command = new DelegateCommand(ExecuteShowHideSection4));
-        private void ExecuteShowHideSection4()
-        {
-            bool isHidden = Section4Height == hiddenSectionHeight;
-            Section4Height = isHidden ? bigSectionHeight : hiddenSectionHeight;
-            Section4ButtonKind = isHidden ? ChevronUp : ChevronDown;
-        }
-
-        private GridLength section4Height;
-        public GridLength Section4Height
-        {
-            get => section4Height;
-            set => SetProperty(ref section4Height, value);
-        }
-
-        private string section4ButtonKind;
-        public string Section4ButtonKind
-        {
-            get => section4ButtonKind;
-            set => SetProperty(ref section4ButtonKind, value);
         }
 
         #endregion
