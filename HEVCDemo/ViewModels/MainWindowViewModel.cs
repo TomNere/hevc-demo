@@ -5,6 +5,7 @@ using Prism.Mvvm;
 using Rasyidf.Localization;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace HEVCDemo.ViewModels
@@ -92,6 +93,13 @@ namespace HEVCDemo.ViewModels
         private void ExecuteSelectVideo()
         {
             GlobalActionsHelper.OnSelectVideoClicked();
+        }
+
+        private DelegateCommand exitCommand;
+        public DelegateCommand ExitCommand => exitCommand ?? (exitCommand = new DelegateCommand(ExecuteExit));
+        private void ExecuteExit()
+        {
+            Application.Current.Shutdown();
         }
     }
 }
