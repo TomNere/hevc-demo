@@ -340,7 +340,7 @@
     },
     {
       "Id": "ClearCacheHeader",
-      "Header": "Vyčistit cache"
+      "Header": "Vyčistit ukázkové data"
     },
     {
       "Id": "ExitHeader",
@@ -369,6 +369,14 @@
     {
       "Id": "ShowDescriptionHeader",
       "Header": "Popis"
+    },
+    {
+      "Id": "ClearCacheMessage",
+      "Text": "Opravdu si přejete vyčistit ukázkové data všech doteď otevřených video souborů?"
+    },
+    {
+      "Id": "ClearingCache",
+      "Text": "Čistení ukázkových dat"
     }
   ]
 }

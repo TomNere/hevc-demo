@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Windows.Input;
 using System.Windows;
 
 namespace HEVCDemo.Helpers
@@ -247,6 +248,16 @@ namespace HEVCDemo.Helpers
 
             writeableBitmap.Freeze();
             return writeableBitmap;
+        }
+
+        public static async Task ClearCache()
+        {
+            if (!Directory.Exists(cachePrefix)) return;
+
+            GlobalActionsHelper.OnAppStateChanged("ClearingCache,Text".Localize(), false);
+            await ActionsHelper.InvokeSafelyAsync(() => Directory.Delete(cachePrefix, true), "ClearingCache,Text".Localize(), false);
+            GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), false);
+            GlobalActionsHelper.OnCacheCleared();
         }
     }
 }

@@ -101,5 +101,16 @@ namespace HEVCDemo.ViewModels
         {
             Application.Current.Shutdown();
         }
+
+        private DelegateCommand clearCacheCommand;
+        public DelegateCommand ClearCacheCommand => clearCacheCommand ?? (clearCacheCommand = new DelegateCommand(ExecuteClearCache));
+        private void ExecuteClearCache()
+        {
+            var result = MessageBox.Show("ClearCacheMessage,Text".Localize(), "ClearCacheHeader,Header".Localize(), MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                _ = CacheProvider.ClearCache();
+            }
+        }
     }
 }

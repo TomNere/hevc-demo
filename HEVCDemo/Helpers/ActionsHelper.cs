@@ -8,6 +8,11 @@ namespace HEVCDemo.Helpers
 {
     public static class ActionsHelper
     {
+        public static async Task InvokeSafelyAsync(Action action, string actionDescription, bool allowEnableViewer)
+        {
+            await InvokeSafelyAsync(async() => await Task.Run(action), actionDescription, allowEnableViewer);
+        }
+
         public static async Task InvokeSafelyAsync(Func<Task> action, string actionDescription, bool allowEnableViewer)
         {
             try

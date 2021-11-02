@@ -13,7 +13,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{rf:Tr Uid='FileHeader'}">
                 <MenuItem Header="{rf:Tr Uid='SelectVideoHeader'}" Command="{Binding SelectVideoCommand}"/>
-                <MenuItem Header="{rf:Tr Uid='ClearCacheHeader'}"/>
+                <MenuItem Header="{rf:Tr Uid='ClearCacheHeader'}" Command="{Binding ClearCacheCommand}"/>
                 <MenuItem Header="{rf:Tr Uid='ExitHeader'}" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="{rf:Tr Uid='LanguageHeader'}"

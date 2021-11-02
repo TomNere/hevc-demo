@@ -293,6 +293,13 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.VectorsStartVisibilityChanged += VectorsStartVisibilityChanged;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
+            GlobalActionsHelper.CacheCleared += CacheCleared;
+        }
+
+        private void CacheCleared(object sender, EventArgs e)
+        {
+            Clear();
+            StartButtonVisibility = Visibility.Visible;
         }
 
         private void MainWindowDeactivated(object sender, EventArgs e)
@@ -431,6 +438,8 @@ namespace HEVCDemo.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
+                Clear();
+
                 await ActionsHelper.InvokeSafelyAsync(async () =>
                 {
                     string filePath = openFileDialog.FileName;
@@ -650,6 +659,18 @@ namespace HEVCDemo.ViewModels
         private Visibility ConvertBoolToVisibility(bool isVisible)
         {
             return isVisible ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        private void Clear()
+        {
+            ClosePopup();
+            IsEnabled = false;
+            CurrentFrameImage = null;
+            CurrentCodingUnitsImage = null;
+            CurrentPredictionTypeImage = null;
+            CurrentIntraPredictionImage = null;
+            CurrentInterPredictionImage = null;
+            cacheProvider = null;
         }
 
         #endregion
