@@ -19,6 +19,17 @@ namespace HEVCDemo.ViewModels
             set { SetProperty(ref title, value); }
         }
 
+        private bool isShowTipsEnabled;
+        public bool IsShowTipsEnabled
+        {
+            get => isShowTipsEnabled;
+            set 
+            {
+                SetProperty(ref isShowTipsEnabled, value);
+                GlobalActionsHelper.OnShowTipsEnabledChanged(value);
+            }
+        }
+
         private ObservableCollection<LocalizationDictionary> cultures = new ObservableCollection<LocalizationDictionary>();
         public ObservableCollection<LocalizationDictionary> Cultures
         {
@@ -64,6 +75,7 @@ namespace HEVCDemo.ViewModels
         public MainWindowViewModel()
         {
             PopulateLanguageComboBox();
+            IsShowTipsEnabled = Properties.Settings.Default.IsShowTipsEnabled;
         }
 
         private void PopulateLanguageComboBox()

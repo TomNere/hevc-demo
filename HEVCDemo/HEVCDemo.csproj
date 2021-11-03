@@ -111,6 +111,8 @@
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Models\InfoImage.cs" />
     <Compile Include="Models\InfoPopupParameters.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Types\ShowTipsEventArgs.cs" />
     <Compile Include="Types\AppStateChangedEventArgs.cs" />
     <Compile Include="Types\VisibilityChangedEventArgs.cs" />
     <Compile Include="ViewModels\SettingsPanelViewModel.cs" />

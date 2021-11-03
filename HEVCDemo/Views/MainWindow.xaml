@@ -12,24 +12,33 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{rf:Tr Uid='FileHeader'}">
-                <MenuItem Header="{rf:Tr Uid='SelectVideoHeader'}" Command="{Binding SelectVideoCommand}"/>
-                <MenuItem Header="{rf:Tr Uid='ClearCacheHeader'}" Command="{Binding ClearCacheCommand}"/>
-                <MenuItem Header="{rf:Tr Uid='ExitHeader'}" Command="{Binding ExitCommand}"/>
+                <MenuItem Header="{rf:Tr Uid='SelectVideoHeader'}"
+                          Command="{Binding SelectVideoCommand}" />
+                <MenuItem Header="{rf:Tr Uid='ClearCacheHeader'}"
+                          Command="{Binding ClearCacheCommand}" />
+                <MenuItem Header="{rf:Tr Uid='ExitHeader'}"
+                          Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="{rf:Tr Uid='LanguageHeader'}"
                       ItemsSource="{Binding CultureMenuItems, Mode=OneWay}">
                 <MenuItem.ItemContainerStyle>
-                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
-                        <Setter Property="Command" Value="{Binding ChangeLanguageCommand}" />
-                        <Setter Property="CommandParameter" Value="{Binding Tag, RelativeSource={RelativeSource Self}}" />
+                    <Style TargetType="MenuItem"
+                           BasedOn="{StaticResource {x:Type MenuItem}}">
+                        <Setter Property="Command"
+                                Value="{Binding ChangeLanguageCommand}" />
+                        <Setter Property="CommandParameter"
+                                Value="{Binding Tag, RelativeSource={RelativeSource Self}}" />
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
             <MenuItem Header="{rf:Tr Uid='HelpHeader'}">
                 <MenuItem Header="{rf:Tr Uid='ShowHelpHeader'}"
-                          Command="{Binding ShowHelpCommand}"/>
-                <MenuItem Header="{rf:Tr Uid='LicensesHeader'}"/>
-                <MenuItem Header="{rf:Tr Uid='AboutHeader'}"/>
+                          Command="{Binding ShowHelpCommand}" />
+                <MenuItem Header="{rf:Tr Uid='ShowTipsHeader'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding IsShowTipsEnabled}" />
+                <MenuItem Header="{rf:Tr Uid='LicensesHeader'}" />
+                <MenuItem Header="{rf:Tr Uid='AboutHeader'}" />
             </MenuItem>
         </Menu>
         <views:ImagesViewer x:Name="ImagesViewer" />

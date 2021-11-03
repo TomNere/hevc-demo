@@ -15,6 +15,7 @@ namespace HEVCDemo.Helpers
         public static event EventHandler<AppStateChangedEventArgs> AppStateChanged;
         public static event EventHandler MainWindowDeactivated;
         public static event EventHandler CacheCleared;
+        public static event EventHandler<ShowTipsEventArgs> ShowTipsEnabledChanged;
 
         public static void OnDecodedFramesVisibilityChanged(VisibilityChangedEventArgs e)
         {
@@ -70,6 +71,11 @@ namespace HEVCDemo.Helpers
         public static void OnCacheCleared()
         {
             CacheCleared?.Invoke(new object(), new EventArgs());
+        }
+
+        public static void OnShowTipsEnabledChanged(bool isEnabled)
+        {
+            ShowTipsEnabledChanged?.Invoke(new object(), new ShowTipsEventArgs { IsEnabled = isEnabled });
         }
     }
 }

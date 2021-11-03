@@ -17,6 +17,21 @@ namespace HEVCDemo.ViewModels
             InitializeHelpPopup();
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
+            GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabled;
+        }
+
+        private void SetTipsIsEnabled(object sender, ShowTipsEventArgs e)
+        {
+            Properties.Settings.Default.IsShowTipsEnabled = e.IsEnabled;
+
+            if (e.IsEnabled)
+            {
+                helpPopupTimer.Change(TimeSpan.Zero, helpPopupInterval);
+            }
+            else
+            {
+                IsHelpPopupOpen = false;
+            }
         }
 
         #region Info dialogs
@@ -149,13 +164,11 @@ namespace HEVCDemo.ViewModels
         private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(5);
         private readonly TimeSpan tryLaterDelay = TimeSpan.FromSeconds(30);
         private Timer helpPopupTimer;
-        private int helpPopupIndex;
         private List<string> helpPopupTexts;
 
         private void InitializeHelpPopup()
         {
             helpPopupTimer = new Timer(DoHelpPopupTimerTick, null, helpPopupInitialDelay, helpPopupInterval);
-            helpPopupIndex = 0;
             helpPopupTexts = new List<string>
             {
                 "PopupHelp1,Content".Localize(),
@@ -169,6 +182,8 @@ namespace HEVCDemo.ViewModels
 
         private async void DoHelpPopupTimerTick(object state)
         {
+            if (!Properties.Settings.Default.IsShowTipsEnabled) return;
+
             if (!WindowHelper.GetApplicationIsActivated())
             {
                 // Try later
@@ -176,9 +191,11 @@ namespace HEVCDemo.ViewModels
                 return;
             }
 
-            HelpPopupText = helpPopupTexts[helpPopupIndex];
+            var index = Properties.Settings.Default.ShowTipsCounter;
+
+            HelpPopupText = helpPopupTexts[index];
             IsHelpPopupOpen = true;
-            helpPopupIndex = helpPopupIndex + 1 >= helpPopupTexts.Count ? 0 : helpPopupIndex + 1;
+            Properties.Settings.Default.ShowTipsCounter = index + 1 >= helpPopupTexts.Count ? 0 : index + 1;
 
             await Task.Delay(helpPopupTimeout);
             IsHelpPopupOpen = false;

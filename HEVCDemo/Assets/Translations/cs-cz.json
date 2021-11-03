@@ -371,6 +371,10 @@
       "Header": "Popis"
     },
     {
+      "Id": "ShowTipsHeader",
+      "Header": "Zobrazovat tipy"
+    },
+    {
       "Id": "ClearCacheMessage",
       "Text": "Opravdu si přejete vyčistit ukázkové data všech doteď otevřených video souborů?"
     },

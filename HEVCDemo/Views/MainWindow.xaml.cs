@@ -17,6 +17,12 @@ namespace HEVCDemo.Views
 
             Application.Current.DispatcherUnhandledException += HandleUnhandledException;
             Deactivated += GlobalActionsHelper.OnMainWindowDeactivated;
+            Closing += HandleClosing;
+        }
+
+        private void HandleClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Properties.Settings.Default.Save();
         }
 
         private void HandleUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
