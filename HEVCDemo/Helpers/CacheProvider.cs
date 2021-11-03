@@ -182,11 +182,11 @@ namespace HEVCDemo.Helpers
         {
             if (!YuvFramesBitmaps.ContainsKey(index))
             {
-                GlobalActionsHelper.OnAppStateChanged("LoadingIntoCacheState,Text".Localize(), false);
+                GlobalActionsHelper.OnAppStateChanged("LoadingIntoCache,Text".Localize(), false);
                 await ActionsHelper.InvokeSafelyAsync(async () =>
                 {
                     await LoadIntoCache(index);
-                }, "LoadIntoCacheTitle,Title".Localize(), true);
+                }, "LoadingIntoCache,Text".Localize(), true);
 
                 GlobalActionsHelper.OnAppStateChanged(afterStateText, true);
             }

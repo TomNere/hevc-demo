@@ -482,7 +482,7 @@ namespace HEVCDemo.ViewModels
                     await SetCurrentFrameIndex(0);
                     StartButtonVisibility = Visibility.Hidden;
                     GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
-                }, "CreateCacheTitle,Title".Localize(), false);
+                }, "CreatingCache,Text".Localize(), false);
             }
         }
 

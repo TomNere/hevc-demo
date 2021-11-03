@@ -63,16 +63,12 @@
       "Text": "Vytvářím ukázkové data"
     },
     {
-      "Id": "LoadingIntoCacheState",
-      "Text": "Načítám do cache"
+      "Id": "LoadingIntoCache",
+      "Text": "Načítání rámců do paměti"
     },
     {
       "Id": "ReadyState",
       "Text": "Připraven"
-    },
-    {
-      "Id": "LoadIntoCacheTitle",
-      "Title": "Načítání do cache"
     },
     {
       "Id": "InvalidWidthEx",
@@ -112,11 +108,11 @@
     },
     {
       "Id": "CacheExistsMsg",
-      "Text": "Cache k dané video sekvenci již existuje. Přejete si ji přepsat?"
+      "Text": "Ukázkové data k dané video sekvenci již existují. Přejete si je přepsat?"
     },
     {
-      "Id": "CreateCacheTitle",
-      "Title": "Vytváření cache"
+      "Id": "CreatingCache",
+      "Text": "Vytváření ukázkových dat"
     },
     {
       "Id": "UnhandledEx",
@@ -376,11 +372,11 @@
     },
     {
       "Id": "ClearCacheMessage",
-      "Text": "Opravdu si přejete vyčistit ukázkové data všech doteď otevřených video souborů?"
+      "Text": "Opravdu si přejete vyčistit ukázkové data všech doteď otevřených video sekvencí?"
     },
     {
       "Id": "ClearingCache",
-      "Text": "Čistení ukázkových dat"
+      "Text": "Čištení ukázkových dat"
     }
   ]
 }
