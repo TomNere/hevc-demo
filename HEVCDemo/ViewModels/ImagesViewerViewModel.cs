@@ -245,10 +245,10 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand StepEndCommand => stepEndCommand ?? (stepEndCommand = new DelegateCommand(ExecuteStepEnd, CanExecuteStepForward));
 
         private DelegateCommand zoomOutCommand;
-        public DelegateCommand ZoomOutCommand => zoomOutCommand ?? (zoomOutCommand = new DelegateCommand(ExecuteZoomOut));
+        public DelegateCommand ZoomOutCommand => zoomOutCommand ?? (zoomOutCommand = new DelegateCommand(ExecuteZoomOut, CanExecuteZoom));
 
         private DelegateCommand zoomInCommand;
-        public DelegateCommand ZoomInCommand => zoomInCommand ?? (zoomInCommand = new DelegateCommand(ExecuteZoomIn));
+        public DelegateCommand ZoomInCommand => zoomInCommand ?? (zoomInCommand = new DelegateCommand(ExecuteZoomIn, CanExecuteZoom));
 
         private DelegateCommand selectVideoCommand;
         public DelegateCommand SelectVideoCommand => selectVideoCommand ?? (selectVideoCommand = new DelegateCommand(ExecuteSelectVideo));
@@ -403,6 +403,11 @@ namespace HEVCDemo.ViewModels
 
             ViewerContentHeight = cacheProvider.VideoSequence.Height * zoom;
             ViewerContentWidth = cacheProvider.VideoSequence.Width * zoom;
+        }
+
+        private bool CanExecuteZoom()
+        {
+            return cacheProvider?.VideoSequence != null;
         }
 
         private void ExecuteMouseScrolled()
@@ -653,6 +658,8 @@ namespace HEVCDemo.ViewModels
             StepBackwardCommand.RaiseCanExecuteChanged();
             StepStartCommand.RaiseCanExecuteChanged();
             StepEndCommand.RaiseCanExecuteChanged();
+            ZoomInCommand.RaiseCanExecuteChanged();
+            ZoomOutCommand.RaiseCanExecuteChanged();
             RaisePlayerControlsExecuteChanged();
         }
 
