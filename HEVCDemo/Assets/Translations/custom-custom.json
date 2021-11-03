@@ -96,7 +96,7 @@
     },
     {
       "Id": "FFmpegMissingState",
-      "Title": "FFmpeg missing"
+      "Text": "FFmpeg missing"
     },
     {
       "Id": "DownloadingFFmpegState",

@@ -92,7 +92,7 @@
     },
     {
       "Id": "FFmpegMissingState",
-      "Title": "FFmpeg nebyl nalezen"
+      "Text": "FFmpeg nebyl nalezen"
     },
     {
       "Id": "DownloadingFFmpegState",
