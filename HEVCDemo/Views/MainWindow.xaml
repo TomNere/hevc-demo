@@ -37,7 +37,8 @@
                 <MenuItem Header="{rf:Tr Uid='ShowTipsHeader'}"
                           IsCheckable="True"
                           IsChecked="{Binding IsShowTipsEnabled}" />
-                <MenuItem Header="{rf:Tr Uid='LicensesHeader'}" />
+                <MenuItem Header="{rf:Tr Uid='LicensesHeader'}"
+                          Command="{Binding ShowLicensesCommand}"/>
                 <MenuItem Header="{rf:Tr Uid='AboutHeader'}" />
             </MenuItem>
         </Menu>

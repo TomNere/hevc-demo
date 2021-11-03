@@ -1,9 +1,10 @@
-﻿using HEVCDemo.Helpers;
+using HEVCDemo.Helpers;
 using HEVCDemo.Models;
-using HEVCDemo.Types;
 using HEVCDemo.ViewModels;
 using MahApps.Metro.Controls;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace HEVCDemo.Views
 {
@@ -15,6 +16,8 @@ namespace HEVCDemo.Views
         public InfoDialog(string title, string textKey, List<InfoImage> images)
         {
             InitializeComponent();
+            AddNavigationCommandBinding();
+
             var viewModel = new InfoDialogViewModel
             {
                 Title = title,
@@ -22,6 +25,20 @@ namespace HEVCDemo.Views
                 Images = images
             };
             DataContext = viewModel;
+        }
+
+        // Handles navigation in markdown
+        private void AddNavigationCommandBinding()
+        {
+            CommandBindings.Add(new CommandBinding(
+                NavigationCommands.GoToPage,
+                    (s, e) =>
+                    {
+                        var proc = new Process();
+                        proc.StartInfo.UseShellExecute = true;
+                        proc.StartInfo.FileName = (string)e.Parameter;
+                        proc.Start();
+                    }));
         }
     }
 }

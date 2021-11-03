@@ -189,6 +189,9 @@
     <Resource Include="Assets\Images\View\biPrediction.png" />
     <Resource Include="Assets\Images\View\uniPrediction.png" />
     <Resource Include="Assets\Images\Bulb.png" />
+    <None Include="Assets\InfoTexts\Custom\Licenses.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Assets\Translations\en-us.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -270,6 +273,12 @@
     <Content Include="Assets\InfoTexts\Custom\InterPrediction.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Assets\InfoTexts\Czech\Licenses.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\InfoTexts\English\Licenses.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
