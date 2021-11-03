@@ -377,6 +377,10 @@
     {
       "Id": "ClearingCache",
       "Text": "Čištení ukázkových dat"
+    },
+    {
+      "Id": "Timeline",
+      "Content": "Časová osa"
     }
   ]
 }
