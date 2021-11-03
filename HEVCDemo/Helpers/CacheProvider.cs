@@ -7,8 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using System.Windows.Input;
-using System.Windows;
 
 namespace HEVCDemo.Helpers
 {
@@ -191,7 +189,10 @@ namespace HEVCDemo.Helpers
                 GlobalActionsHelper.OnAppStateChanged(afterStateText, true);
             }
 
-            return YuvFramesBitmaps[index];
+            lock(YuvFramesBitmaps)
+            {
+                return YuvFramesBitmaps[index];
+            }
         }
 
         public WriteableBitmap GetIntraPredictionFrame(int index)
