@@ -146,7 +146,7 @@
                           Grid.ColumnSpan="3"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <!--Coding and prediction units-->
-                    <Border Margin="-22,4,0,0"
+                    <Border Margin="-22,-1,0,0"
                             BorderThickness="0.5"
                             BorderBrush="WhiteSmoke">
                         <StackPanel x:Name="StackPanel">
@@ -216,7 +216,7 @@
                         </StackPanel>
                     </Border>
                     <!--Prediction mode-->
-                    <Border Margin="-22,4,0,0"
+                    <Border Margin="-22,-1,0,0"
                             BorderThickness="0.5"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
@@ -286,7 +286,7 @@
                         </StackPanel>
                     </Border>
                     <!--Intra prediction-->
-                    <Border Margin="-22,4,0,0"
+                    <Border Margin="-22,-1,0,0"
                             BorderThickness="0.5"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
@@ -382,7 +382,7 @@
                         </StackPanel>
                     </Border>
                     <!--Inter prediction-->
-                    <Border Margin="-22,4,0,0"
+                    <Border Margin="-22,-1,0,0"
                             BorderThickness="0.5"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
