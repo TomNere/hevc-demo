@@ -438,7 +438,7 @@ namespace HEVCDemo.ViewModels
 
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin"
+                Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin;*.h265"
             };
 
             if (openFileDialog.ShowDialog() == true)
