@@ -1,1 +1,1 @@
-﻿- jednotlivé snímky videa vytvořené dekódovacím algoritmem kodeku H.265
+﻿* jednotlivé snímky videa vytvořené dekódovacím algoritmem kodeku H.265

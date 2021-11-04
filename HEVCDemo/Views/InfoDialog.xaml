@@ -4,34 +4,52 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
+                 xmlns:mdx="clr-namespace:MdXaml;assembly=MdXaml"
                  xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization"
                  mc:Ignorable="d"
                  Title="{rf:Tr Uid='InfoDialogTitle'}"
                  SizeToContent="Height"
-                 MinHeight="300" MinWidth="600" Width="600" MaxHeight="768" MaxWidth="1024">
+                 MinHeight="300"
+                 MinWidth="600"
+                 Width="600"
+                 MaxHeight="768"
+                 MaxWidth="1024">
     <ScrollViewer  VerticalScrollBarVisibility="Auto">
         <Grid Margin="30,0,30,10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" HorizontalAlignment="Center" Content="{Binding Title}" FontSize="24"/>
-            <mdxam:MarkdownScrollViewer Grid.Row="1" Markdown="{Binding Text}" xml:space="preserve" VerticalScrollBarVisibility="Hidden"/>
-            <ItemsControl Grid.Row="2" Margin="0,20,0,0" ItemsSource="{Binding Images}">
+            <Label Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   Content="{Binding Title}"
+                   FontSize="24" />
+            <mdx:MarkdownScrollViewer Grid.Row="1"
+                                      Markdown="{Binding Text}"
+                                      xml:space="preserve"
+                                      VerticalScrollBarVisibility="Hidden" />
+            <ItemsControl Grid.Row="2"
+                          Margin="0,20,0,0"
+                          ItemsSource="{Binding Images}">
                 <ItemsControl.ItemTemplate>
-		    		<DataTemplate>
-		    			<Grid Margin="6">
-		    				<Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                    <DataTemplate>
+                        <Grid Margin="6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-		    				<Image Grid.Row="0" Source="{Binding ImagePath}" MaxHeight="250"/>
-		    				<TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0"/>
-		    			</Grid>
-		    		</DataTemplate>
-		    	</ItemsControl.ItemTemplate>
+                            <Image Grid.Row="0"
+                                   Source="{Binding ImagePath}"
+                                   MaxHeight="250" />
+                            <TextBlock Grid.Row="1"
+                                       Text="{Binding Name}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       Margin="0,4,0,0" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
     </ScrollViewer>

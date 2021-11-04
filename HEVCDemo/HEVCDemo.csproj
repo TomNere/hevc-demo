@@ -190,6 +190,9 @@
     <Resource Include="Assets\Images\View\biPrediction.png" />
     <Resource Include="Assets\Images\View\uniPrediction.png" />
     <Resource Include="Assets\Images\Bulb.png" />
+    <Content Include="Assets\InfoTexts\Custom\About.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Assets\InfoTexts\Custom\Licenses.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -274,9 +277,15 @@
     <Content Include="Assets\InfoTexts\Custom\InterPrediction.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\InfoTexts\Czech\About.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Assets\InfoTexts\Czech\Licenses.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Assets\InfoTexts\English\About.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Assets\InfoTexts\English\Licenses.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

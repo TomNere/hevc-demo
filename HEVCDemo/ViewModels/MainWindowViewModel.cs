@@ -70,6 +70,10 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand ShowLicensesCommand
             => showLicensesCommand ?? (showLicensesCommand = new DelegateCommand(ExecuteShowLicenses));
 
+        private DelegateCommand showAboutCommand;
+        public DelegateCommand ShowAboutCommand
+            => showAboutCommand ?? (showAboutCommand = new DelegateCommand(ExecuteShowAbout));
+
         private void ExecuteShowHelp()
         {
             var infoDialog = new InfoDialog("HelpHeader,Header".Localize(), "Help", null);
@@ -79,6 +83,12 @@ namespace HEVCDemo.ViewModels
         private void ExecuteShowLicenses()
         {
             var infoDialog = new InfoDialog("LicensesHeader,Header".Localize(), "Licenses", null);
+            infoDialog.Show();
+        }
+
+        private void ExecuteShowAbout()
+        {
+            var infoDialog = new InfoDialog("HevcDemo,Text".Localize(), "About", null);
             infoDialog.Show();
         }
 

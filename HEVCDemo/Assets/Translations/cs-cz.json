@@ -52,7 +52,7 @@
     },
     {
       "Id": "ConvertingAnnexBState",
-      "Text": "Převod na tok bajtů"
+      "Text": "Převod z kontejneru na tok bitů"
     },
     {
       "Id": "CreatingDemoData",
@@ -385,6 +385,10 @@
     {
       "Id": "OpeningFile",
       "Text": "Otvírání souboru"
+    },
+    {
+      "Id": "HevcDemo",
+      "Text": "HEVC Demo"
     }
   ]
 }

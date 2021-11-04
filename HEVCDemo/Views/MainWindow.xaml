@@ -39,7 +39,8 @@
                           IsChecked="{Binding IsShowTipsEnabled}" />
                 <MenuItem Header="{rf:Tr Uid='LicensesHeader'}"
                           Command="{Binding ShowLicensesCommand}"/>
-                <MenuItem Header="{rf:Tr Uid='AboutHeader'}" />
+                <MenuItem Header="{rf:Tr Uid='AboutHeader'}"
+                          Command="{Binding ShowAboutCommand}"/>
             </MenuItem>
         </Menu>
         <views:ImagesViewer x:Name="ImagesViewer" />
