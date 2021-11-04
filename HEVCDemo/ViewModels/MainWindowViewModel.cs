@@ -87,11 +87,11 @@ namespace HEVCDemo.ViewModels
 
         public MainWindowViewModel()
         {
-            PopulateLanguageComboBox();
+            InitializeLanguages();
             IsShowTipsEnabled = Properties.Settings.Default.IsShowTipsEnabled;
         }
 
-        private void PopulateLanguageComboBox()
+        private void InitializeLanguages()
         {
             LocalizationService.ScanLanguagesInFolder("Assets\\Translations");
             var packs = LocalizationService.RegisteredPacks;
@@ -101,7 +101,16 @@ namespace HEVCDemo.ViewModels
             {
                 var pack = LocalizationDictionary.GetResources(culture);
                 Cultures.Add(pack);
-                CultureMenuItems.Add(new MenuItem() { Header = $"{pack.EnglishName} ({pack.CultureName})", Tag = pack });
+
+                var menuItem = new MenuItem
+                {
+                    Header = $"{pack.EnglishName} ({pack.CultureName})",
+                    Tag = pack,
+                    IsChecked = cultures.First() == culture, // TODO,
+                    IsEnabled = cultures.First() == culture // TODO,
+                };
+
+                CultureMenuItems.Add(menuItem);
             }
         }
 
