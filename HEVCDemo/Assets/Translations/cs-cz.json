@@ -387,8 +387,8 @@
       "Text": "Otvírání souboru"
     },
     {
-      "Id": "HevcDemo",
-      "Text": "HEVC Demo"
+      "Id": "AppTitle",
+      "Title": "HEVC Demo"
     }
   ]
 }

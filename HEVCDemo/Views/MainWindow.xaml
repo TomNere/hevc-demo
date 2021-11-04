@@ -6,7 +6,7 @@
                  xmlns:views="clr-namespace:HEVCDemo.Views"
                  xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization"
                  prism:ViewModelLocator.AutoWireViewModel="True"
-                 Title="{Binding Title}"
+                 Title="{rf:Tr Uid='AppTitle'}"
                  WindowState="Maximized"
                  PreviewKeyDown="WindowPreviewKeyDown">
     <DockPanel>

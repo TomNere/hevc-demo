@@ -12,13 +12,6 @@ namespace HEVCDemo.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string title = "AppTitle,Title".Localize();
-        public string Title
-        {
-            get { return title; }
-            set { SetProperty(ref title, value); }
-        }
-
         private bool isShowTipsEnabled;
         public bool IsShowTipsEnabled
         {
@@ -88,7 +81,7 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteShowAbout()
         {
-            var infoDialog = new InfoDialog("HevcDemo,Text".Localize(), "About", null);
+            var infoDialog = new InfoDialog("AppTitle,Title".Localize(), "About", null);
             infoDialog.Show();
         }
 

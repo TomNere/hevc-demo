@@ -24,7 +24,8 @@
             <Label Grid.Row="0"
                    HorizontalAlignment="Center"
                    Content="{Binding Title}"
-                   FontSize="24" />
+                   FontSize="24"
+                   Margin="0,0,0,20"/>
             <mdx:MarkdownScrollViewer Grid.Row="1"
                                       Markdown="{Binding Text}"
                                       xml:space="preserve"
