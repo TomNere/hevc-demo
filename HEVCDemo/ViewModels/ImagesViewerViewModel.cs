@@ -443,17 +443,21 @@ namespace HEVCDemo.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
-                Clear();
+                StartButtonVisibility = Visibility.Hidden;
 
                 await ActionsHelper.InvokeSafelyAsync(async () =>
                 {
+                    GlobalActionsHelper.OnAppStateChanged("OpeningFile,Text".Localize(), false);
                     string filePath = openFileDialog.FileName;
 
                     if (cacheProvider?.LoadedFilePath == filePath)
                     {
                         MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
+                        GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
                         return;
                     }
+
+                    Clear();
 
                     cacheProvider = new CacheProvider(filePath);
                     if (cacheProvider.CacheExists)
@@ -465,7 +469,7 @@ namespace HEVCDemo.ViewModels
                         }
                         else
                         {
-                            GlobalActionsHelper.OnAppStateChanged("CreatingDemoState,Text".Localize(), false);
+                            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false);
                             cacheProvider.ParseProps();
                             await cacheProvider.ProcessFiles();
                             cacheProvider.CheckFramesCount();
@@ -485,7 +489,6 @@ namespace HEVCDemo.ViewModels
 
                     MaxSliderValue = cacheProvider.VideoSequence.FramesCount - 1;
                     await SetCurrentFrameIndex(0);
-                    StartButtonVisibility = Visibility.Hidden;
                     GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
                 }, "CreatingCache,Text".Localize(), false);
             }

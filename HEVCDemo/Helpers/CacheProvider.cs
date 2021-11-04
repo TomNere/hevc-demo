@@ -78,14 +78,14 @@ namespace HEVCDemo.Helpers
             }
 
             // Get stats data from annexB file
-            GlobalActionsHelper.OnAppStateChanged("ProcessingAnnexBState,Text".Localize(), false);
+            GlobalActionsHelper.OnAppStateChanged("CreatingDemoData,Text".Localize(), false);
             _ = await ProcessHelper.RunProcessAsync($@".\TAppDecoder.exe", $@"-b {AnnexBFilePath} -o {YuvFilePath} -p {StatsDirPath}");
 
             // Parse properties
             ParseProps();
 
             // Extract frames 
-            GlobalActionsHelper.OnAppStateChanged("CreatingDemoState,Text".Localize(), false);
+            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false);
             var framesLoading = FFmpegHelper.ExtractFrames(this);
 
             await ProcessFiles();
