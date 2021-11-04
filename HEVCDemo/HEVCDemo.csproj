@@ -112,6 +112,7 @@
     <Compile Include="Models\InfoImage.cs" />
     <Compile Include="Models\InfoPopupParameters.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Types\BusyEventArgs.cs" />
     <Compile Include="Types\ShowTipsEventArgs.cs" />
     <Compile Include="Types\AppStateChangedEventArgs.cs" />
     <Compile Include="Types\VisibilityChangedEventArgs.cs" />

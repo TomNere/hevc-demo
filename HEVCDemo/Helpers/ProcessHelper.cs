@@ -9,10 +9,18 @@ namespace HEVCDemo.Helpers
         {
             var tcs = new TaskCompletionSource<int>();
 
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = fileName,
+                Arguments = arguments,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
             var process = new Process
             {
-                StartInfo = { FileName = fileName, Arguments = arguments },
-                EnableRaisingEvents = true,
+                StartInfo = startInfo,
+                EnableRaisingEvents = true
             };
 
             process.Exited += (s, e) =>

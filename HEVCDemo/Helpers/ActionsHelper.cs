@@ -18,6 +18,7 @@ namespace HEVCDemo.Helpers
             try
             {
                 Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
+                GlobalActionsHelper.OnBusyChanged(true);
                 await action();
             }
             catch (Exception e)
@@ -27,6 +28,7 @@ namespace HEVCDemo.Helpers
             }
             finally
             {
+                GlobalActionsHelper.OnBusyChanged(false);
                 Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
             }
         }

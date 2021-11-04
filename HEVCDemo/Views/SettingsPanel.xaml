@@ -51,7 +51,8 @@
             </Grid>
         </Popup>
         <ScrollViewer Grid.Row="0"
-                      VerticalScrollBarVisibility="Auto">
+                      VerticalScrollBarVisibility="Auto"
+                      IsEnabled="{Binding SettingsEnabled}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="28" />
@@ -146,8 +147,8 @@
                           Grid.ColumnSpan="3"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <!--Coding and prediction units-->
-                    <Border Margin="-22,-1,0,0"
-                            BorderThickness="0.5"
+                    <Border Margin="-22,0.5,0,0"
+                            BorderThickness="0.5,0,0.5,0.5"
                             BorderBrush="WhiteSmoke">
                         <StackPanel x:Name="StackPanel">
                             <Grid Margin="8,0,8,0">
@@ -216,8 +217,8 @@
                         </StackPanel>
                     </Border>
                     <!--Prediction mode-->
-                    <Border Margin="-22,-1,0,0"
-                            BorderThickness="0.5"
+                    <Border Margin="-22,0.5,0,0"
+                            BorderThickness="0.5,0,0.5,0.5"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
                             <Grid Margin="8,0,8,0">
@@ -286,8 +287,8 @@
                         </StackPanel>
                     </Border>
                     <!--Intra prediction-->
-                    <Border Margin="-22,-1,0,0"
-                            BorderThickness="0.5"
+                    <Border Margin="-22,0.5,0,0"
+                            BorderThickness="0.5,0,0.5,0.5"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
                             <Grid Margin="8,0,8,0">
@@ -382,8 +383,8 @@
                         </StackPanel>
                     </Border>
                     <!--Inter prediction-->
-                    <Border Margin="-22,-1,0,0"
-                            BorderThickness="0.5"
+                    <Border Margin="-22,0.5,0,0"
+                            BorderThickness="0.5,0,0.5,0.5"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
                             <Grid Margin="8,0,8,0">
@@ -470,11 +471,37 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
                    Content="{rf:Tr Uid='AppStateLabel'}" />
             <Label Grid.Column="1"
                    Content="{Binding AppState}" />
+            <Border Grid.Column="2"
+                    BorderBrush="WhiteSmoke"
+                    BorderThickness="1"
+                    Visibility="{Binding ProgressBarVisibility}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Width="42"
+                    Height="10"
+                    Margin="2,0,0,0">
+                <Rectangle Fill="WhiteSmoke"
+                           HorizontalAlignment="Left">
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Rectangle.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard TargetProperty="Width">
+                                    <DoubleAnimation RepeatBehavior="Forever"
+                                                     From="0"
+                                                     To="42"
+                                                     Duration="0:0:3.0" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                </Rectangle>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

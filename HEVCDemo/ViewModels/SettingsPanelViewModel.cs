@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HEVCDemo.ViewModels
 {
@@ -18,6 +19,13 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
             GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabled;
+            GlobalActionsHelper.BusyChanged += BusyChanged;
+        }
+
+        private void BusyChanged(object sender, BusyEventArgs e)
+        {
+            SettingsEnabled = !e.IsBusy;
+            ProgressBarVisibility = e.IsBusy ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void SetTipsIsEnabled(object sender, ShowTipsEventArgs e)
@@ -88,6 +96,15 @@ namespace HEVCDemo.ViewModels
         #endregion
 
         #region View options
+
+        private bool settingsEnabled;
+
+        public bool SettingsEnabled
+        {
+            get => settingsEnabled;
+            set => SetProperty(ref settingsEnabled, value);
+        }
+
 
         private bool isDecodedFramesEnabled = true;
         public bool IsDecodedFramesEnabled
@@ -246,6 +263,13 @@ namespace HEVCDemo.ViewModels
         private void SetAppState(string stateText)
         {
             AppState = stateText;
+        }
+
+        private Visibility progressBarVisibility = Visibility.Hidden;
+        public Visibility ProgressBarVisibility
+        {
+            get => progressBarVisibility;
+            set => SetProperty(ref progressBarVisibility, value);
         }
 
         #endregion
