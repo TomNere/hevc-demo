@@ -52,15 +52,15 @@
     },
     {
       "Id": "ConvertingAnnexBState",
-      "Text": "Konvertuji na tok bajtů"
+      "Text": "Převod na tok bajtů"
     },
     {
-      "Id": "ProcessingAnnexBState",
-      "Text": "Zpracovávám tok bajtů"
+      "Id": "CreatingDemoData",
+      "Text": "Vytvářění ukázkových dat"
     },
     {
-      "Id": "CreatingDemoState",
-      "Text": "Vytvářím ukázkové data"
+      "Id": "LoadingDemoData",
+      "Text": "Načítání ukázkových dat"
     },
     {
       "Id": "LoadingIntoCache",
@@ -344,7 +344,7 @@
     },
     {
       "Id": "ErrorCreatingDemoData",
-      "Text": "Nastal problém při tvorbě ukázkových dat. Může jít o poškození nacachovaných dat, nebo jste se pokusili otevřít neplatný video soubor."
+      "Text": "Nastal problém při načítání ukázkových dat. Může jít o poškození nacachovaných dat, nebo jste se pokusili otevřít neplatný video soubor."
     },
     {
       "Id": "ShowHelpHeader",
@@ -381,6 +381,10 @@
     {
       "Id": "Timeline",
       "Content": "Časová osa"
+    },
+    {
+      "Id": "OpeningFile",
+      "Text": "Otvírání souboru"
     }
   ]
 }

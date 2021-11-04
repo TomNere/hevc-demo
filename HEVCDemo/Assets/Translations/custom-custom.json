@@ -55,11 +55,11 @@
       "Text": "Converting to byte stream"
     },
     {
-      "Id": "ProcessingAnnexBState",
+      "Id": "CreatingDemoData",
       "Text": "Processing byte stream"
     },
     {
-      "Id": "CreatingDemoState",
+      "Id": "LoadingDemoData",
       "Text": "Creating demo data"
     },
     {
