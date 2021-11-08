@@ -19,7 +19,7 @@
                AllowsTransparency="True"
                PlacementTarget="{Binding ElementName=AppState}"
                Placement="Top">
-            <Grid Width="300"
+            <Grid Width="350"
                   Background="LightGoldenrodYellow">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="32" />
@@ -116,7 +116,7 @@
                 <Border Grid.Row="4"
                         Grid.ColumnSpan="3"
                         Padding="8,0,8,0"
-                        BorderThickness="0.5"
+                        BorderThickness="1,1,1,0"
                         BorderBrush="WhiteSmoke">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -147,8 +147,8 @@
                           Grid.ColumnSpan="3"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <!--Coding and prediction units-->
-                    <Border Margin="-22,0.5,0,0"
-                            BorderThickness="0.5,0,0.5,0.5"
+                    <Border Margin="-22,0,0,0"
+                            BorderThickness="1,1,1,0"
                             BorderBrush="WhiteSmoke">
                         <StackPanel x:Name="StackPanel">
                             <Grid Margin="8,0,8,0">
@@ -177,7 +177,7 @@
                             <TreeViewItem Margin="0,0,8,0"
                                           Header="{rf:Tr Uid='ShowDescriptionHeader'}"
                                           IsExpanded="True"
-                                          MaxWidth="{Binding ActualWidth, ElementName=StackPanel}">
+                                          MaxWidth="350">
                                 <Grid Height="120"
                                       Margin="0,0,8,0">
                                     <Grid.RowDefinitions>
@@ -217,8 +217,8 @@
                         </StackPanel>
                     </Border>
                     <!--Prediction mode-->
-                    <Border Margin="-22,0.5,0,0"
-                            BorderThickness="0.5,0,0.5,0.5"
+                    <Border Margin="-22,0,0,0"
+                            BorderThickness="1,1,1,0"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
                             <Grid Margin="8,0,8,0">
@@ -247,7 +247,7 @@
                             <TreeViewItem Margin="0,0,8,0"
                                           Header="{rf:Tr Uid='ShowDescriptionHeader'}"
                                           IsExpanded="False"
-                                          MaxWidth="{Binding ActualWidth, ElementName=StackPanel}">
+                                          MaxWidth="350">
                                 <Grid Height="120"
                                       Margin="0,0,8,0">
                                     <Grid.RowDefinitions>
@@ -287,8 +287,8 @@
                         </StackPanel>
                     </Border>
                     <!--Intra prediction-->
-                    <Border Margin="-22,0.5,0,0"
-                            BorderThickness="0.5,0,0.5,0.5"
+                    <Border Margin="-22,0,0,0"
+                            BorderThickness="1,1,1,0"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
                             <Grid Margin="8,0,8,0">
@@ -317,8 +317,8 @@
                             <TreeViewItem Margin="0,0,4,0"
                                           Header="{rf:Tr Uid='ShowDescriptionHeader'}"
                                           IsExpanded="False"
-                                          MaxWidth="{Binding ActualWidth, ElementName=StackPanel}">
-                                <Grid Height="150"
+                                          MaxWidth="350">
+                                <Grid Height="120"
                                       Margin="0,0,8,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
@@ -383,17 +383,16 @@
                         </StackPanel>
                     </Border>
                     <!--Inter prediction-->
-                    <Border Margin="-22,0.5,0,0"
-                            BorderThickness="0.5,0,0.5,0.5"
+                    <Border Margin="-22,0,0,0"
+                            BorderThickness="1,1,1,1"
                             BorderBrush="WhiteSmoke">
                         <StackPanel>
                             <Grid Margin="8,0,8,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="38" />
+                                    <RowDefinition Height="38" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
@@ -403,13 +402,16 @@
                                 <Label Grid.Column="1"
                                        VerticalAlignment="Center"
                                        Content="{rf:Tr Uid='MotionVectorsLabel'}" />
-                                <CheckBox Grid.Column="2"
+                                <CheckBox Grid.Row="1"
+                                          Grid.Column="0"
                                           IsChecked="{Binding IsVectorsStartEnabled}"
                                           VerticalAlignment="Center" />
-                                <Label Grid.Column="3"
+                                <Label Grid.Row="1"
+                                       Grid.Column="1"
                                        VerticalAlignment="Center"
                                        Content="{rf:Tr Uid='VectorsStartLabel'}" />
-                                <Button Grid.Column="4"
+                                <Button Grid.Row="0"
+                                        Grid.Column="2"
                                         Height="24"
                                         Width="24"
                                         Command="{Binding ShowInterPredictionInfoCommand}">
@@ -421,7 +423,7 @@
                             <TreeViewItem Margin="0,0,8,0"
                                           Header="{rf:Tr Uid='ShowDescriptionHeader'}"
                                           IsExpanded="False"
-                                          MaxWidth="{Binding ActualWidth, ElementName=StackPanel}">
+                                          MaxWidth="350">
                                 <Grid Height="150"
                                       Margin="0,0,8,0">
                                     <Grid.RowDefinitions>
