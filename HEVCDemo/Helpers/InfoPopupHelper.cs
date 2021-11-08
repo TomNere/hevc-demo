@@ -11,10 +11,12 @@ namespace HEVCDemo.Helpers
 {
     public static class InfoPopupHelper
     {
-        public static InfoPopupParameters GetInfo(VideoSequence videoSequence, int frameIndex, Point mouseLocation, Grid grid, double zoom)
+        public static InfoPopupParameters GetInfo(VideoSequence videoSequence, int frameIndex, Point mouseLocation, double horizontalOffset, double verticalOffset, Grid grid, double zoom)
         {
-            var locationWithZoom = new Point((int)(mouseLocation.X / zoom), (int)(mouseLocation.Y / zoom));
+            var locationWithZoom = new Point((int)((mouseLocation.X - horizontalOffset) / zoom), (int)((mouseLocation.Y - verticalOffset) / zoom));
             var predictionUnit = GetPredictionUnit(videoSequence.GetFrameByPoc(frameIndex).CodingUnits, locationWithZoom);
+
+            if (predictionUnit == null) return null;
 
             var parameters = new InfoPopupParameters
             {
@@ -33,7 +35,14 @@ namespace HEVCDemo.Helpers
                 GetInterParameters(parameters, predictionUnit);
             }
 
-            GetUnitImage(parameters, predictionUnit, grid, zoom);
+            try
+            {
+                GetUnitImage(parameters, predictionUnit, horizontalOffset, verticalOffset, grid, zoom);
+            }
+            catch
+            {
+                return null;
+            }
 
             return parameters;
         }
@@ -104,10 +113,10 @@ namespace HEVCDemo.Helpers
             }
         }
 
-        private static void GetUnitImage(InfoPopupParameters parameters, ComPU predictionUnit, Grid grid, double zoom)
+        private static void GetUnitImage(InfoPopupParameters parameters, ComPU predictionUnit, double horizontalOffset, double verticalOffset, Grid grid, double zoom)
         {
-            double actualHeight = grid.RenderSize.Height;
-            double actualWidth = grid.RenderSize.Width;
+            double actualHeight = grid.ActualHeight - (verticalOffset * 2);
+            double actualWidth = grid.ActualWidth - (horizontalOffset * 2);
 
             var renderTarget = new RenderTargetBitmap((int)actualWidth, (int)actualHeight, 96, 96, PixelFormats.Pbgra32);
             var sourceBrush = new VisualBrush(grid);

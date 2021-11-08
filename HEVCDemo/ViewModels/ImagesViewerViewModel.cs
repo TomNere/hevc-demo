@@ -18,6 +18,7 @@ namespace HEVCDemo.ViewModels
 {
     public class ImagesViewerViewModel : BindableBase
     {
+        private const double zoomStep = 0.05;
         private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
         private readonly Color highlightColor = Colors.DeepPink;
         private bool isPlaying;
@@ -391,7 +392,9 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteZoomOut()
         {
-            zoom -= 0.05;
+            if (zoom - zoomStep < 0) return;
+
+            zoom -= zoomStep;
 
             ViewerContentHeight = cacheProvider.VideoSequence.Height * zoom;
             ViewerContentWidth = cacheProvider.VideoSequence.Width * zoom;
@@ -399,7 +402,7 @@ namespace HEVCDemo.ViewModels
         
         private void ExecuteZoomIn()
         {
-            zoom += 0.05;
+            zoom += zoomStep;
 
             ViewerContentHeight = cacheProvider.VideoSequence.Height * zoom;
             ViewerContentWidth = cacheProvider.VideoSequence.Width * zoom;
@@ -482,6 +485,7 @@ namespace HEVCDemo.ViewModels
 
                     await cacheProvider.LoadIntoCache(0);
 
+                    zoom = 1;
                     ViewerContentHeight = cacheProvider.VideoSequence.Height;
                     ViewerContentWidth = cacheProvider.VideoSequence.Width;
                     Resolution = $"{cacheProvider.VideoSequence.Width} x {cacheProvider.VideoSequence.Height}";
@@ -504,10 +508,26 @@ namespace HEVCDemo.ViewModels
             {
                 // Reset position
                 IsPopupOpen = false;
-                IsPopupOpen = true;
+
+                double horizontalOffset = 0;
+                double verticalOffset = 0;
+
+                if (ViewerContentWidth < grid.ActualWidth)
+                {
+                    horizontalOffset = (grid.ActualWidth - ViewerContentWidth) / 2;
+                }
+
+                if (ViewerContentHeight < grid.ActualHeight)
+                {
+                    verticalOffset = (grid.ActualHeight - ViewerContentHeight) / 2;
+                }
 
                 // Get parameters
-                InfoPopupParameters = InfoPopupHelper.GetInfo(cacheProvider.VideoSequence, currentFrameIndex, new Point(ScrollViewerX, ScrollViewerY), grid, zoom);
+                InfoPopupParameters = InfoPopupHelper.GetInfo(cacheProvider.VideoSequence, currentFrameIndex, new Point(ScrollViewerX , ScrollViewerY), horizontalOffset, verticalOffset, grid, zoom);
+
+                if (infoPopupParameters == null) return;
+
+                IsPopupOpen = true;
 
                 // Highlight unit
                 var highlightImage = BitmapFactory.New((int)ViewerContentWidth, (int)ViewerContentHeight);
