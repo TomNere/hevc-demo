@@ -75,7 +75,7 @@ namespace HEVCDemo.Helpers
 
         private static void GetIntraParameters(InfoPopupParameters parameters, ComPU predictionUnit)
         {
-            parameters.InterMode = "-";
+            parameters.InterMode = string.Empty;
 
             string intraMode;
             if (predictionUnit.IntraDirLuma == 0)
@@ -97,7 +97,7 @@ namespace HEVCDemo.Helpers
 
         private static void GetInterParameters(InfoPopupParameters parameters, ComPU predictionUnit)
         {
-            parameters.IntraMode = "-";
+            parameters.IntraMode = string.Empty;
 
             switch (predictionUnit.InterDir)
             {

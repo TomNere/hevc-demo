@@ -1,6 +1,5 @@
 ﻿using HEVCDemo.Helpers;
 using HEVCDemo.Models;
-using HEVCDemo.Types;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -11,6 +10,9 @@ namespace HEVCDemo.Views
     /// </summary>
     public partial class InfoPopup : UserControl
     {
+        private readonly GridLength visibleRowHeight = new GridLength(40);
+        private readonly GridLength hiddenRowHeight = new GridLength(0);
+
         public static readonly DependencyProperty ParametersProperty = DependencyProperty.Register(nameof(Parameters), typeof(InfoPopupParameters), typeof(InfoPopup));
         public InfoPopupParameters Parameters
         {
@@ -18,9 +20,30 @@ namespace HEVCDemo.Views
             set => SetValue(ParametersProperty, value);
         }
 
+        public static readonly DependencyProperty IntraPredictionRowHeightProperty = DependencyProperty.Register(nameof(IntraPredictionRowHeight), typeof(GridLength), typeof(InfoPopup));
+        public GridLength IntraPredictionRowHeight
+        {
+            get => (GridLength)GetValue(IntraPredictionRowHeightProperty);
+            set => SetValue(IntraPredictionRowHeightProperty, value);
+        }
+
+        public static readonly DependencyProperty InterPredictionRowHeightProperty = DependencyProperty.Register(nameof(InterPredictionRowHeight), typeof(GridLength), typeof(InfoPopup));
+        public GridLength InterPredictionRowHeight
+        {
+            get => (GridLength)GetValue(InterPredictionRowHeightProperty);
+            set => SetValue(InterPredictionRowHeightProperty, value);
+        }
+
+
         public InfoPopup()
         {
             InitializeComponent();
+            IsVisibleChanged += InfoPopup_IsVisibleChanged;
+        }
+
+        private void InfoPopup_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            SetRowsVisibility();
         }
 
         private void ShowCodingUnitsInfo_Click(object sender, RoutedEventArgs e)
@@ -41,6 +64,12 @@ namespace HEVCDemo.Views
         private void ShowInterPredictionInfo_Click(object sender, RoutedEventArgs e)
         {
             InfoDialogHelper.ShowInterPredictionInfoDialog();
+        }
+
+        private void SetRowsVisibility()
+        {
+            IntraPredictionRowHeight = string.IsNullOrEmpty(Parameters?.IntraMode) ? hiddenRowHeight : visibleRowHeight;
+            InterPredictionRowHeight = string.IsNullOrEmpty(Parameters?.InterMode) ? hiddenRowHeight : visibleRowHeight;
         }
     }
 }
