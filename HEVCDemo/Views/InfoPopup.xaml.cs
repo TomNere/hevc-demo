@@ -38,10 +38,10 @@ namespace HEVCDemo.Views
         public InfoPopup()
         {
             InitializeComponent();
-            IsVisibleChanged += InfoPopup_IsVisibleChanged;
+            Loaded += InfoPopup_Loaded;
         }
 
-        private void InfoPopup_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void InfoPopup_Loaded(object sender, RoutedEventArgs e)
         {
             SetRowsVisibility();
         }

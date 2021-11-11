@@ -340,7 +340,7 @@
     },
     {
       "Id": "ErrorCreatingDemoData",
-      "Text": "Nastal problém při načítání ukázkových dat. Může jít o poškození nacachovaných dat, nebo jste se pokusili otevřít neplatný video soubor."
+      "Text": "Nastal problém při načítání ukázkových dat. Může jít o poškození nacachovaných dat, nedostatek volného místa na disku, nebo jste se pokusili otevřít neplatný video soubor."
     },
     {
       "Id": "ShowHelpHeader",
