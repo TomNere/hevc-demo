@@ -1,14 +1,14 @@
 ﻿V kodeku H.265 existují 2 typy predikce.
 
-**Intra-picture (vnitřno-snímková)** 
+**Intra-picture (vnitřní-predikce)** 
 
-* k predikování částí obrazu využívá pouze obrazová data, která se nacházejí v aktuálně kódovaném snímku
+* predikce na základě podobných hodnot nacházejících se v odlišných pozicích v rámci jednoho snímku
 * nepotřebuje znát data z předešlých snímků, takže na kódování prvního snímku se vždy využije tenhle typ predikce
 * příkladem je, když se ve snímku nachází velké plochy podobné barvy, takže se dá použít kopírování sousedních pixelů z aktuálního snímku
 
-**Inter-picture (mezi-snímková)**
+**Inter-picture (vnější-snímková)**
 
-* k predikování využívá obrazová data získána z předešlých snímků
+* predikce na základě podobných hodnot nacházejících se v časově odlišných/sousedních snímcích
 * příkladem je pohyblivý objekt, kdy predikce využije toho, že se objekt mezi snímky posouvá ale nemění tvar a barvu 
 
 Každá **jednotka predikce** je kódovaná za použití jednoho z těchto typů.

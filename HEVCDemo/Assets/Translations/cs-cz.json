@@ -108,7 +108,7 @@
     },
     {
       "Id": "CacheExistsMsg",
-      "Text": "Ukázkové data k dané video sekvenci již existují. Přejete si je přepsat?"
+      "Text": "Ukázková data k dané video sekvenci již existují. Přejete si je přepsat?"
     },
     {
       "Id": "CreatingCache",
@@ -215,12 +215,12 @@
       "Content": "Obr.1: Hranice CTU (hrubá linka), CU (tenká) a PU (tečkovaná). Čísla reprezentují pořadí přístupu k jednotkám při kódování."
     },
     {
-      "Id": "IntraPredictionFig1",
-      "Content": "Obr.1: Blok C je kódován pomocí referenčních pixelů (šedá barva) z ostatních bloků"
+      "Id": "IntraPredictionFig2",
+      "Content": "Obr.2: Blok C je kódován pomocí referenčních pixelů (šedá barva) z ostatních bloků"
     },
     {
-      "Id": "IntraPredictionFig2",
-      "Content": "Obr.2: Notace pro popis vnitřno-predikčních módů"
+      "Id": "IntraPredictionFig1",
+      "Content": "Obr.1: Notace pro popis vnitřno-predikčních módů"
     },
     {
       "Id": "IntraPredictionFig3",
@@ -272,11 +272,11 @@
     },
     {
       "Id": "ViewUniPrediction",
-      "Text": "1 vektor (uni-predikce). Tečka znázorňuje počáteční bod vektoru. Modrá barva znamená, že vektor je na první pozici v listu."
+      "Text": "1 vektor (jednostranná predikce). Tečka znázorňuje počáteční bod vektoru. Modrá barva znamená, že byl použitý první z možné dvojice vektorů."
     },
     {
       "Id": "ViewBiPrediction",
-      "Text": "2 vektory (bi-predikce). Barva opět znázorňuje pozici vektoru v listu. Červená barva je druhá pozice v listu."
+      "Text": "2 vektory (oboustranná predikce). Barva opět znázorňuje, o který vektor se jedná. Červená barva znamená druhý vektor z dvojice."
     },
     {
       "Id": "HelpHeader",
@@ -332,7 +332,7 @@
     },
     {
       "Id": "ClearCacheHeader",
-      "Header": "Vyčistit ukázkové data"
+      "Header": "Vyčistit ukázková data"
     },
     {
       "Id": "ExitHeader",
@@ -368,7 +368,7 @@
     },
     {
       "Id": "ClearCacheMessage",
-      "Text": "Opravdu si přejete vyčistit ukázkové data všech doteď otevřených video sekvencí?"
+      "Text": "Opravdu si přejete vyčistit ukázková data všech doteď otevřených video sekvencí?"
     },
     {
       "Id": "ClearingCache",

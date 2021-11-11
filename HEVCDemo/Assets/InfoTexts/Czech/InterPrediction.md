@@ -1,11 +1,11 @@
-﻿* mezisnímková (inter) predikce čerpá výhodu z redudance informací ve video snímcích navazujících na sebe
-* jednoduchý příklad je, když se kamera pouze jemně pohybuje, ale záběr zůstává stejný
+﻿* mezisnímková (inter) predikce čerpá výhodu z redundance informací ve video snímcích navazujících na sebe
+* příkladem je pohyblivý objekt, kdy predikce využije toho, že se objekt mezi snímky posouvá ale nemění tvar a barvu 
 * predikční jednotky jsou kódovány pomocí tzv. **vektorů pohybu** (motion vectors)
-* vektor pohybu signalizuje ofset v kódovaném snímku od koordinátů v referenčním snímku
-* jednotka může obsahovat seznam 2 vektorů a obsahuje také informaci, který vektor se použije (**uni-predikce**), nebo se použijou oba vektory (**bi-predikce**). V tom případě vzniká výsledná jednotka spojením dvou jednotek.
+* vektor pohybu definuje posun predikční jednotky v aktuálním snímku vzhledem k pozici podobné predikční jednotky v referenčním snímku
+* jednotka může obsahovat 1 nebo 2 vektory a obsahuje také informaci, který vektor se použije (**jednostranná predikce**), nebo se použijou oba vektory (**oboustranná predikce**). V tom případě vzniká výsledná jednotka spojením dvou jednotek.
 
-**Tvorba seznamu:**
+**Výběr vektorů:**
 
-* bere se v potaz, že vektor pro aktuální jednotku bude mít malý rozdíl oproti vektorům sousedních jednotek
+* bere se v potaz, že vektor pro aktuální predikční jednotku bude mít malý rozdíl oproti vektorům sousedních jednotek
 * podobně když se dva snímky velmi podobají, tak se může použít vektor z jiného snímku ve stejné nebo podobné pozici
-* ve výsledku se do seznamu tedy můžou dostat vektory z jednotek CandA a CandB (viz. obr. 1) z aktuálního snímku, vektor z jiného snímku z tzv. *co-located* jednotky, nebo nulový vektor
+* ve výsledku se tedy můžou použít vektory z jednotek CandA a CandB (viz. obr. 1) z aktuálního snímku, vektor z jiného snímku z tzv. *co-located* jednotky, nebo nulový vektor

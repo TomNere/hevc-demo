@@ -47,8 +47,8 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "IntraPredictionFig1,Content".Localize(), ImagePath = "../Assets/Images/referencePixels.png"},
-                new InfoImage { Name = "IntraPredictionFig2,Content".Localize(), ImagePath = "../Assets/Images/intraNotation.png"},
+                new InfoImage { Name = "IntraPredictionFig1,Content".Localize(), ImagePath = "../Assets/Images/intraNotation.png"},
+                new InfoImage { Name = "IntraPredictionFig2,Content".Localize(), ImagePath = "../Assets/Images/referencePixels.png"},
                 new InfoImage { Name = "IntraPredictionFig3,Content".Localize(), ImagePath = "../Assets/Images/intraInterpolation.png"},
                 new InfoImage { Name = "IntraPredictionFig4,Content".Localize(), ImagePath = "../Assets/Images/intraModes.png"},
             };
