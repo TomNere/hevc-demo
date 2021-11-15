@@ -1,5 +1,6 @@
 ﻿using HEVCDemo.CustomEventArgs;
 using System;
+using System.Windows.Input;
 
 namespace HEVCDemo.Helpers
 {
@@ -16,6 +17,7 @@ namespace HEVCDemo.Helpers
         public static event EventHandler MainWindowDeactivated;
         public static event EventHandler CacheCleared;
         public static event EventHandler<ShowTipsEventArgs> ShowTipsEnabledChanged;
+        public static event EventHandler<KeyDownEventArgs> KeyDown;
 
         public static void OnDecodedFramesVisibilityChanged(VisibilityChangedEventArgs e)
         {
@@ -77,6 +79,11 @@ namespace HEVCDemo.Helpers
         public static void OnShowTipsEnabledChanged(bool isEnabled)
         {
             ShowTipsEnabledChanged?.Invoke(new object(), new ShowTipsEventArgs { IsEnabled = isEnabled });
+        }
+
+        public static void OnKeyDown(Key key)
+        {
+            KeyDown?.Invoke(new object(), new KeyDownEventArgs { Key = key });
         }
     }
 }

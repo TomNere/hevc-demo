@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -294,6 +295,65 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.CacheCleared += CacheCleared;
+            GlobalActionsHelper.KeyDown += KeyDown;
+        }
+
+        private void KeyDown(object sender, KeyDownEventArgs e)
+        {
+            var key = e.Key;
+            if (key == Key.Left)
+            {
+                if (StepBackwardCommand.CanExecute())
+                {
+                    if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                    {
+                        StepStartCommand.Execute();
+                    }
+                    else
+                    {
+                        StepBackwardCommand.Execute();
+                    }
+                }
+            }
+            else if (key == Key.Right)
+            {
+                if (StepForwardCommand.CanExecute())
+                {
+                    if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                    {
+                        StepEndCommand.Execute();
+                    }
+                    else
+                    {
+                        StepForwardCommand.Execute();
+                    }
+                }
+            }
+            else if (key == Key.Space)
+            {
+                if (!isPlaying)
+                {
+                    PlayForwardCommand.Execute();
+                }
+                else
+                {
+                    PauseCommand.Execute();
+                }
+            }
+            else if (key == Key.Add)
+            {
+                if (ZoomInCommand.CanExecute())
+                {
+                    ZoomInCommand.Execute();
+                }
+            }
+            else if (key == Key.Subtract)
+            {
+                if (ZoomOutCommand.CanExecute())
+                {
+                    ZoomOutCommand.Execute();
+                }
+            }
         }
 
         private void CacheCleared(object sender, EventArgs e)

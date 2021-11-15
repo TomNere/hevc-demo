@@ -102,6 +102,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviors\ScrollViewerMouseBehavior.cs" />
+    <Compile Include="CustomEventArgs\KeyDownEventArgs.cs" />
     <Compile Include="Helpers\FormattingHelper.cs" />
     <Compile Include="Helpers\InfoDialogHelper.cs" />
     <Compile Include="Helpers\InfoPopupHelper.cs" />

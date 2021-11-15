@@ -2,6 +2,7 @@ using HEVCDemo.Helpers;
 using MahApps.Metro.Controls;
 using Rasyidf.Localization;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace HEVCDemo.Views
@@ -31,9 +32,15 @@ namespace HEVCDemo.Views
             MessageBox.Show($"{"UnhandledEx,Text".Localize()}\n\n{e.Exception.Message}");
         }
 
-        private void WindowPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void WindowPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            e.Handled = ImagesViewer.ProcessPreviewKeyDown(e.Key);
+            var key = e.Key;
+            GlobalActionsHelper.OnKeyDown(key);
+            e.Handled = key == Key.Left ||
+                        key == Key.Right ||
+                        key == Key.Space ||
+                        key == Key.Add ||
+                        key == Key.Subtract;
         }
     }
 }
