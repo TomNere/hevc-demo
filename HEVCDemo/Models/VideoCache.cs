@@ -85,13 +85,15 @@ namespace HEVCDemo.Models
             // Parse properties
             ParseProps();
 
-            // Extract frames 
+            // Extract frames
             GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false);
             var framesLoading = FFmpegHelper.ExtractFrames(this);
 
             await ProcessFiles();
             await framesLoading;
             CheckFramesCount();
+            File.Delete(AnnexBFilePath);
+            File.Delete(YuvFilePath);
         }
 
         public async Task ProcessFiles()
