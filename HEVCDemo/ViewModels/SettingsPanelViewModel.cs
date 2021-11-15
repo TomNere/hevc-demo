@@ -189,6 +189,9 @@ namespace HEVCDemo.ViewModels
                 "PopupHelp4,Content".Localize(),
                 "PopupHelp5,Content".Localize(),
                 "PopupHelp6,Content".Localize(),
+                "PopupHelp7,Content".Localize(),
+                "PopupHelp8,Content".Localize(),
+                "PopupHelp9,Content".Localize(),
             };
         }
 

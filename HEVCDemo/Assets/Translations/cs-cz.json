@@ -52,7 +52,7 @@
     },
     {
       "Id": "ConvertingAnnexBState",
-      "Text": "Převod z kontejneru na tok bitů"
+      "Text": "Převod z kontejneru na tok bajtů"
     },
     {
       "Id": "CreatingDemoData",
@@ -300,27 +300,39 @@
     },
     {
       "Id": "PopupHelp1",
-      "Content": "Prohlížeč video snímků lze kromě tlačítek ovládat i klávesami ←,→,+,−."
+      "Content": "Klávesama ← a → se lze přepínat mezi snímky. Při současně stisknuté klávese CTRL lze provést skok na začátek a na konec."
     },
     {
       "Id": "PopupHelp2",
-      "Content": "Taháním myši lze posouvat snímky v horizontálním a vertikálním směru."
+      "Content": "Pravým myšítkem lze otevřít dialog s informacemi o predikční jednotce, ve které se nachází kursor."
     },
     {
       "Id": "PopupHelp3",
-      "Content": "Rolováním myši lze přibližovat."
+      "Content": "Přibližovat a oddalovat snímek lze klávesama +,- a kolečkem myši."
     },
     {
       "Id": "PopupHelp4",
-      "Content": "Pravým tlačítkem lze otevřít dialog s informacemi o dané predikční jednotce."
+      "Content": "Taháním myši lze posouvat snímek v horizontálním a vertikálním směru."
     },
     {
       "Id": "PopupHelp5",
-      "Content": "Jednotlivé složky algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole."
+      "Content": "Kódovací mechanizmy algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole."
     },
     {
       "Id": "PopupHelp6",
-      "Content": "Kliknutím na ikonu informace v pravém panelu lze zobrazit detailní popis jednotlivých složek algoritmu H.265."
+      "Content": "Kliknutím na ikonu informace v panelu lze zobrazit detailní popis kódovacích mechanizmů algoritmu H.265."
+    },
+    {
+      "Id": "PopupHelp7",
+      "Content": "Rozbalením sekcí v panelu lze zobrazit legendu ke kódovacím mechanizmům."
+    },
+    {
+      "Id": "PopupHelp8",
+      "Content": "Mezerníkem lze spustit a pozastavit automatické přepínání snímků."
+    },
+    {
+      "Id": "PopupHelp9",
+      "Content": "Snímky lze přepínat taky pomocí časové osy."
     },
     {
       "Id": "DidYouKnow",
