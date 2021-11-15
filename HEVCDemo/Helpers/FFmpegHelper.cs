@@ -17,32 +17,27 @@ namespace HEVCDemo.Helpers
         {
             await OperationsHelper.InvokeSafelyAsync(async () =>
             {
-                GlobalActionsHelper.OnAppStateChanged("CheckingFFmpegState,Text".Localize(), false);
-
                 if (!IsFFmpegDownloaded)
                 {
                     var result = MessageBox.Show("FFmpegNotFoundMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
-                        GlobalActionsHelper.OnAppStateChanged("DownloadingFFmpegState,Text".Localize(), false);
+                        GlobalActionsHelper.OnAppStateChanged("DownloadingFFmpegState,Text".Localize(), false, true);
                         await DownloadFFmpeg();
                         MessageBox.Show("FFmpegDownloadedMsg,Text".Localize());
                     }
                     else
                     {
-                        GlobalActionsHelper.OnAppStateChanged("FFmpegMissingState,Text".Localize(), false);
+                        GlobalActionsHelper.OnAppStateChanged("FFmpegMissingState,Text".Localize(), false, false);
                         return;
                     }
                 }
-
-                SetReadyState();
-            }, "DownloadFFmpegTitle,Title".Localize(), false);
-
-            void SetReadyState()
-            {
-                // Enable to allow invoking download by clicking on "Select video"
-                GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
-            }
+            }, 
+            "DownloadFFmpegTitle,Title".Localize(),
+            false,
+            "CheckingFFmpegState,Text".Localize(),
+            "ReadyState,Text".Localize()
+            );
         }
 
         private async static Task DownloadFFmpeg()

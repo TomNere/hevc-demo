@@ -74,19 +74,19 @@ namespace HEVCDemo.Models
             // Check if already annexB format and convert if not
             if (Path.GetExtension(LoadedFilePath).ToLower() != annexBExtension)
             {
-                GlobalActionsHelper.OnAppStateChanged("ConvertingAnnexBState,Text".Localize(), false);
+                GlobalActionsHelper.OnAppStateChanged("ConvertingAnnexBState,Text".Localize(), false, true);
                 await FFmpegHelper.ConvertToAnnexB(this);
             }
 
             // Get stats data from annexB file
-            GlobalActionsHelper.OnAppStateChanged("CreatingDemoData,Text".Localize(), false);
+            GlobalActionsHelper.OnAppStateChanged("CreatingDemoData,Text".Localize(), false, true);
             _ = await ProcessHelper.RunProcessAsync($@".\TAppDecoder.exe", $@"-b {AnnexBFilePath} -o {YuvFilePath} -p {StatsDirPath}");
 
             // Parse properties
             ParseProps();
 
             // Extract frames
-            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false);
+            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, true);
             var framesLoading = FFmpegHelper.ExtractFrames(this);
 
             await ProcessFiles();
@@ -183,13 +183,15 @@ namespace HEVCDemo.Models
         {
             if (!YuvFramesBitmaps.ContainsKey(index))
             {
-                GlobalActionsHelper.OnAppStateChanged("LoadingIntoCache,Text".Localize(), false);
                 await OperationsHelper.InvokeSafelyAsync(async () =>
                 {
                     await LoadIntoCache(index);
-                }, "LoadingIntoCache,Text".Localize(), true);
-
-                GlobalActionsHelper.OnAppStateChanged(afterStateText, true);
+                },
+                "LoadingIntoCache,Text".Localize(),
+                true,
+                "LoadingIntoCache,Text".Localize(),
+                afterStateText
+                );
             }
 
             lock(YuvFramesBitmaps)
@@ -258,9 +260,13 @@ namespace HEVCDemo.Models
         {
             if (!Directory.Exists(cachePrefix)) return;
 
-            GlobalActionsHelper.OnAppStateChanged("ClearingCache,Text".Localize(), false);
-            await OperationsHelper.InvokeSafelyAsync(() => Directory.Delete(cachePrefix, true), "ClearingCache,Text".Localize(), false);
-            GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), false);
+            await OperationsHelper.InvokeSafelyAsync(
+                () => Directory.Delete(cachePrefix, true),
+                "ClearingCache,Text".Localize(),
+                true,
+                "ClearingCache,Text".Localize(),
+                "ReadyState,Text".Localize());
+
             GlobalActionsHelper.OnCacheCleared();
         }
     }

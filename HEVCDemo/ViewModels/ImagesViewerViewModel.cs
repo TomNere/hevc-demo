@@ -449,13 +449,12 @@ namespace HEVCDemo.ViewModels
 
                 await OperationsHelper.InvokeSafelyAsync(async () =>
                 {
-                    GlobalActionsHelper.OnAppStateChanged("OpeningFile,Text".Localize(), false);
                     string filePath = openFileDialog.FileName;
 
                     if (cache?.LoadedFilePath == filePath)
                     {
                         MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
-                        GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
+                        GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true, false);
                         return;
                     }
 
@@ -471,7 +470,7 @@ namespace HEVCDemo.ViewModels
                         }
                         else
                         {
-                            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false);
+                            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, false);
                             cache.ParseProps();
                             await cache.ProcessFiles();
                             cache.CheckFramesCount();
@@ -492,8 +491,12 @@ namespace HEVCDemo.ViewModels
 
                     MaxSliderValue = cache.VideoSequence.FramesCount - 1;
                     await SetCurrentFrameIndex(0);
-                    GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
-                }, "CreatingCache,Text".Localize(), false);
+                },
+                "CreatingCache,Text".Localize(),
+                false,
+                "OpeningFile,Text".Localize(),
+                "ReadyState,Text".Localize()
+                );
             }
         }
 
@@ -620,14 +623,14 @@ namespace HEVCDemo.ViewModels
 
         private void StartPlayer()
         {
-            GlobalActionsHelper.OnAppStateChanged("PlayingState,Text".Localize(), null);
+            GlobalActionsHelper.OnAppStateChanged("PlayingState,Text".Localize(), null, false);
             isPlaying = true;
             RaisePlayerControlsExecuteChanged();
         }
 
         private void StopPlayer()
         {
-            GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), null);
+            GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), null, false);
             isPlaying = false;
             RaisePlayerControlsExecuteChanged();
         }

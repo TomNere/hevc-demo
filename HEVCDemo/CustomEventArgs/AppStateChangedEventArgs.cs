@@ -6,5 +6,6 @@ namespace HEVCDemo.CustomEventArgs
     {
         public string StateText { get; set; }
         public bool? IsViewerEnabled { get; set; }
+        public bool IsBusy { get; set; }
     }
 }

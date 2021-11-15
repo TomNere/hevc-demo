@@ -18,15 +18,8 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
             GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabled;
-            GlobalActionsHelper.BusyChanged += BusyChanged;
             InitializeHelpPopup();
             _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
-        }
-
-        private void BusyChanged(object sender, BusyEventArgs e)
-        {
-            SettingsEnabled = !e.IsBusy;
-            ProgressBarVisibility = e.IsBusy ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void SetTipsIsEnabled(object sender, ShowTipsEventArgs e)
@@ -259,6 +252,8 @@ namespace HEVCDemo.ViewModels
         private void AppStateChanged(object sender, AppStateChangedEventArgs e)
         {
             SetAppState(e.StateText);
+            SettingsEnabled = !e.IsBusy;
+            ProgressBarVisibility = e.IsBusy ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void SetAppState(string stateText)
