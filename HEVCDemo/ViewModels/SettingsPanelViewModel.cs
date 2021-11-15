@@ -15,11 +15,12 @@ namespace HEVCDemo.ViewModels
     {
         public SettingsPanelViewModel()
         {
-            InitializeHelpPopup();
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
             GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabled;
             GlobalActionsHelper.BusyChanged += BusyChanged;
+            InitializeHelpPopup();
+            _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
         }
 
         private void BusyChanged(object sender, BusyEventArgs e)

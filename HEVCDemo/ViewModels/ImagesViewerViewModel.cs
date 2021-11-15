@@ -277,7 +277,6 @@ namespace HEVCDemo.ViewModels
 
         public ImagesViewerViewModel()
         {
-            _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
             BindEventHandlers();
         }
 
