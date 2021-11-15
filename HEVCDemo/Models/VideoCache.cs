@@ -1,6 +1,7 @@
+using HEVCDemo.Helpers;
+using HEVCDemo.Hevc;
 using HEVCDemo.Parsers;
 using Rasyidf.Localization;
-using HEVCDemo.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,9 +9,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace HEVCDemo.Helpers
+namespace HEVCDemo.Models
 {
-    public class CacheProvider
+    public class VideoCache
     {
         public readonly string LoadedFilePath;
 
@@ -39,7 +40,7 @@ namespace HEVCDemo.Helpers
         public double FileSize;
         public VideoSequence VideoSequence = new VideoSequence();
 
-        public CacheProvider(string filePath)
+        public VideoCache(string filePath)
         {
             LoadedFilePath = filePath;
             cacheDirPath = $@".\{cachePrefix}\{Path.GetFileNameWithoutExtension(filePath)}";
@@ -181,7 +182,7 @@ namespace HEVCDemo.Helpers
             if (!YuvFramesBitmaps.ContainsKey(index))
             {
                 GlobalActionsHelper.OnAppStateChanged("LoadingIntoCache,Text".Localize(), false);
-                await ActionsHelper.InvokeSafelyAsync(async () =>
+                await OperationsHelper.InvokeSafelyAsync(async () =>
                 {
                     await LoadIntoCache(index);
                 }, "LoadingIntoCache,Text".Localize(), true);
@@ -256,7 +257,7 @@ namespace HEVCDemo.Helpers
             if (!Directory.Exists(cachePrefix)) return;
 
             GlobalActionsHelper.OnAppStateChanged("ClearingCache,Text".Localize(), false);
-            await ActionsHelper.InvokeSafelyAsync(() => Directory.Delete(cachePrefix, true), "ClearingCache,Text".Localize(), false);
+            await OperationsHelper.InvokeSafelyAsync(() => Directory.Delete(cachePrefix, true), "ClearingCache,Text".Localize(), false);
             GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), false);
             GlobalActionsHelper.OnCacheCleared();
         }

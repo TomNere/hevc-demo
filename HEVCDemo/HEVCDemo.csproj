@@ -109,35 +109,35 @@
     <Compile Include="Helpers\ScrollDragger.cs" />
     <Compile Include="Helpers\GlobalActionsHelper.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
+    <Compile Include="Hevc\ComCU.cs" />
+    <Compile Include="Hevc\ComFrame.cs" />
+    <Compile Include="Hevc\ComPU.cs" />
+    <Compile Include="Hevc\MotionVector.cs" />
+    <Compile Include="Hevc\PartSize.cs" />
+    <Compile Include="Hevc\PredictionMode.cs" />
+    <Compile Include="Hevc\VideoSequence.cs" />
     <Compile Include="Models\InfoImage.cs" />
     <Compile Include="Models\InfoPopupParameters.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Types\BusyEventArgs.cs" />
-    <Compile Include="Types\ShowTipsEventArgs.cs" />
-    <Compile Include="Types\AppStateChangedEventArgs.cs" />
-    <Compile Include="Types\VisibilityChangedEventArgs.cs" />
+    <Compile Include="CustomEventArgs\BusyEventArgs.cs" />
+    <Compile Include="CustomEventArgs\ShowTipsEventArgs.cs" />
+    <Compile Include="CustomEventArgs\AppStateChangedEventArgs.cs" />
+    <Compile Include="CustomEventArgs\VisibilityChangedEventArgs.cs" />
     <Compile Include="ViewModels\SettingsPanelViewModel.cs" />
     <Compile Include="ViewModels\InfoDialogViewModel.cs" />
     <Compile Include="Views\InfoDialog.xaml.cs">
       <DependentUpon>InfoDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\CacheProvider.cs" />
+    <Compile Include="Models\VideoCache.cs" />
     <Compile Include="Helpers\FFmpegHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
-    <Compile Include="Helpers\ActionsHelper.cs" />
+    <Compile Include="Helpers\OperationsHelper.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="Parsers\MotionVectorsParser.cs" />
     <Compile Include="Parsers\IntraParser.cs" />
     <Compile Include="Parsers\PredictionParser.cs" />
     <Compile Include="Parsers\PropsParser.cs" />
     <Compile Include="Parsers\CupuParser.cs" />
-    <Compile Include="Types\MotionVector.cs" />
-    <Compile Include="Types\ComPU.cs" />
-    <Compile Include="Types\ComCU.cs" />
-    <Compile Include="Types\ComFrame.cs" />
-    <Compile Include="Types\PredictionMode.cs" />
-    <Compile Include="Types\VideoSequence.cs" />
-    <Compile Include="Types\PartSize.cs" />
     <Compile Include="ViewModels\ImagesViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\ImagesViewer.xaml.cs">
@@ -172,7 +172,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="App.config" />
     <Resource Include="Assets\Images\cupuStructure.png" />
     <Resource Include="Assets\Images\intraInterpolation.png" />
     <Resource Include="Assets\Images\intraModes.png" />
@@ -306,9 +306,6 @@
     </PackageReference>
     <PackageReference Include="MvvmLightLibs">
       <Version>5.4.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.3</Version>
     </PackageReference>
     <PackageReference Include="Prism.Core">
       <Version>8.0.0.1909</Version>

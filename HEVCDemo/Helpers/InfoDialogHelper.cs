@@ -1,5 +1,4 @@
 ﻿using HEVCDemo.Models;
-using HEVCDemo.Types;
 using HEVCDemo.Views;
 using Rasyidf.Localization;
 using System.Collections.Generic;

@@ -12,10 +12,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.4*"/>
             <ColumnDefinition Width="0.3*"/>
             <ColumnDefinition Width="0.3*"/>
-            <ColumnDefinition Width="0.2*"/>
-            <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
 
         <!--Image viewer-->
@@ -57,9 +56,6 @@
                 <Button Command="{Binding ClosePopupCommand}" Width="100" Content="{rf:Tr Uid='Ok'}" />
             </StackPanel>
         </Popup>
-
-        <!--Video info-->
-        <views:SettingsPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Margin="4,0,0,0"/>
 
         <!--Frame index-->
         <Grid Grid.Row="1" Grid.Column="0" IsEnabled="{Binding IsEnabled}">
@@ -126,7 +122,7 @@
             </Button>
         </StackPanel>
         <!--Zoom-->
-        <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,30,0" HorizontalAlignment="Right" Orientation="Horizontal" Height="32">
+        <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,4,0" HorizontalAlignment="Right" Orientation="Horizontal" Height="32">
             <Button Margin="20,0,0,0" Command="{Binding ZoomOutCommand}">
                 <iconPacks:PackIconModern Kind="MagnifyMinus"
                                      VerticalAlignment="Center"

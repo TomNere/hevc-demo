@@ -1,5 +1,5 @@
+using HEVCDemo.CustomEventArgs;
 using HEVCDemo.Helpers;
-using HEVCDemo.Types;
 using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
@@ -176,9 +176,9 @@ namespace HEVCDemo.ViewModels
 
         #region HelpPopup
 
-        private readonly TimeSpan helpPopupInterval = TimeSpan.FromMinutes(1);
+        private readonly TimeSpan helpPopupInterval = TimeSpan.FromMinutes(3);
         private readonly TimeSpan helpPopupTimeout = TimeSpan.FromSeconds(15);
-        private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(5);
+        private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(15);
         private readonly TimeSpan tryLaterDelay = TimeSpan.FromSeconds(30);
         private Timer helpPopupTimer;
         private List<string> helpPopupTexts;

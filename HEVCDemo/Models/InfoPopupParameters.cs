@@ -1,4 +1,4 @@
-﻿using HEVCDemo.Types;
+﻿using HEVCDemo.Hevc;
 using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Models

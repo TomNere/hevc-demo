@@ -1,6 +1,6 @@
+using HEVCDemo.CustomEventArgs;
 using HEVCDemo.Helpers;
 using HEVCDemo.Models;
-using HEVCDemo.Types;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -19,11 +19,11 @@ namespace HEVCDemo.ViewModels
     public class ImagesViewerViewModel : BindableBase
     {
         private const double zoomStep = 0.05;
-        private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
+        private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(2);
         private readonly Color highlightColor = Colors.DeepPink;
         private bool isPlaying;
 
-        private CacheProvider cacheProvider;
+        private VideoCache cache;
 
         private double zoom = 1;
         private bool isVectorsStartEnabled = true;
@@ -373,7 +373,7 @@ namespace HEVCDemo.ViewModels
 
         private bool CanExecuteStepForward()
         {
-            return cacheProvider?.VideoSequence.FramesCount > CurrentFrameIndex + 1;
+            return cache?.VideoSequence.FramesCount > CurrentFrameIndex + 1;
         }
 
         private void ExecuteStepStart()
@@ -383,7 +383,7 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteStepEnd()
         {
-            _ = SetCurrentFrameIndex(cacheProvider.VideoSequence.FramesCount - 1);
+            _ = SetCurrentFrameIndex(cache.VideoSequence.FramesCount - 1);
         }
 
         #endregion
@@ -396,21 +396,21 @@ namespace HEVCDemo.ViewModels
 
             zoom -= zoomStep;
 
-            ViewerContentHeight = cacheProvider.VideoSequence.Height * zoom;
-            ViewerContentWidth = cacheProvider.VideoSequence.Width * zoom;
+            ViewerContentHeight = cache.VideoSequence.Height * zoom;
+            ViewerContentWidth = cache.VideoSequence.Width * zoom;
         }
         
         private void ExecuteZoomIn()
         {
             zoom += zoomStep;
 
-            ViewerContentHeight = cacheProvider.VideoSequence.Height * zoom;
-            ViewerContentWidth = cacheProvider.VideoSequence.Width * zoom;
+            ViewerContentHeight = cache.VideoSequence.Height * zoom;
+            ViewerContentWidth = cache.VideoSequence.Width * zoom;
         }
 
         private bool CanExecuteZoom()
         {
-            return cacheProvider?.VideoSequence != null;
+            return cache?.VideoSequence != null;
         }
 
         private void ExecuteMouseScrolled()
@@ -448,12 +448,12 @@ namespace HEVCDemo.ViewModels
             {
                 StartButtonVisibility = Visibility.Hidden;
 
-                await ActionsHelper.InvokeSafelyAsync(async () =>
+                await OperationsHelper.InvokeSafelyAsync(async () =>
                 {
                     GlobalActionsHelper.OnAppStateChanged("OpeningFile,Text".Localize(), false);
                     string filePath = openFileDialog.FileName;
 
-                    if (cacheProvider?.LoadedFilePath == filePath)
+                    if (cache?.LoadedFilePath == filePath)
                     {
                         MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
                         GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
@@ -462,36 +462,36 @@ namespace HEVCDemo.ViewModels
 
                     Clear();
 
-                    cacheProvider = new CacheProvider(filePath);
-                    if (cacheProvider.CacheExists)
+                    cache = new VideoCache(filePath);
+                    if (cache.CacheExists)
                     {
                         var result = MessageBox.Show("CacheExistsMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
                         if (result == MessageBoxResult.Yes)
                         {
-                            await cacheProvider.CreateCache();
+                            await cache.CreateCache();
                         }
                         else
                         {
                             GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false);
-                            cacheProvider.ParseProps();
-                            await cacheProvider.ProcessFiles();
-                            cacheProvider.CheckFramesCount();
+                            cache.ParseProps();
+                            await cache.ProcessFiles();
+                            cache.CheckFramesCount();
                         }
                     }
                     else
                     {
-                        await cacheProvider.CreateCache();
+                        await cache.CreateCache();
                     }
 
-                    await cacheProvider.LoadIntoCache(0);
+                    await cache.LoadIntoCache(0);
 
                     zoom = 1;
-                    ViewerContentHeight = cacheProvider.VideoSequence.Height;
-                    ViewerContentWidth = cacheProvider.VideoSequence.Width;
-                    Resolution = $"{cacheProvider.VideoSequence.Width} x {cacheProvider.VideoSequence.Height}";
+                    ViewerContentHeight = cache.VideoSequence.Height;
+                    ViewerContentWidth = cache.VideoSequence.Width;
+                    Resolution = $"{cache.VideoSequence.Width} x {cache.VideoSequence.Height}";
                     FileSize = FormattingHelper.GetFileSize(new FileInfo(openFileDialog.FileName).Length);
 
-                    MaxSliderValue = cacheProvider.VideoSequence.FramesCount - 1;
+                    MaxSliderValue = cache.VideoSequence.FramesCount - 1;
                     await SetCurrentFrameIndex(0);
                     GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true);
                 }, "CreatingCache,Text".Localize(), false);
@@ -523,7 +523,7 @@ namespace HEVCDemo.ViewModels
                 }
 
                 // Get parameters
-                InfoPopupParameters = InfoPopupHelper.GetInfo(cacheProvider.VideoSequence, currentFrameIndex, new Point(ScrollViewerX , ScrollViewerY), horizontalOffset, verticalOffset, grid, zoom);
+                InfoPopupParameters = InfoPopupHelper.GetInfo(cache.VideoSequence, currentFrameIndex, new Point(ScrollViewerX , ScrollViewerY), horizontalOffset, verticalOffset, grid, zoom);
 
                 if (infoPopupParameters == null) return;
 
@@ -560,7 +560,7 @@ namespace HEVCDemo.ViewModels
 
         private bool CanExecutePlay()
         {
-            return cacheProvider?.VideoSequence != null && !isPlaying;
+            return cache?.VideoSequence != null && !isPlaying;
         }
 
         private bool CanExecutePause()
@@ -601,7 +601,7 @@ namespace HEVCDemo.ViewModels
                 {
                     Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-                    if (cacheProvider?.VideoSequence.FramesCount > CurrentFrameIndex + 1)
+                    if (cache?.VideoSequence.FramesCount > CurrentFrameIndex + 1)
                     {
                         await SetCurrentFrameIndex(CurrentFrameIndex + 1);
                         await Task.Delay(playerInterval);
@@ -654,27 +654,27 @@ namespace HEVCDemo.ViewModels
         {
             ClosePopup();
 
-            if (cacheProvider == null) return;
+            if (cache == null) return;
 
             if (DecodedFramesVisibility == Visibility.Visible)
             {
-                CurrentFrameImage = await cacheProvider.GetYuvFrame(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize());
+                CurrentFrameImage = await cache.GetYuvFrame(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize());
             }
             if (CodingUnitsVisibility == Visibility.Visible)
             {
-                CurrentCodingUnitsImage = cacheProvider.GetCodingUnitsFrame(index);
+                CurrentCodingUnitsImage = cache.GetCodingUnitsFrame(index);
             }
             if (PredictionTypeVisibility == Visibility.Visible)
             {
-                CurrentPredictionTypeImage = cacheProvider.GetPredictionTypeFrame(index);
+                CurrentPredictionTypeImage = cache.GetPredictionTypeFrame(index);
             }
             if (IntraPredictionVisibility == Visibility.Visible)
             {
-                CurrentIntraPredictionImage = cacheProvider.GetIntraPredictionFrame(index);
+                CurrentIntraPredictionImage = cache.GetIntraPredictionFrame(index);
             }
             if (InterPredictionVisibility == Visibility.Visible)
             {
-                CurrentInterPredictionImage = cacheProvider.GetInterPredictionFrame(index, isVectorsStartEnabled);
+                CurrentInterPredictionImage = cache.GetInterPredictionFrame(index, isVectorsStartEnabled);
             }
 
             StepForwardCommand.RaiseCanExecuteChanged();
@@ -700,7 +700,7 @@ namespace HEVCDemo.ViewModels
             CurrentPredictionTypeImage = null;
             CurrentIntraPredictionImage = null;
             CurrentInterPredictionImage = null;
-            cacheProvider = null;
+            cache = null;
         }
 
         #endregion

@@ -1,4 +1,4 @@
-﻿using HEVCDemo.Types;
+﻿using HEVCDemo.CustomEventArgs;
 using System;
 
 namespace HEVCDemo.Helpers

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HEVCDemo.Types
+namespace HEVCDemo.Hevc
 {
     public class ComCU
     {

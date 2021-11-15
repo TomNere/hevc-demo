@@ -1,5 +1,6 @@
 ﻿using HEVCDemo.Helpers;
-using HEVCDemo.Types;
+using HEVCDemo.Hevc;
+using HEVCDemo.Models;
 
 namespace HEVCDemo.Parsers
 {
@@ -9,7 +10,7 @@ namespace HEVCDemo.Parsers
         private const string seqWidthInLumaPrefix = "seqWidthInLuma";
         private const string seqHeightInLumaPrefix = "seqHeightInLuma";
 
-        public void ParseProps(CacheProvider cacheProvider, VideoSequence sequence)
+        public void ParseProps(VideoCache cacheProvider, VideoSequence sequence)
         {
             var propsFile = new System.IO.StreamReader(cacheProvider.PropsFilePath);
             string line;

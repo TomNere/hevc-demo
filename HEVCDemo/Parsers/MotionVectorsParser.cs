@@ -1,5 +1,6 @@
 ﻿using HEVCDemo.Helpers;
-using HEVCDemo.Types;
+using HEVCDemo.Hevc;
+using HEVCDemo.Models;
 using Rasyidf.Localization;
 using System;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace HEVCDemo.Parsers
             this.videoSequence = videoSequence;
         }
 
-        public async Task<bool> ParseFile(CacheProvider cacheProvider)
+        public async Task<bool> ParseFile(VideoCache cacheProvider)
         {
             return await Task.Run(() =>
             {

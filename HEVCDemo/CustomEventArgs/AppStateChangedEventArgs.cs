@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HEVCDemo.Types
+namespace HEVCDemo.CustomEventArgs
 {
     public class AppStateChangedEventArgs : EventArgs
     {

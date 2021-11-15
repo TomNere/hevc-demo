@@ -14,8 +14,6 @@
 
 **MvvmLightLibs** - [MIT](https://github.com/lbugnion/mvvmlight/blob/master/LICENSE)
 
-**Newtonsoft.Json** - [MIT](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md)
-
 **Prism** - [MIT](https://github.com/PrismLibrary/Prism/blob/master/LICENSE)
 
 **Rasyidf.Localization** - [MIT](https://github.com/rasyidf/Rasyidf.Localization/blob/master/LICENSE.md)

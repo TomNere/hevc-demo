@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace HEVCDemo.Helpers
 {
-    public static class ActionsHelper
+    public static class OperationsHelper
     {
         public static async Task InvokeSafelyAsync(Action action, string actionDescription, bool allowEnableViewer)
         {

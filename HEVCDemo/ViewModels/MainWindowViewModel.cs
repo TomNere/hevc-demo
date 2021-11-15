@@ -1,4 +1,5 @@
 ﻿using HEVCDemo.Helpers;
+using HEVCDemo.Models;
 using HEVCDemo.Views;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -143,7 +144,7 @@ namespace HEVCDemo.ViewModels
             var result = MessageBox.Show("ClearCacheMessage,Text".Localize(), "ClearCacheHeader,Header".Localize(), MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                _ = CacheProvider.ClearCache();
+                _ = VideoCache.ClearCache();
             }
         }
     }

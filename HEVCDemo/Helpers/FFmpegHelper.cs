@@ -1,4 +1,5 @@
-﻿using Rasyidf.Localization;
+﻿using HEVCDemo.Models;
+using Rasyidf.Localization;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace HEVCDemo.Helpers
 
         public static async Task EnsureFFmpegIsDownloaded()
         {
-            await ActionsHelper.InvokeSafelyAsync(async () =>
+            await OperationsHelper.InvokeSafelyAsync(async () =>
             {
                 GlobalActionsHelper.OnAppStateChanged("CheckingFFmpegState,Text".Localize(), false);
 
@@ -59,12 +60,12 @@ namespace HEVCDemo.Helpers
             return info.Duration;
         }
 
-        public async static Task ExtractFrames(CacheProvider cacheProvider)
+        public async static Task ExtractFrames(VideoCache cacheProvider)
         {
             await ProcessHelper.RunProcessAsync("ffmpeg.exe", $@"-s {cacheProvider.VideoSequence.Width}x{cacheProvider.VideoSequence.Height} -i {cacheProvider.YuvFilePath} -preset fast {cacheProvider.YuvFramesDirPath}\%03d.bmp");
         }
 
-        public async static Task ConvertToAnnexB(CacheProvider cacheProvider)
+        public async static Task ConvertToAnnexB(VideoCache cacheProvider)
         {
             var duration = await GetDuration(cacheProvider.LoadedFilePath);
 

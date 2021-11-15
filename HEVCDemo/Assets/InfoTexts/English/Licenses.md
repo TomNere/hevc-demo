@@ -7,7 +7,6 @@
 - **MahApps.Metro.IconPacks.Modern** - [MIT](https://github.com/MahApps/MahApps.Metro.IconPacks/blob/develop/LICENSE)
 - **MdXaml** - [MIT](https://github.com/whistyun/MdXaml/blob/master/LICENSE.txt)
 - **MvvmLightLibs** - [MIT](https://github.com/lbugnion/mvvmlight/blob/master/LICENSE)
-- **Newtonsoft.Json** - [MIT](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md)
 - **Prism** - [MIT](https://github.com/PrismLibrary/Prism/blob/master/LICENSE)
 - **Rasyidf.Localization** - [MIT](https://github.com/rasyidf/Rasyidf.Localization/blob/master/LICENSE.md)
 - **WriteableBitmapEx** - [MIT](https://github.com/reneschulte/WriteableBitmapEx/blob/master/LICENSE)
