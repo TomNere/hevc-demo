@@ -1,5 +1,6 @@
 using HEVCDemo.CustomEventArgs;
 using HEVCDemo.Helpers;
+using HEVCDemo.Views;
 using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
@@ -227,10 +228,18 @@ namespace HEVCDemo.ViewModels
         }
 
         private DelegateCommand closeHelpPopupCommand;
-        public DelegateCommand CloseHelpPopupCommand => closeHelpPopupCommand ?? (closeHelpPopupCommand = new DelegateCommand(ExecuteCloseHelpPopupClick));
-        private void ExecuteCloseHelpPopupClick()
+        public DelegateCommand CloseHelpPopupCommand => closeHelpPopupCommand ?? (closeHelpPopupCommand = new DelegateCommand(ExecuteCloseHelp));
+        private void ExecuteCloseHelp()
         {
             IsHelpPopupOpen = false;
+        }
+
+        private DelegateCommand showHelpCommand;
+        public DelegateCommand ShowHelpCommand => showHelpCommand ?? (showHelpCommand = new DelegateCommand(ExecuteShowHelp));
+        private void ExecuteShowHelp()
+        {
+            var infoDialog = new InfoDialog("HelpHeader,Header".Localize(), "Help", null);
+            infoDialog.Show();
         }
 
         private void MainWindowDeactivated(object sender, EventArgs e)

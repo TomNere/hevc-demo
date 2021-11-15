@@ -385,6 +385,10 @@
     {
       "Id": "AppTitle",
       "Title": "HEVC Demo"
+    },
+    {
+      "Id": "ShowFullHelp",
+      "Content": "Zobrazit plnou nápovědu"
     }
   ]
 }

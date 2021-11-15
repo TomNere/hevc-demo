@@ -24,6 +24,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="32" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="32" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -42,12 +43,22 @@
                                TextWrapping="Wrap"
                                Foreground="Black" />
                 </StackPanel>
+                <Button Grid.Row="0"
+                        Grid.Column="2"
+                        Margin="0,4,0,0"
+                        Height="24"
+                        Width="24"
+                        VerticalAlignment="Top"
+                        Command="{Binding CloseHelpPopupCommand}">
+                    <iconPacks:PackIconModern Kind="Close"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center" />
+                </Button>
                 <Button Grid.Row="1"
-                        Grid.ColumnSpan="2"
-                        Margin="8"
-                        Command="{Binding CloseHelpPopupCommand}"
-                        Width="100"
-                        Content="{rf:Tr Uid='Ok'}" />
+                        Grid.Column="1"
+                        Margin="0,8,0,8"
+                        Command="{Binding ShowHelpCommand}"
+                        Content="{rf:Tr Uid='ShowFullHelp'}" />
             </Grid>
         </Popup>
         <ScrollViewer Grid.Row="0"
