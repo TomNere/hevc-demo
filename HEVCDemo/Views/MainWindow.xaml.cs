@@ -19,7 +19,16 @@ namespace HEVCDemo.Views
 
             Application.Current.DispatcherUnhandledException += HandleUnhandledException;
             Deactivated += GlobalActionsHelper.OnMainWindowDeactivated;
+            GlobalActionsHelper.VideoLoaded += VideoLoaded;
             Closing += HandleClosing;
+        }
+
+        /// <summary>
+        /// VideoLoaded handler - focus main window to ensure shortcuts functionality
+        /// </summary>
+        private void VideoLoaded(object sender, CustomEventArgs.VideoLoadedEventArgs e)
+        {
+            Focus();
         }
 
         private void HandleClosing(object sender, System.ComponentModel.CancelEventArgs e)
