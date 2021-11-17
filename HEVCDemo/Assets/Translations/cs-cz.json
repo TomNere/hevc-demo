@@ -36,15 +36,15 @@
     },
     {
       "Id": "DecodedFramesLabel",
-      "Content": "Dekódované rámce"
+      "Content": "Dekódované snímky"
     },
     {
       "Id": "CodingUnitsLabel",
       "Content": "Kódovací a predikční jednotky"
     },
     {
-      "Id": "CurrentFrameLabel",
-      "Content": "Aktuální rámec: "
+      "Id": "CurrentFrameDescription",
+      "Text": "Aktuální snímek: {0} ze {1}"
     },
     {
       "Id": "AppStateLabel",
@@ -56,7 +56,7 @@
     },
     {
       "Id": "CantCrop",
-      "Text": "Aplikace nepodporuje ořezání tohoto typu souboru. Video bude použito v plné délce."
+      "Text": "Aplikace nepodporuje ořezání tohoto typu souboru. Video bude spracováno v plné délce."
     },
     {
       "Id": "CreatingDemoData",
@@ -68,7 +68,7 @@
     },
     {
       "Id": "LoadingIntoCache",
-      "Text": "Načítání rámců do paměti"
+      "Text": "Načítání snímků do paměti"
     },
     {
       "Id": "ReadyState",
@@ -392,7 +392,11 @@
     },
     {
       "Id": "Timeline",
-      "Content": "Časová osa"
+      "Content": "Pozice snímku na časové osi"
+    },
+    {
+      "Id": "Framerate",
+      "Text": "Snímková frekvence: {0} fps"
     },
     {
       "Id": "OpeningFile",

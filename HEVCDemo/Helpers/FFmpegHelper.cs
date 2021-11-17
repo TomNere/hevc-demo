@@ -49,15 +49,24 @@ namespace HEVCDemo.Helpers
             }
         }
 
-        public async static Task<TimeSpan> GetDuration(string filePath)
+        public async static Task InitProperties(VideoCache cache)
         {
-            IMediaInfo info = await FFmpeg.GetMediaInfo(filePath).ConfigureAwait(false);
-            return info.Duration;
+            var info = await FFmpeg.GetMediaInfo(cache.LoadedFilePath).ConfigureAwait(false);
+            cache.Duration = info.Duration;
+            cache.FileSize = info.Size;
+
+            foreach(var videoStream in info.VideoStreams)
+            {
+                if (videoStream.Framerate > 0)
+                {
+                    cache.Framerate = videoStream.Framerate;
+                }
+            }
         }
 
-        public async static Task ExtractFrames(VideoCache cacheProvider)
+        public async static Task ExtractFrames(VideoCache cache)
         {
-            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $@"-s {cacheProvider.VideoSequence.Width}x{cacheProvider.VideoSequence.Height} -i {cacheProvider.YuvFilePath} -preset fast {cacheProvider.YuvFramesDirPath}\%03d.bmp");
+            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $@"-s {cache.VideoSequence.Width}x{cache.VideoSequence.Height} -i {cache.YuvFilePath} -preset fast {cache.YuvFramesDirPath}\%03d.bmp");
         }
 
         public async static Task ConvertToAnnexB(VideoCache cacheProvider, int startSecond, int endSecond)

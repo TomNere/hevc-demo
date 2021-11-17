@@ -40,7 +40,9 @@ namespace HEVCDemo.Models
         public string YuvFilePath;
         public string YuvFramesDirPath;
 
-        public double FileSize;
+        public TimeSpan Duration { get; set; }
+        public double FileSize { get; set; }
+        public double Framerate { get; set; }
         public VideoSequence VideoSequence = new VideoSequence();
 
         public VideoCache(string filePath)

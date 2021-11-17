@@ -2,7 +2,7 @@
 {
     public static class FormattingHelper
     {
-        public static string GetFileSize(long lengthInBytes)
+        public static string GetFileSize(double lengthInBytes)
         {
             double kiloBytes = lengthInBytes / 1024d;
             return kiloBytes < 1000 ? $"{kiloBytes:0.000} KB" : $"{kiloBytes / 1024:0.000} MB";

@@ -60,11 +60,25 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref maxSliderValue, value);
         }
 
+        private string framerate;
+        public string Framerate
+        {
+            get => framerate;
+            set => SetProperty(ref framerate, value);
+        }
+
         private HevcBitmaps currentFrame;
         public HevcBitmaps CurrentFrame
         {
             get => currentFrame;
             set => SetProperty(ref currentFrame, value);
+        }
+
+        private string currentFrameDescription;
+        public string CurrentFrameDescription
+        {
+            get => currentFrameDescription;
+            set => SetProperty(ref currentFrameDescription, value);
         }
 
         private WriteableBitmap currentHighlightImage;
@@ -486,6 +500,7 @@ namespace HEVCDemo.ViewModels
                         else
                         {
                             GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, true);
+                            await FFmpegHelper.InitProperties(cacheToCreate);
                             cacheToCreate.ParseProps();
                             await cacheToCreate.ProcessFiles();
                             cacheToCreate.InitializeYuvFramesFiles();
@@ -500,10 +515,13 @@ namespace HEVCDemo.ViewModels
                     zoom = 1;
                     ViewerContentHeight = cache.VideoSequence.Height;
                     ViewerContentWidth = cache.VideoSequence.Width;
-                    string resolution = $"{cache.VideoSequence.Width} x {cache.VideoSequence.Height}";
-                    string fileSize = FormattingHelper.GetFileSize(new FileInfo(openFileDialog.FileName).Length);
-                    GlobalActionsHelper.OnVideoLoaded(resolution, fileSize);
 
+                    string resolution = $"{cache.VideoSequence.Width} x {cache.VideoSequence.Height}";
+                    string fileSize = FormattingHelper.GetFileSize(cache.FileSize);
+                    string framerate = $"{cache.Framerate} fps";
+                    GlobalActionsHelper.OnVideoLoaded(resolution, fileSize, framerate);
+
+                    Framerate = string.Format("Framerate,Text".Localize(), cache.Framerate);
                     MaxSliderValue = cache.VideoSequence.FramesCount - 1;
                     CurrentFrameIndex = 0;
                 },
@@ -521,8 +539,8 @@ namespace HEVCDemo.ViewModels
             {
                 Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
 
-                var duration = await FFmpegHelper.GetDuration(cache.LoadedFilePath);
-                var dialog = new SelectRangeDialog((int)duration.TotalSeconds);
+                await FFmpegHelper.InitProperties(cache);
+                var dialog = new SelectRangeDialog((int)cache.Duration.TotalSeconds);
                 var dialogResult = dialog.ShowDialog();
 
                 Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
@@ -539,7 +557,10 @@ namespace HEVCDemo.ViewModels
             }
             else
             {
+                var initLoading = FFmpegHelper.InitProperties(cache);
                 MessageBox.Show("CantCrop,Text".Localize(), "AppTitle,Title".Localize());
+
+                await initLoading;
                 await cache.CreateCache(0, 0);
                 return true;
             }
@@ -592,7 +613,7 @@ namespace HEVCDemo.ViewModels
 
         private void ExecuteClosePopup()
         {
-            ClosePopup();   
+            ClosePopup();
         }
 
         private void ClosePopup()
@@ -697,10 +718,8 @@ namespace HEVCDemo.ViewModels
 
             if (cache == null) return;
 
-            if (DecodedFramesVisibility == Visibility.Visible)
-            {
-                CurrentFrame = await cache.GetFrameBitmaps(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize(), isVectorsStartEnabled);
-            }
+            CurrentFrame = await cache.GetFrameBitmaps(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize(), isVectorsStartEnabled);
+            CurrentFrameDescription = string.Format("CurrentFrameDescription,Text".Localize(), index + 1, cache.VideoSequence.FramesCount);
 
             StepForwardCommand.RaiseCanExecuteChanged();
             StepBackwardCommand.RaiseCanExecuteChanged();
