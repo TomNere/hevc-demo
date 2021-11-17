@@ -319,7 +319,7 @@ namespace HEVCDemo.ViewModels
             {
                 IsEnabled = (bool)e.IsViewerEnabled;
             }
-
+            
             SpinnerVisibility = e.IsBusy ? Visibility.Visible : Visibility.Hidden;
         }
 

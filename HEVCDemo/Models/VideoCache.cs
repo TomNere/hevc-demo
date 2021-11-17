@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Models
@@ -153,37 +154,54 @@ namespace HEVCDemo.Models
             {
                 lock (PrecachedHevcBitmaps)
                 {
+                    // Remove precached frames outside of predefined range
+                    foreach (var item in PrecachedHevcBitmaps.Where(item => item.Key < index - precachedBitmapsRange || item.Key > index + precachedBitmapsRange).ToList())
+                    {
+                        PrecachedHevcBitmaps.Remove(item.Key);
+                    }
+                    GC.Collect();
+
                     for (int i = Math.Max(0, index - range); i < Math.Min(VideoSequence.FramesCount, index + range); i++)
                     {
                         // Frame already precached, skip...
                         if (PrecachedHevcBitmaps.ContainsKey(i)) continue;
 
-                        var yuvFrame = new BitmapImage();
-                        using (var imageStreamSource = new FileStream(orderedYuvFramesFiles[i].FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        try
                         {
-                            yuvFrame.BeginInit();
-                            yuvFrame.StreamSource = imageStreamSource;
-                            yuvFrame.CacheOption = BitmapCacheOption.OnLoad;
-                            yuvFrame.EndInit();
+                            var yuvFrame = new BitmapImage();
+                            using (var imageStreamSource = new FileStream(orderedYuvFramesFiles[i].FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                            {
+                                yuvFrame.BeginInit();
+                                yuvFrame.StreamSource = imageStreamSource;
+                                yuvFrame.CacheOption = BitmapCacheOption.OnLoad;
+                                yuvFrame.EndInit();
+                            }
+
+                            yuvFrame.Freeze();
+                            var hevcBitmaps = new HevcBitmaps
+                            {
+                                YuvFrame = yuvFrame,
+                                CodingPredictionUnits = GetCodingPredictionUnitsBitmap(i),
+                                PredictionType = GetPredictionTypeBitmap(i),
+                                IntraPrediction = GetIntraPredictionBitmap(i),
+                                InterPrediction = GetInterPredictionBitmap(i, isMotionVectorStartEnabled)
+                            };
+
+                            PrecachedHevcBitmaps.Add(i, hevcBitmaps);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex is OutOfMemoryException || ex is InsufficientMemoryException)
+                            {
+                                MessageBox.Show($"{"InsufficientMemory,Text".Localize()}\n\n{ex.Message}", "AppTitle,Title".Localize());
+                                return null;
+                            }
+                            else
+                            {
+                                throw ex;
+                            }
                         }
 
-                        yuvFrame.Freeze();
-                        var hevcBitmaps = new HevcBitmaps
-                        {
-                            YuvFrame = yuvFrame,
-                            CodingPredictionUnits = GetCodingPredictionUnitsBitmap(i),
-                            PredictionType = GetPredictionTypeBitmap(i),
-                            IntraPrediction = GetIntraPredictionBitmap(i),
-                            InterPrediction = GetInterPredictionBitmap(i, isMotionVectorStartEnabled)
-                        };
-
-                        PrecachedHevcBitmaps.Add(i, hevcBitmaps);
-                    }
-
-                    // Remove precached frames outside of predefined range
-                    foreach (var item in PrecachedHevcBitmaps.Where(item => item.Key < index - precachedBitmapsRange || item.Key > index + precachedBitmapsRange).ToList())
-                    {
-                        PrecachedHevcBitmaps.Remove(item.Key);
                     }
 
                     return PrecachedHevcBitmaps[index];
@@ -217,7 +235,7 @@ namespace HEVCDemo.Models
                 "LoadingIntoCache,Text".Localize(),
                 afterStateText);
             }
-            
+
             // Precache in background for later use
             _ = PrecacheHevcBitmaps(index, precachedBitmapsRange, isMotionVectorStartEnabled);
 

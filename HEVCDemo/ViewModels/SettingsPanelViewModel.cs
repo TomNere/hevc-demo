@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace HEVCDemo.ViewModels
 {
@@ -286,19 +285,11 @@ namespace HEVCDemo.ViewModels
         {
             SetAppState(e.StateText);
             SettingsEnabled = !e.IsBusy;
-            ProgressBarVisibility = e.IsBusy ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void SetAppState(string stateText)
         {
             AppState = stateText;
-        }
-
-        private Visibility progressBarVisibility = Visibility.Hidden;
-        public Visibility ProgressBarVisibility
-        {
-            get => progressBarVisibility;
-            set => SetProperty(ref progressBarVisibility, value);
         }
 
         #endregion

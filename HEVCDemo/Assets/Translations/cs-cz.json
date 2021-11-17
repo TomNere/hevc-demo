@@ -421,6 +421,10 @@
     {
       "Id": "EndSecond",
       "Content": "Konec (s):"
+    },
+    {
+      "Id": "InsufficientMemory",
+      "Text": "Nedostatek operační paměti!"
     }
   ]
 }

@@ -1,6 +1,7 @@
 using HEVCDemo.Helpers;
 using MahApps.Metro.Controls;
 using Rasyidf.Localization;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -29,7 +30,15 @@ namespace HEVCDemo.Views
         private void HandleUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            MessageBox.Show($"{"UnhandledEx,Text".Localize()}\n\n{e.Exception.Message}", "AppTitle,Title".Localize());
+
+            if (e.Exception is OutOfMemoryException || e.Exception is InsufficientMemoryException)
+            {
+                MessageBox.Show($"{"InsufficientMemory,Text".Localize()}\n\n{e.Exception.Message}", "AppTitle,Title".Localize());
+            }
+            else
+            {
+                MessageBox.Show($"{"UnhandledEx,Text".Localize()}\n\n{e.Exception.Message}", "AppTitle,Title".Localize());
+            }
         }
 
         private void WindowPreviewKeyDown(object sender, KeyEventArgs e)

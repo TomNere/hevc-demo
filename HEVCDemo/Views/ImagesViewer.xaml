@@ -48,16 +48,20 @@
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrame.InterPrediction}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding InterPredictionVisibility}" Stretch="Fill" />
             </Grid>
         </ScrollViewer>
-        <StackPanel Grid.Row="0"
+        <!--Spinner-->
+        <Border Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Visibility="{Binding SpinnerVisibility}">
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Visibility="{Binding SpinnerVisibility}"
+                    Background="#AA111111">
             <views:Spinner EllipseSize="20"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
                            Height="200"
                            Width="200" />
-        </StackPanel>
+        </Border>
         
         <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Command="{Binding SelectVideoCommand}" FontSize="20" Visibility="{Binding SelectVideoVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
 
