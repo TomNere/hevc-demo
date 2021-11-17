@@ -117,6 +117,7 @@
     <Compile Include="Hevc\PartSize.cs" />
     <Compile Include="Hevc\PredictionMode.cs" />
     <Compile Include="Hevc\VideoSequence.cs" />
+    <Compile Include="Models\HevcBitmaps.cs" />
     <Compile Include="Models\InfoImage.cs" />
     <Compile Include="Models\InfoPopupParameters.cs" />
     <Compile Include="Settings.cs" />
