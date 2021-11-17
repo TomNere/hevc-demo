@@ -31,7 +31,7 @@ namespace HEVCDemo.Views
 
             if (EndSecond - StartSecond < 1 || EndSecond - StartSecond > maxRange)
             {
-                MessageBox.Show("SelectRange,Content".Localize());
+                MessageBox.Show("SelectRange,Content".Localize(), "AppTitle,Title".Localize());
                 return;
             }
 

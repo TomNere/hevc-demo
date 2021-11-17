@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomEventArgs\VideoLoadedEventArgs.cs" />
     <Compile Include="ViewModels\SelectRangeDialogViewModel.cs" />
     <Compile Include="Views\SelectRangeDialog.xaml.cs">
       <DependentUpon>SelectRangeDialog.xaml</DependentUpon>

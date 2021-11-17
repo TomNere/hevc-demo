@@ -29,7 +29,7 @@ namespace HEVCDemo.Views
         private void HandleUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            MessageBox.Show($"{"UnhandledEx,Text".Localize()}\n\n{e.Exception.Message}");
+            MessageBox.Show($"{"UnhandledEx,Text".Localize()}\n\n{e.Exception.Message}", "AppTitle,Title".Localize());
         }
 
         private void WindowPreviewKeyDown(object sender, KeyEventArgs e)

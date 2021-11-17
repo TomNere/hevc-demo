@@ -18,6 +18,7 @@ namespace HEVCDemo.Helpers
         public static event EventHandler CacheCleared;
         public static event EventHandler<ShowTipsEventArgs> ShowTipsEnabledChanged;
         public static event EventHandler<KeyDownEventArgs> KeyDown;
+        public static event EventHandler<VideoLoadedEventArgs> VideoLoaded;
 
         public static void OnDecodedFramesVisibilityChanged(VisibilityChangedEventArgs e)
         {
@@ -84,6 +85,17 @@ namespace HEVCDemo.Helpers
         public static void OnKeyDown(Key key)
         {
             KeyDown?.Invoke(new object(), new KeyDownEventArgs { Key = key });
+        }
+
+        public static void OnVideoLoaded(string resolution, string fileSize)
+        {
+            var e = new VideoLoadedEventArgs
+            {
+                Resolution = resolution,
+                FileSize = fileSize
+            };
+
+            VideoLoaded?.Invoke(new object(), e);
         }
     }
 }

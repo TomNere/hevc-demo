@@ -24,7 +24,7 @@ namespace HEVCDemo.Helpers
             catch (Exception e)
             {
                 GlobalActionsHelper.OnAppStateChanged("ErrorOccuredState,Text".Localize(), allowEnableViewer ? true : (bool?)null, false);
-                MessageBox.Show($"{"ErrorOccuredTitle,Title".Localize()}\n\n{e.Message}", actionDescription);
+                MessageBox.Show($"{"ErrorOccuredTitle,Title".Localize()} - {actionDescription}\n\n{e.Message}", "AppTitle,Title".Localize());
             }
             finally
             {

@@ -106,20 +106,6 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref highlightVisibility, value);
         }
 
-        private string resolution;
-        public string Resolution
-        {
-            get => resolution;
-            set => SetProperty(ref resolution, value);
-        }
-
-        private string fileSize;
-        public string FileSize
-        {
-            get => fileSize;
-            set => SetProperty(ref fileSize, value);
-        }
-
         private Visibility decodedFramesVisibility = Visibility.Visible;
         public Visibility DecodedFramesVisibility
         {
@@ -514,8 +500,9 @@ namespace HEVCDemo.ViewModels
                     zoom = 1;
                     ViewerContentHeight = cache.VideoSequence.Height;
                     ViewerContentWidth = cache.VideoSequence.Width;
-                    Resolution = $"{cache.VideoSequence.Width} x {cache.VideoSequence.Height}";
-                    FileSize = FormattingHelper.GetFileSize(new FileInfo(openFileDialog.FileName).Length);
+                    string resolution = $"{cache.VideoSequence.Width} x {cache.VideoSequence.Height}";
+                    string fileSize = FormattingHelper.GetFileSize(new FileInfo(openFileDialog.FileName).Length);
+                    GlobalActionsHelper.OnVideoLoaded(resolution, fileSize);
 
                     MaxSliderValue = cache.VideoSequence.FramesCount - 1;
                     CurrentFrameIndex = 0;
@@ -552,7 +539,7 @@ namespace HEVCDemo.ViewModels
             }
             else
             {
-                MessageBox.Show("CantCrop,Text".Localize());
+                MessageBox.Show("CantCrop,Text".Localize(), "AppTitle,Title".Localize());
                 await cache.CreateCache(0, 0);
                 return true;
             }

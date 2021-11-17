@@ -19,8 +19,15 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
             GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabled;
+            GlobalActionsHelper.VideoLoaded += VideoLoaded;
             InitializeHelpPopup();
             _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
+        }
+
+        private void VideoLoaded(object sender, VideoLoadedEventArgs e)
+        {
+            Resolution = e.Resolution;
+            FileSize = e.FileSize;
         }
 
         private void SetTipsIsEnabled(object sender, ShowTipsEventArgs e)
@@ -35,6 +42,20 @@ namespace HEVCDemo.ViewModels
             {
                 IsHelpPopupOpen = false;
             }
+        }
+
+        private string resolution;
+        public string Resolution
+        {
+            get => resolution;
+            set => SetProperty(ref resolution, value);
+        }
+
+        private string fileSize;
+        public string FileSize
+        {
+            get => fileSize;
+            set => SetProperty(ref fileSize, value);
         }
 
         #region Info dialogs

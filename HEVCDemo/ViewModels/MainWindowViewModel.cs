@@ -141,7 +141,7 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand ClearCacheCommand => clearCacheCommand ?? (clearCacheCommand = new DelegateCommand(ExecuteClearCache));
         private void ExecuteClearCache()
         {
-            var result = MessageBox.Show("ClearCacheMessage,Text".Localize(), "ClearCacheHeader,Header".Localize(), MessageBoxButton.YesNo);
+            var result = MessageBox.Show("ClearCacheMessage,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 _ = VideoCache.ClearCache();

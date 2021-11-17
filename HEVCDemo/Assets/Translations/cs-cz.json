@@ -124,7 +124,7 @@
     },
     {
       "Id": "ErrorOccuredTitle",
-      "Title": "Nastal problém:"
+      "Title": "Nastal problém"
     },
     {
       "Id": "ErrorMessageMsg",
@@ -415,11 +415,11 @@
       "Content": "Plná délka videa (s):"
     },
     {
-      "Id": "startSecond",
+      "Id": "StartSecond",
       "Content": "Začátek (s):"
     },
     {
-      "Id": "endSecond",
+      "Id": "EndSecond",
       "Content": "Konec (s):"
     }
   ]

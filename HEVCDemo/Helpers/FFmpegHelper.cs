@@ -24,7 +24,7 @@ namespace HEVCDemo.Helpers
                     {
                         GlobalActionsHelper.OnAppStateChanged("DownloadingFFmpegState,Text".Localize(), false, true);
                         await DownloadFFmpeg();
-                        MessageBox.Show("FFmpegDownloadedMsg,Text".Localize());
+                        MessageBox.Show("FFmpegDownloadedMsg,Text".Localize(), "AppTitle,Title".Localize());
                     }
                     else
                     {
