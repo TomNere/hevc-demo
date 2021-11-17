@@ -31,8 +31,6 @@ namespace HEVCDemo.ViewModels
 
         private void SetTipsIsEnabled(object sender, ShowTipsEventArgs e)
         {
-            Properties.Settings.Default.IsShowTipsEnabled = e.IsEnabled;
-
             if (e.IsEnabled)
             {
                 helpPopupTimer.Change(TimeSpan.Zero, helpPopupInterval);
@@ -195,13 +193,7 @@ namespace HEVCDemo.ViewModels
         private readonly TimeSpan helpPopupTimeout = TimeSpan.FromSeconds(15);
         private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(15);
         private readonly TimeSpan tryLaterDelay = TimeSpan.FromSeconds(30);
-        private Timer helpPopupTimer;
-        private List<string> helpPopupTexts;
-
-        private void InitializeHelpPopup()
-        {
-            helpPopupTimer = new Timer(DoHelpPopupTimerTick, null, helpPopupInitialDelay, helpPopupInterval);
-            helpPopupTexts = new List<string>
+        private readonly List<string> helpPopupTexts = new List<string>
             {
                 "PopupHelp1,Content".Localize(),
                 "PopupHelp2,Content".Localize(),
@@ -213,6 +205,12 @@ namespace HEVCDemo.ViewModels
                 "PopupHelp8,Content".Localize(),
                 "PopupHelp9,Content".Localize(),
             };
+
+        private Timer helpPopupTimer;
+
+        private void InitializeHelpPopup()
+        {
+            helpPopupTimer = new Timer(DoHelpPopupTimerTick, null, helpPopupInitialDelay, helpPopupInterval);
         }
 
         private async void DoHelpPopupTimerTick(object state)

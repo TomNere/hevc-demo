@@ -425,6 +425,10 @@
     {
       "Id": "InsufficientMemory",
       "Text": "Nedostatek operační paměti!"
+    },
+    {
+      "Id": "ShowTerminal",
+      "Header": "Zobrazovat průbeh operací"
     }
   ]
 }

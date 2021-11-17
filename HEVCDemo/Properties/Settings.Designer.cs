@@ -46,5 +46,17 @@ namespace HEVCDemo.Properties {
                 this["ShowTipsCounter"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsTerminalEnabled {
+            get {
+                return ((bool)(this["IsTerminalEnabled"]));
+            }
+            set {
+                this["IsTerminalEnabled"] = value;
+            }
+        }
     }
 }

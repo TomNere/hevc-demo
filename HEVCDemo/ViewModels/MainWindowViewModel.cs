@@ -13,13 +13,25 @@ namespace HEVCDemo.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+        private bool isTerminalEnabled;
+        public bool IsTerminalEnabled
+        {
+            get => isTerminalEnabled;
+            set
+            {
+                SetProperty(ref isTerminalEnabled, value);
+                Properties.Settings.Default.IsTerminalEnabled = value;
+            }
+        }
+
         private bool isShowTipsEnabled;
         public bool IsShowTipsEnabled
         {
             get => isShowTipsEnabled;
-            set 
+            set
             {
                 SetProperty(ref isShowTipsEnabled, value);
+                Properties.Settings.Default.IsShowTipsEnabled = value;
                 GlobalActionsHelper.OnShowTipsEnabledChanged(value);
             }
         }
@@ -90,6 +102,7 @@ namespace HEVCDemo.ViewModels
         {
             InitializeLanguages();
             IsShowTipsEnabled = Properties.Settings.Default.IsShowTipsEnabled;
+            IsTerminalEnabled = Properties.Settings.Default.IsTerminalEnabled;
         }
 
         private void InitializeLanguages()

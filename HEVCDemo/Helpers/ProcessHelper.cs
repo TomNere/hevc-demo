@@ -14,7 +14,7 @@ namespace HEVCDemo.Helpers
                 FileName = fileName,
                 Arguments = arguments,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = !Properties.Settings.Default.IsTerminalEnabled
             };
 
             var process = new Process

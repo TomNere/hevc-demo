@@ -2,6 +2,8 @@
 	* aplikace podporuje pouze video soubory kódované kodekem H.265
 	* video může být buď v kontejneru .mp4, nebo jako tok bajtů (koncovky .bin a .h265) 
 	* aplikace pro svůj běh potřebuje dostatek volného místa na disku a operační paměti
+	* soubory, které aplikace ukládá na disk lze pročistit pomocí volby "Vyčistit ukázková data" pod menu položkou "Soubor"
+	* nachází se tam taky možnost "Zobrazit průbeh operací" - jde třeba o tvorbu ukázkových dat, nebo extrakci snímků
 * Ovládání prohlížeče video snímků:
 	* prohlížeč video snímků lze kromě tlačítek ovládat i klavesama ←,→
 	* při současně stisknuté klávese CTRL lze provést skok na začátek a na konec
