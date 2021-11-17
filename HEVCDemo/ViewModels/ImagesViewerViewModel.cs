@@ -483,7 +483,7 @@ namespace HEVCDemo.ViewModels
                         }
                         else
                         {
-                            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, false);
+                            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, true);
                             cache.ParseProps();
                             await cache.ProcessFiles();
                             cache.InitializeYuvFramesFiles();

@@ -213,11 +213,9 @@ namespace HEVCDemo.Models
                 "LoadingIntoCache,Text".Localize(),
                 afterStateText);
             }
-            else
-            {
-                // Precache in background for later use
-                _ = PrecacheHevcBitmaps(index, precachedBitmapsRange, isMotionVectorStartEnabled);
-            }
+            
+            // Precache in background for later use
+            _ = PrecacheHevcBitmaps(index, precachedBitmapsRange, isMotionVectorStartEnabled);
 
             return toReturn;
         }
