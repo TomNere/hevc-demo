@@ -28,6 +28,7 @@ namespace HEVCDemo.Models
         private readonly Dictionary<int, HevcBitmaps> PrecachedHevcBitmaps = new Dictionary<int, HevcBitmaps>();
 
         public bool CacheExists => File.Exists(PropsFilePath);
+        public bool IsMp4 => Path.GetExtension(LoadedFilePath) == ".mp4";
         public string StatsDirPath;
         public string CodingUnitsFilePath;
         public string PropsFilePath;
@@ -54,15 +55,13 @@ namespace HEVCDemo.Models
             IntraPredictionFilePath = $@"{StatsDirPath}\intra{textExtension}";
             InterPredictionFilePath = $@"{StatsDirPath}\motionVectors{textExtension}";
 
-            // Frames images
+            // Set paths
             YuvFramesDirPath = $@"{cacheDirPath}\yuvFrames";
-
-            // AnnexB file stays at his location
-            AnnexBFilePath = Path.GetExtension(filePath).ToLower() == annexBExtension ? filePath : $@"{cacheDirPath}\annexB{annexBExtension}";
+            AnnexBFilePath = $@"{cacheDirPath}\annexBFile{annexBExtension}";
             YuvFilePath = $@"{cacheDirPath}\yuvFile{yuvExtension}";
         }
 
-        public async Task CreateCache()
+        public async Task CreateCache(int startSecond, int endSecond)
         {
             // Clear at first
             if (Directory.Exists(cacheDirPath))
@@ -76,7 +75,12 @@ namespace HEVCDemo.Models
             if (Path.GetExtension(LoadedFilePath).ToLower() != annexBExtension)
             {
                 GlobalActionsHelper.OnAppStateChanged("ConvertingAnnexBState,Text".Localize(), false, true);
-                await FFmpegHelper.ConvertToAnnexB(this);
+                await FFmpegHelper.ConvertToAnnexB(this, startSecond, endSecond);
+            }
+            // Only copy
+            else
+            {
+                File.Copy(LoadedFilePath, AnnexBFilePath);
             }
 
             // Get stats data from annexB file

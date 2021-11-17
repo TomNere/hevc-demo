@@ -49,9 +49,9 @@ namespace HEVCDemo.Helpers
             }
         }
 
-        public async static Task<TimeSpan> GetDuration(string fileFullName)
+        public async static Task<TimeSpan> GetDuration(string filePath)
         {
-            IMediaInfo info = await FFmpeg.GetMediaInfo(fileFullName).ConfigureAwait(false);
+            IMediaInfo info = await FFmpeg.GetMediaInfo(filePath).ConfigureAwait(false);
             return info.Duration;
         }
 
@@ -60,11 +60,9 @@ namespace HEVCDemo.Helpers
             await ProcessHelper.RunProcessAsync("ffmpeg.exe", $@"-s {cacheProvider.VideoSequence.Width}x{cacheProvider.VideoSequence.Height} -i {cacheProvider.YuvFilePath} -preset fast {cacheProvider.YuvFramesDirPath}\%03d.bmp");
         }
 
-        public async static Task ConvertToAnnexB(VideoCache cacheProvider)
+        public async static Task ConvertToAnnexB(VideoCache cacheProvider, int startSecond, int endSecond)
         {
-            var duration = await GetDuration(cacheProvider.LoadedFilePath);
-
-            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $"-ss {TimeSpan.FromSeconds(0)} -t {TimeSpan.FromSeconds(Math.Min(duration.Seconds, 10))} -i {cacheProvider.LoadedFilePath} -c:v copy -bsf hevc_mp4toannexb -f hevc {cacheProvider.AnnexBFilePath}");
+            await ProcessHelper.RunProcessAsync("ffmpeg.exe", $"-ss {TimeSpan.FromSeconds(startSecond)} -t {endSecond} -i {cacheProvider.LoadedFilePath} -c:v copy -bsf hevc_mp4toannexb -f hevc {cacheProvider.AnnexBFilePath}");
         }
     }
 }

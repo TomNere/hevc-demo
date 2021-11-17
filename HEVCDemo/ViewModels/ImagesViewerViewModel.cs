@@ -1,6 +1,7 @@
 using HEVCDemo.CustomEventArgs;
 using HEVCDemo.Helpers;
 using HEVCDemo.Models;
+using HEVCDemo.Views;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -369,8 +370,11 @@ namespace HEVCDemo.ViewModels
         private void VectorsStartVisibilityChanged(object sender, VisibilityChangedEventArgs e)
         {
             isVectorsStartEnabled = e.IsVisible;
-            cache.ClearPrecachedHevcBitmaps();
-            _ = SetCurrentFrame(CurrentFrameIndex);
+            if (cache != null)
+            {
+                cache.ClearPrecachedHevcBitmaps();
+                _ = SetCurrentFrame(CurrentFrameIndex);
+            }
         }
 
         #endregion
@@ -482,27 +486,31 @@ namespace HEVCDemo.ViewModels
 
                     Clear();
 
-                    cache = new VideoCache(filePath);
-                    if (cache.CacheExists)
+                    var cacheToCreate = new VideoCache(filePath);
+                    if (cacheToCreate.CacheExists)
                     {
                         var result = MessageBox.Show("CacheExistsMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
                         if (result == MessageBoxResult.Yes)
                         {
-                            await cache.CreateCache();
+                            if (!await CreateCache(cacheToCreate))
+                            {
+                                return;
+                            }
                         }
                         else
                         {
                             GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, true);
-                            cache.ParseProps();
-                            await cache.ProcessFiles();
-                            cache.InitializeYuvFramesFiles();
+                            cacheToCreate.ParseProps();
+                            await cacheToCreate.ProcessFiles();
+                            cacheToCreate.InitializeYuvFramesFiles();
                         }
                     }
-                    else
+                    else if (!await CreateCache(cacheToCreate))
                     {
-                        await cache.CreateCache();
+                        return;
                     }
 
+                    cache = cacheToCreate;
                     zoom = 1;
                     ViewerContentHeight = cache.VideoSequence.Height;
                     ViewerContentWidth = cache.VideoSequence.Width;
@@ -517,6 +525,36 @@ namespace HEVCDemo.ViewModels
                 "OpeningFile,Text".Localize(),
                 "ReadyState,Text".Localize()
                 );
+            }
+        }
+
+        private async Task<bool> CreateCache(VideoCache cache)
+        {
+            if (cache.IsMp4)
+            {
+                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
+
+                var duration = await FFmpegHelper.GetDuration(cache.LoadedFilePath);
+                var dialog = new SelectRangeDialog((int)duration.TotalSeconds);
+                var dialogResult = dialog.ShowDialog();
+
+                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
+
+                if (dialogResult ?? false)
+                {
+                    await cache.CreateCache(dialog.StartSecond, dialog.EndSecond);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("CantCrop,Text".Localize());
+                await cache.CreateCache(0, 0);
+                return true;
             }
         }
 

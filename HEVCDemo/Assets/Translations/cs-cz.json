@@ -52,7 +52,11 @@
     },
     {
       "Id": "ConvertingAnnexBState",
-      "Text": "Převod z kontejneru na tok bajtů"
+      "Text": "Převod na tok bajtů a ořezávání videa"
+    },
+    {
+      "Id": "CantCrop",
+      "Text": "Aplikace nepodporuje ořezání tohoto typu souboru. Video bude použito v plné délce."
     },
     {
       "Id": "CreatingDemoData",
@@ -401,6 +405,22 @@
     {
       "Id": "ShowFullHelp",
       "Content": "Zobrazit plnou nápovědu"
+    },
+    {
+      "Id": "SelectRange",
+      "Content": "Zvolte časový úsek videa (max. 10s) ke spracování."
+    },
+    {
+      "Id": "FullVideoLength",
+      "Content": "Plná délka videa (s):"
+    },
+    {
+      "Id": "startSecond",
+      "Content": "Začátek (s):"
+    },
+    {
+      "Id": "endSecond",
+      "Content": "Konec (s):"
     }
   ]
 }
