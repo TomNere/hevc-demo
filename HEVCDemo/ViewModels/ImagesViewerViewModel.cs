@@ -81,6 +81,13 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref currentFrameDescription, value);
         }
 
+        private int sliderTickFrequency;
+        public int SliderTickFrequency
+        {
+            get => sliderTickFrequency;
+            set => SetProperty(ref sliderTickFrequency, value);
+        }
+
         private WriteableBitmap currentHighlightImage;
         public WriteableBitmap CurrentHighlightImage
         {
@@ -519,9 +526,10 @@ namespace HEVCDemo.ViewModels
                     string resolution = $"{cache.VideoSequence.Width} x {cache.VideoSequence.Height}";
                     string fileSize = FormattingHelper.GetFileSize(cache.FileSize);
                     string framerate = $"{cache.Framerate} fps";
-                    GlobalActionsHelper.OnVideoLoaded(resolution, fileSize, framerate);
+                    GlobalActionsHelper.OnVideoLoaded(resolution, fileSize);
 
                     Framerate = string.Format("Framerate,Text".Localize(), cache.Framerate);
+                    SliderTickFrequency = (int) Math.Round(cache.VideoSequence.FramesCount / 10.0);
                     MaxSliderValue = cache.VideoSequence.FramesCount - 1;
                     CurrentFrameIndex = 0;
                 },

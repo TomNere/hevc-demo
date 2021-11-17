@@ -92,7 +92,7 @@
                 <Label Grid.Column="2" Content="{Binding CurrentFrameDescription}" />
             </Grid>
             <!--Slider-->
-            <Slider Grid.Row="1" Margin="12,0,0,12" Maximum="{Binding MaxSliderValue}" TickFrequency="30" TickPlacement="BottomRight" Value="{Binding CurrentFrameIndex}"/>
+            <Slider Grid.Row="1" Margin="12,0,0,12" Maximum="{Binding MaxSliderValue}" TickFrequency="{Binding SliderTickFrequency}" TickPlacement="BottomRight" Value="{Binding CurrentFrameIndex}"/>
         </Grid>
         <!--Buttons-->
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Height="32" IsEnabled="{Binding IsEnabled}">
