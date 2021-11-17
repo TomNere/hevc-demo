@@ -6,6 +6,7 @@
              xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:local="clr-namespace:HEVCDemo.Views"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d">
     <Grid>
@@ -487,34 +488,18 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
-                   Content="{rf:Tr Uid='AppStateLabel'}" />
+                   Content="{rf:Tr Uid='AppStateLabel'}"/>
             <Label Grid.Column="1"
-                   Content="{Binding AppState}" />
-            <Border Grid.Column="2"
-                    BorderBrush="WhiteSmoke"
-                    BorderThickness="1"
-                    Visibility="{Binding ProgressBarVisibility}"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Width="42"
-                    Height="10"
-                    Margin="2,0,0,0">
-                <Rectangle Fill="WhiteSmoke"
-                           HorizontalAlignment="Left">
-                    <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="Rectangle.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard TargetProperty="Width">
-                                    <DoubleAnimation RepeatBehavior="Forever"
-                                                     From="0"
-                                                     To="42"
-                                                     Duration="0:0:3.0" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Rectangle.Triggers>
-                </Rectangle>
-            </Border>
+                   Content="{Binding AppState}"/>
+            <StackPanel Grid.Column="2"
+                        VerticalAlignment="Top"
+                        Visibility="{Binding ProgressBarVisibility}">
+                <local:Spinner EllipseSize="4"
+                               HorizontalAlignment="Left"
+                               Margin="16,0,0,0"
+                               Height="16"
+                               Width="16" />
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

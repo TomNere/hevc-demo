@@ -84,11 +84,18 @@ namespace HEVCDemo.ViewModels
             }
         }
 
-        private Visibility startButtonVisibility = Visibility.Visible;
-        public Visibility StartButtonVisibility
+        private Visibility spinnerVisibility = Visibility.Visible;
+        public Visibility SpinnerVisibility
         {
-            get => startButtonVisibility;
-            set => SetProperty(ref startButtonVisibility, value);
+            get => spinnerVisibility;
+            set => SetProperty(ref spinnerVisibility, value);
+        }
+
+        private Visibility selectVideoVisibility = Visibility.Visible;
+        public Visibility SelectVideoVisibility
+        {
+            get => selectVideoVisibility;
+            set => SetProperty(ref selectVideoVisibility, value);
         }
 
         private Visibility highlightVisibility = Visibility.Hidden;
@@ -311,7 +318,7 @@ namespace HEVCDemo.ViewModels
         private void CacheCleared(object sender, EventArgs e)
         {
             Clear();
-            StartButtonVisibility = Visibility.Visible;
+            SelectVideoVisibility = Visibility.Visible;
         }
 
         private void MainWindowDeactivated(object sender, EventArgs e)
@@ -325,6 +332,8 @@ namespace HEVCDemo.ViewModels
             {
                 IsEnabled = (bool)e.IsViewerEnabled;
             }
+
+            SpinnerVisibility = e.IsBusy ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void SelectVideoClicked(object sender, EventArgs e)
@@ -458,7 +467,7 @@ namespace HEVCDemo.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
-                StartButtonVisibility = Visibility.Hidden;
+                SelectVideoVisibility = Visibility.Hidden;
 
                 await OperationsHelper.InvokeSafelyAsync(async () =>
                 {

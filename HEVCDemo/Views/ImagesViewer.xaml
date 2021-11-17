@@ -48,7 +48,18 @@
                 <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrame.InterPrediction}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding InterPredictionVisibility}" Stretch="Fill" />
             </Grid>
         </ScrollViewer>
-        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Command="{Binding SelectVideoCommand}" FontSize="20" Visibility="{Binding StartButtonVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
+        <StackPanel Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding SpinnerVisibility}">
+            <views:Spinner EllipseSize="20"
+                           Height="200"
+                           Width="200" />
+        </StackPanel>
+        
+        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Command="{Binding SelectVideoCommand}" FontSize="20" Visibility="{Binding SelectVideoVisibility}" Content="{rf:Tr Uid='StartButton'}"/>
 
         <Popup Placement="MousePoint" HorizontalOffset="32" IsOpen="{Binding IsPopupOpen}">
             <StackPanel Margin="4">
