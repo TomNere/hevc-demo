@@ -74,6 +74,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CustomEventArgs\VideoLoadedEventArgs.cs" />
+    <Compile Include="Models\HevcBitmaps.cs" />
     <Compile Include="ViewModels\SelectRangeDialogViewModel.cs" />
     <Compile Include="Views\SelectRangeDialog.xaml.cs">
       <DependentUpon>SelectRangeDialog.xaml</DependentUpon>
@@ -129,13 +130,13 @@
     <Compile Include="Hevc\PartSize.cs" />
     <Compile Include="Hevc\PredictionMode.cs" />
     <Compile Include="Hevc\VideoSequence.cs" />
-    <Compile Include="Models\HevcBitmaps.cs" />
+    <Compile Include="Models\ViewConfiguration.cs" />
     <Compile Include="Models\InfoImage.cs" />
     <Compile Include="Models\InfoPopupParameters.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="CustomEventArgs\ShowTipsEventArgs.cs" />
     <Compile Include="CustomEventArgs\AppStateChangedEventArgs.cs" />
-    <Compile Include="CustomEventArgs\VisibilityChangedEventArgs.cs" />
+    <Compile Include="CustomEventArgs\ViewConfigurationChangedEventArgs.cs" />
     <Compile Include="ViewModels\SettingsPanelViewModel.cs" />
     <Compile Include="ViewModels\InfoDialogViewModel.cs" />
     <Compile Include="Views\InfoDialog.xaml.cs">

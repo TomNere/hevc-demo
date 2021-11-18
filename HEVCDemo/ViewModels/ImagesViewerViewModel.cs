@@ -24,11 +24,11 @@ namespace HEVCDemo.ViewModels
         private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
         private readonly Color highlightColor = Colors.DeepPink;
         private bool isPlaying;
+        private ViewConfiguration viewConfiguration = new ViewConfiguration();
 
         private VideoCache cache;
 
         private double zoom = 1;
-        private bool isVectorsStartEnabled = true;
 
         #region Binding properties
 
@@ -127,41 +127,6 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref highlightVisibility, value);
         }
 
-        private Visibility decodedFramesVisibility = Visibility.Visible;
-        public Visibility DecodedFramesVisibility
-        {
-            get => decodedFramesVisibility;
-            set => _ = SetProperty(ref decodedFramesVisibility, value);
-        }
-
-        private Visibility codingUnitsVisibility = Visibility.Visible;
-        public Visibility CodingUnitsVisibility
-        {
-            get => codingUnitsVisibility;
-            set => _ = SetProperty(ref codingUnitsVisibility, value);
-        }
-
-        private Visibility predictionTypeVisibility = Visibility.Visible;
-        public Visibility PredictionTypeVisibility
-        {
-            get => predictionTypeVisibility;
-            set => _ = SetProperty(ref predictionTypeVisibility, value);
-        }
-
-        private Visibility intraPredictionVisibility = Visibility.Visible;
-        public Visibility IntraPredictionVisibility
-        {
-            get => intraPredictionVisibility;
-            set => _ = SetProperty(ref intraPredictionVisibility, value);
-        }
-
-        private Visibility interPredictionVisibility = Visibility.Visible;
-        public Visibility InterPredictionVisibility
-        {
-            get => interPredictionVisibility;
-            set => _ = SetProperty(ref interPredictionVisibility, value);
-        }
-
         private int scrollViewerX;
         public int ScrollViewerX
         {
@@ -253,12 +218,7 @@ namespace HEVCDemo.ViewModels
         private void BindEventHandlers()
         {
             GlobalActionsHelper.SelectVideoClicked += SelectVideoClicked;
-            GlobalActionsHelper.DecodedFramesVisibilityChanged += DecodedFramesVisibilityChanged;
-            GlobalActionsHelper.CodingUnitsVisibilityChanged += CodingUnitsVisibilityChanged;
-            GlobalActionsHelper.PredictionTypeVisibilityChanged += PredictionTypeVisibilityChanged;
-            GlobalActionsHelper.IntraPredictionVisibilityChanged += IntraPredictionVisibilityChanged;
-            GlobalActionsHelper.InterPredictionVisibilityChanged += InterPredictionVisibilityChanged;
-            GlobalActionsHelper.VectorsStartVisibilityChanged += VectorsStartVisibilityChanged;
+            GlobalActionsHelper.ViewConfigurationChanged += ViewConfigurationChanged;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.CacheCleared += CacheCleared;
@@ -349,34 +309,10 @@ namespace HEVCDemo.ViewModels
             _ = SelectVideo();
         }
 
-        private void DecodedFramesVisibilityChanged(object sender, VisibilityChangedEventArgs e)
+        private void ViewConfigurationChanged(object sender, ViewConfigurationChangedEventArgs e)
         {
-            DecodedFramesVisibility = ConvertBoolToVisibility(e.IsVisible);
-        }
+            viewConfiguration = e.ViewConfiguration;
 
-        private void CodingUnitsVisibilityChanged(object sender, VisibilityChangedEventArgs e)
-        {
-            CodingUnitsVisibility = ConvertBoolToVisibility(e.IsVisible);
-        }
-
-        private void PredictionTypeVisibilityChanged(object sender, VisibilityChangedEventArgs e)
-        {
-            PredictionTypeVisibility = ConvertBoolToVisibility(e.IsVisible);
-        }
-
-        private void IntraPredictionVisibilityChanged(object sender, VisibilityChangedEventArgs e)
-        {
-            IntraPredictionVisibility = ConvertBoolToVisibility(e.IsVisible);
-        }
-
-        private void InterPredictionVisibilityChanged(object sender, VisibilityChangedEventArgs e)
-        {
-            InterPredictionVisibility = ConvertBoolToVisibility(e.IsVisible);
-        }
-
-        private void VectorsStartVisibilityChanged(object sender, VisibilityChangedEventArgs e)
-        {
-            isVectorsStartEnabled = e.IsVisible;
             if (cache != null)
             {
                 cache.ClearPrecachedHevcBitmaps();
@@ -726,7 +662,7 @@ namespace HEVCDemo.ViewModels
 
             if (cache == null) return;
 
-            CurrentFrame = await cache.GetFrameBitmaps(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize(), isVectorsStartEnabled);
+            CurrentFrame = await cache.GetFrameBitmaps(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize(), viewConfiguration);
             CurrentFrameDescription = string.Format("CurrentFrameDescription,Text".Localize(), index + 1, cache.VideoSequence.FramesCount);
 
             StepForwardCommand.RaiseCanExecuteChanged();
@@ -736,11 +672,6 @@ namespace HEVCDemo.ViewModels
             ZoomInCommand.RaiseCanExecuteChanged();
             ZoomOutCommand.RaiseCanExecuteChanged();
             RaisePlayerControlsExecuteChanged();
-        }
-
-        private Visibility ConvertBoolToVisibility(bool isVisible)
-        {
-            return isVisible ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void Clear()

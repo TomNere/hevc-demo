@@ -34,18 +34,21 @@
                                     AncestorType={x:Type ScrollViewer}}}"/>
             </ScrollViewer.InputBindings>
             <Grid x:Name="ScrollViewerContent">
-                <!--Frame Image-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrame.YuvFrame}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding DecodedFramesVisibility}" Stretch="Fill"/>
                 <!--Highlighted unit (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentHighlightImage}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding HighlightVisibility}" Stretch="Fill" />
-                <!--CU Structure Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrame.CodingPredictionUnits}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding CodingUnitsVisibility}" Stretch="Fill" />
-                <!--Prediction Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrame.PredictionType}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding PredictionTypeVisibility}" Stretch="Fill" />
-                <!--Intra Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrame.IntraPrediction}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding IntraPredictionVisibility}" Stretch="Fill" />
-                <!--Motion Vectors Image (Overlay)-->
-                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrame.InterPrediction}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Visibility="{Binding InterPredictionVisibility}" Stretch="Fill" />
+                <Image Grid.Row="0"
+                       Source="{Binding Mode=OneWay, Path=CurrentHighlightImage}"
+                       Height="{Binding ViewerContentHeight}"
+                       Width="{Binding ViewerContentWidth}"
+                       Visibility="{Binding HighlightVisibility}"
+                       Stretch="Fill" />
+                <!--Frame Image-->
+                <Image Grid.Row="0" Source="{Binding Mode=OneWay, Path=CurrentFrame.AllOthers}" Height="{Binding ViewerContentHeight}" Width="{Binding ViewerContentWidth}" Stretch="Fill"/>
+                <!--Prediction Type Image (Overlay)-->
+                <Image Grid.Row="0"
+                       Source="{Binding Mode=OneWay, Path=CurrentFrame.PredictionType}"
+                       Height="{Binding ViewerContentHeight}"
+                       Width="{Binding ViewerContentWidth}"
+                       Stretch="Fill" />
             </Grid>
         </ScrollViewer>
         <!--Spinner-->

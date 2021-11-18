@@ -124,7 +124,7 @@
                        FontWeight="SemiBold"
                        FontSize="14"
                        Content="{rf:Tr Uid='ViewOptionsLabel'}" />
-                <!--Decoded frames-->
+                <!--Yuv frame-->
                 <Border Grid.Row="4"
                         Grid.ColumnSpan="3"
                         Padding="8,0,8,0"
@@ -139,7 +139,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <CheckBox IsChecked="{Binding IsDecodedFramesEnabled}"
+                        <CheckBox IsChecked="{Binding IsYuvFrameEnabled}"
                                   VerticalAlignment="Center" />
                         <Label Grid.Column="1"
                                VerticalAlignment="Center"

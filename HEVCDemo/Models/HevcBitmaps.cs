@@ -3,14 +3,21 @@
 namespace HEVCDemo.Models
 {
     /// <summary>
-    /// Represents collection of bitmaps shown in ImageViewer as HEVC features
+    /// 2 bitmaps representing HEVC data - prediction type and all other data
     /// </summary>
     public class HevcBitmaps
     {
-        public BitmapImage YuvFrame { get; set; }
-        public WriteableBitmap CodingPredictionUnits { get; set; }
-        public WriteableBitmap PredictionType { get; set; }
-        public WriteableBitmap IntraPrediction { get; set; }
-        public WriteableBitmap InterPrediction { get; set; }
+        // YUV frame, coding and prediction units, intra prediction and inter prediction
+        public WriteableBitmap AllOthers { get; private set; }
+
+        // Prediction type needs to be shown separately because of transparency
+        public WriteableBitmap PredictionType { get; private set; }
+
+
+        public HevcBitmaps(WriteableBitmap allOthers, WriteableBitmap predictionType)
+        {
+            AllOthers = allOthers;
+            PredictionType = predictionType;
+        }
     }
 }

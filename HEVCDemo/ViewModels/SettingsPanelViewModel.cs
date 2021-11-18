@@ -1,5 +1,6 @@
 using HEVCDemo.CustomEventArgs;
 using HEVCDemo.Helpers;
+using HEVCDemo.Models;
 using HEVCDemo.Views;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -13,6 +14,8 @@ namespace HEVCDemo.ViewModels
 {
     public class SettingsPanelViewModel : BindableBase
     {
+        private readonly ViewConfiguration viewConfiguration = new ViewConfiguration();
+
         public SettingsPanelViewModel()
         {
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
@@ -21,6 +24,13 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.VideoLoaded += VideoLoaded;
             InitializeHelpPopup();
             _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
+
+            IsYuvFrameEnabled = viewConfiguration.IsYuvFrameVisible;
+            IsCodingUnitsEnabled = viewConfiguration.IsCodingPredictionUnitsVisible;
+            IsPredictionTypeEnabled = viewConfiguration.IsPredictionTypeVisible;
+            IsIntraPredictionEnabled = viewConfiguration.IsIntraPredictionVisible;
+            IsInterPredictionEnabled = viewConfiguration.IsInterPredictionVisible;
+            IsVectorsStartEnabled = viewConfiguration.IsMotionVectorsStartEnabled;
         }
 
         private void VideoLoaded(object sender, VideoLoadedEventArgs e)
@@ -119,14 +129,15 @@ namespace HEVCDemo.ViewModels
         }
 
 
-        private bool isDecodedFramesEnabled = true;
-        public bool IsDecodedFramesEnabled
+        private bool isYuvFrameEnabled = true;
+        public bool IsYuvFrameEnabled
         {
-            get => isDecodedFramesEnabled;
+            get => isYuvFrameEnabled;
             set
             {
-                SetProperty(ref isDecodedFramesEnabled, value);
-                GlobalActionsHelper.OnDecodedFramesVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                SetProperty(ref isYuvFrameEnabled, value);
+                viewConfiguration.IsYuvFrameVisible = value;
+                GlobalActionsHelper.OnViewConfigurationChanged(viewConfiguration);
             }
         }
 
@@ -137,7 +148,8 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isCodingUnitsEnabled, value);
-                GlobalActionsHelper.OnCodingUnitsVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                viewConfiguration.IsCodingPredictionUnitsVisible = value;
+                GlobalActionsHelper.OnViewConfigurationChanged(viewConfiguration);
             }
         }
 
@@ -148,7 +160,8 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isPredictionTypeEnabled, value);
-                GlobalActionsHelper.OnPredictionTypeVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                viewConfiguration.IsPredictionTypeVisible = value;
+                GlobalActionsHelper.OnViewConfigurationChanged(viewConfiguration);
             }
         }
 
@@ -159,7 +172,8 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isIntraPredictionEnabled, value);
-                GlobalActionsHelper.OnIntraPredictionVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                viewConfiguration.IsIntraPredictionVisible = value;
+                GlobalActionsHelper.OnViewConfigurationChanged(viewConfiguration);
             }
         }
 
@@ -170,7 +184,8 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isInterPredictionEnabled, value);
-                GlobalActionsHelper.OnInterPredictionVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                viewConfiguration.IsInterPredictionVisible = value;
+                GlobalActionsHelper.OnViewConfigurationChanged(viewConfiguration);
             }
         }
 
@@ -181,7 +196,8 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isVectorsStartEnabled, value);
-                GlobalActionsHelper.OnVectorsStartVisibilityChanged(new VisibilityChangedEventArgs { IsVisible = value });
+                viewConfiguration.IsMotionVectorsStartEnabled = value;
+                GlobalActionsHelper.OnViewConfigurationChanged(viewConfiguration);
             }
         }
 

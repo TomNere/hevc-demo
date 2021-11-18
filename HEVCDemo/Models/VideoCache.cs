@@ -150,173 +150,203 @@ namespace HEVCDemo.Models
         /// <summary>
         /// Precache HevcBitmaps by given range and return hevc bitmaps on index
         /// </summary>
-        private async Task<HevcBitmaps> PrecacheHevcBitmaps(int index, int range, bool isMotionVectorStartEnabled)
+        private async Task<HevcBitmaps> PrecacheHevcBitmaps(int index, int range, ViewConfiguration configuration)
         {
             return await Task.Run(() =>
             {
                 lock (PrecachedHevcBitmaps)
                 {
-                    // Remove precached frames outside of predefined range
-                    foreach (var item in PrecachedHevcBitmaps.Where(item => item.Key < index - precachedBitmapsRange || item.Key > index + precachedBitmapsRange).ToList())
+                    try
                     {
-                        PrecachedHevcBitmaps.Remove(item.Key);
-                    }
-                    GC.Collect();
+                        var bitmapsToPrecache = new List<(int, HevcBitmaps)>();
 
-                    for (int i = Math.Max(0, index - range); i < Math.Min(VideoSequence.FramesCount, index + range); i++)
+                        for (int i = Math.Max(0, index - range); i < Math.Min(VideoSequence.FramesCount, index + range); i++)
+                        {
+                            // Frame already precached, skip...
+                            if (PrecachedHevcBitmaps.ContainsKey(i)) continue;
+
+                            WriteableBitmap allOthers = null;
+                            WriteableBitmap predictionType = null;
+
+                            // Get YUV frame
+                            if (configuration.IsYuvFrameVisible)
+                            {
+                                var yuvFrame = new BitmapImage();
+                                using (var imageStreamSource = new FileStream(orderedYuvFramesFiles[i].FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                                {
+                                    yuvFrame.BeginInit();
+                                    yuvFrame.StreamSource = imageStreamSource;
+                                    yuvFrame.CacheOption = BitmapCacheOption.OnLoad;
+                                    yuvFrame.EndInit();
+                                }
+
+                                allOthers = new WriteableBitmap(yuvFrame);
+                            }
+
+                            // Init if YUV frame not enabled
+                            if (allOthers == null)
+                            {
+                                allOthers = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
+                            }
+
+                            // Prediction types
+                            if (configuration.IsPredictionTypeVisible)
+                            {
+                                predictionType = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
+                                GetPredictionTypeBitmap(i, predictionType);
+                            }
+
+                            // Intra prediction
+                            if (configuration.IsIntraPredictionVisible)
+                            {
+                                GetIntraPredictionBitmap(i, allOthers);
+                            }
+
+                            // Inter prediction
+                            if (configuration.IsInterPredictionVisible)
+                            {
+                                GetInterPredictionBitmap(i, allOthers, configuration.IsMotionVectorsStartEnabled);
+                            }
+
+                            // Coding and prediction units
+                            if (configuration.IsCodingPredictionUnitsVisible)
+                            {
+                                GetCodingPredictionUnitsBitmap(i, allOthers);
+                            }
+
+                            allOthers.Freeze();
+                            predictionType?.Freeze();
+
+                            bitmapsToPrecache.Add((i, new HevcBitmaps(allOthers, predictionType)));
+                        }
+
+                        // Remove precached frames outside of predefined range
+                        foreach (var item in PrecachedHevcBitmaps.Where(item => item.Key < index - precachedBitmapsRange || item.Key > index + precachedBitmapsRange).ToList())
+                        {
+                            PrecachedHevcBitmaps.Remove(item.Key);
+                        }
+
+                        // Add to dictionary
+                        foreach (var item in bitmapsToPrecache)
+                        {
+                            PrecachedHevcBitmaps.Add(item.Item1, item.Item2);
+                        }
+
+                        return PrecachedHevcBitmaps[index];
+                    }
+                    catch (Exception ex)
                     {
-                        // Frame already precached, skip...
-                        if (PrecachedHevcBitmaps.ContainsKey(i)) continue;
-
-                        try
+                        if (ex is OutOfMemoryException || ex is InsufficientMemoryException)
                         {
-                            var yuvFrame = new BitmapImage();
-                            using (var imageStreamSource = new FileStream(orderedYuvFramesFiles[i].FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
-                            {
-                                yuvFrame.BeginInit();
-                                yuvFrame.StreamSource = imageStreamSource;
-                                yuvFrame.CacheOption = BitmapCacheOption.OnLoad;
-                                yuvFrame.EndInit();
-                            }
-
-                            yuvFrame.Freeze();
-                            var hevcBitmaps = new HevcBitmaps
-                            {
-                                YuvFrame = yuvFrame,
-                                CodingPredictionUnits = GetCodingPredictionUnitsBitmap(i),
-                                PredictionType = GetPredictionTypeBitmap(i),
-                                IntraPrediction = GetIntraPredictionBitmap(i),
-                                InterPrediction = GetInterPredictionBitmap(i, isMotionVectorStartEnabled)
-                            };
-
-                            PrecachedHevcBitmaps.Add(i, hevcBitmaps);
+                            MessageBox.Show($"{"InsufficientMemory,Text".Localize()}\n\n{ex.Message}", "AppTitle,Title".Localize());
+                            return null;
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            if (ex is OutOfMemoryException || ex is InsufficientMemoryException)
-                            {
-                                MessageBox.Show($"{"InsufficientMemory,Text".Localize()}\n\n{ex.Message}", "AppTitle,Title".Localize());
-                                return null;
-                            }
-                            else
-                            {
-                                throw ex;
-                            }
+                            throw ex;
                         }
-
                     }
-
-                    return PrecachedHevcBitmaps[index];
                 }
             });
         }
 
-        public async Task<HevcBitmaps> GetFrameBitmaps(int index, string afterStateText, bool isMotionVectorStartEnabled)
+    public async Task<HevcBitmaps> GetFrameBitmaps(int index, string afterStateText, ViewConfiguration configuration)
+    {
+        HevcBitmaps toReturn = null;
+
+        // Check if precached
+        lock (PrecachedHevcBitmaps)
         {
-            HevcBitmaps toReturn = null;
-
-            // Check if precached
-            lock (PrecachedHevcBitmaps)
+            if (PrecachedHevcBitmaps.ContainsKey(index))
             {
-                if (PrecachedHevcBitmaps.ContainsKey(index))
-                {
-                    toReturn = PrecachedHevcBitmaps[index];
-                }
+                toReturn = PrecachedHevcBitmaps[index];
             }
+        }
 
-            // Not precached
-            if (toReturn == null)
+        // Not precached
+        if (toReturn == null)
+        {
+            await OperationsHelper.InvokeSafelyAsync(async () =>
             {
-                await OperationsHelper.InvokeSafelyAsync(async () =>
-                {
                     // Load only 3 frames to save time
-                    toReturn = await PrecacheHevcBitmaps(index, 1, isMotionVectorStartEnabled);
-                },
-                "LoadingIntoCache,Text".Localize(),
-                true,
-                "LoadingIntoCache,Text".Localize(),
-                afterStateText);
-            }
-
-            // Precache in background for later use
-            _ = PrecacheHevcBitmaps(index, precachedBitmapsRange, isMotionVectorStartEnabled);
-
-            return toReturn;
+                    toReturn = await PrecacheHevcBitmaps(index, 1, configuration);
+            },
+            "LoadingIntoCache,Text".Localize(),
+            true,
+            "LoadingIntoCache,Text".Localize(),
+            afterStateText);
         }
 
-        public WriteableBitmap GetIntraPredictionBitmap(int index)
+        // Precache in background for later use
+        _ = PrecacheHevcBitmaps(index, precachedBitmapsRange, configuration);
+
+        return toReturn;
+    }
+
+    public void GetIntraPredictionBitmap(int index, WriteableBitmap writeableBitmap)
+    {
+        var frame = VideoSequence.GetFrameByPoc(index);
+        if (frame == null) return;
+
+        foreach (var cu in frame.CodingUnits)
         {
-            var frame = VideoSequence.GetFrameByPoc(index);
-
-            var writeableBitmap = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
-            foreach (var cu in frame.CodingUnits)
-            {
-                IntraParser.WriteBitmaps(cu, writeableBitmap);
-            }
-
-            writeableBitmap.Freeze();
-            return writeableBitmap;
+            IntraParser.WriteBitmaps(cu, writeableBitmap);
         }
+    }
 
-        public WriteableBitmap GetPredictionTypeBitmap(int index)
+    public void GetPredictionTypeBitmap(int index, WriteableBitmap writeableBitmap)
+    {
+        var frame = VideoSequence.GetFrameByPoc(index);
+        if (frame == null) return;
+
+        foreach (var cu in frame.CodingUnits)
         {
-            var frame = VideoSequence.GetFrameByPoc(index);
-
-            var writeableBitmap = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
-            foreach (var cu in frame.CodingUnits)
-            {
-                PredictionParser.WriteBitmaps(cu, writeableBitmap);
-            }
-
-            writeableBitmap.Freeze();
-            return writeableBitmap;
+            PredictionParser.WriteBitmaps(cu, writeableBitmap);
         }
+    }
 
-        public WriteableBitmap GetCodingPredictionUnitsBitmap(int index)
+    public void GetCodingPredictionUnitsBitmap(int index, WriteableBitmap writeableBitmap)
+    {
+        var frame = VideoSequence.GetFrameByPoc(index);
+        if (frame == null) return;
+
+        foreach (var cu in frame.CodingUnits)
         {
-            var frame = VideoSequence.GetFrameByPoc(index);
-
-            var writeableBitmap = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
-            foreach (var cu in frame.CodingUnits)
-            {
-                CupuParser.WriteBitmaps(cu, writeableBitmap);
-            }
-
-            writeableBitmap.Freeze();
-            return writeableBitmap;
+            CupuParser.WriteBitmaps(cu, writeableBitmap);
         }
+    }
 
-        public WriteableBitmap GetInterPredictionBitmap(int index, bool isStartEnabled)
+    public void GetInterPredictionBitmap(int index, WriteableBitmap writeableBitmap, bool isStartEnabled)
+    {
+        var frame = VideoSequence.GetFrameByPoc(index);
+        if (frame == null) return;
+
+        foreach (var cu in frame.CodingUnits)
         {
-            var frame = VideoSequence.GetFrameByPoc(index);
-
-            var writeableBitmap = BitmapFactory.New(VideoSequence.Width, VideoSequence.Height);
-            foreach (var cu in frame.CodingUnits)
-            {
-                MotionVectorsParser.WriteBitmaps(cu, writeableBitmap, isStartEnabled);
-            }
-
-            writeableBitmap.Freeze();
-            return writeableBitmap;
+            MotionVectorsParser.WriteBitmaps(cu, writeableBitmap, isStartEnabled);
         }
+    }
 
-        public void ClearPrecachedHevcBitmaps()
+    public void ClearPrecachedHevcBitmaps()
+    {
+        lock (PrecachedHevcBitmaps)
         {
             PrecachedHevcBitmaps.Clear();
         }
-
-        public static async Task ClearCache()
-        {
-            if (!Directory.Exists(cachePrefix)) return;
-
-            await OperationsHelper.InvokeSafelyAsync(
-                () => Directory.Delete(cachePrefix, true),
-                "ClearingCache,Text".Localize(),
-                true,
-                "ClearingCache,Text".Localize(),
-                "ReadyState,Text".Localize());
-
-            GlobalActionsHelper.OnCacheCleared();
-        }
     }
+
+    public static async Task ClearCache()
+    {
+        if (!Directory.Exists(cachePrefix)) return;
+
+        await OperationsHelper.InvokeSafelyAsync(
+            () => Directory.Delete(cachePrefix, true),
+            "ClearingCache,Text".Localize(),
+            true,
+            "ClearingCache,Text".Localize(),
+            "ReadyState,Text".Localize());
+
+        GlobalActionsHelper.OnCacheCleared();
+    }
+}
 }

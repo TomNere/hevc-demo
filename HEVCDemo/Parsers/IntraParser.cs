@@ -109,7 +109,7 @@ namespace HEVCDemo.Parsers
                             {
                                 var offset = pu.IntraDirLuma - 18;
                                 var scaled = (pu.Width / 16) * offset;
-                                writeableBitmap.DrawLine(pu.X + scaled, pu.Y, pu.X + (pu.Width / 2), pu.Y + (pu.Height / 2), Colors.Blue);
+                                writeableBitmap.DrawLine(pu.X + scaled, pu.Y, pu.X + (pu.Width / 2), pu.Y + (pu.Height / 2), Colors.Red);
                             }
                             break;
                     }

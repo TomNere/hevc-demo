@@ -1,4 +1,5 @@
 ﻿using HEVCDemo.CustomEventArgs;
+using HEVCDemo.Models;
 using System;
 using System.Windows.Input;
 
@@ -6,12 +7,7 @@ namespace HEVCDemo.Helpers
 {
     public static class GlobalActionsHelper
     {
-        public static event EventHandler<VisibilityChangedEventArgs> DecodedFramesVisibilityChanged;
-        public static event EventHandler<VisibilityChangedEventArgs> CodingUnitsVisibilityChanged;
-        public static event EventHandler<VisibilityChangedEventArgs> PredictionTypeVisibilityChanged;
-        public static event EventHandler<VisibilityChangedEventArgs> IntraPredictionVisibilityChanged;
-        public static event EventHandler<VisibilityChangedEventArgs> InterPredictionVisibilityChanged;
-        public static event EventHandler<VisibilityChangedEventArgs> VectorsStartVisibilityChanged;
+        public static event EventHandler<ViewConfigurationChangedEventArgs> ViewConfigurationChanged;
         public static event EventHandler SelectVideoClicked;
         public static event EventHandler<AppStateChangedEventArgs> AppStateChanged;
         public static event EventHandler MainWindowDeactivated;
@@ -20,34 +16,9 @@ namespace HEVCDemo.Helpers
         public static event EventHandler<KeyDownEventArgs> KeyDown;
         public static event EventHandler<VideoLoadedEventArgs> VideoLoaded;
 
-        public static void OnDecodedFramesVisibilityChanged(VisibilityChangedEventArgs e)
+        public static void OnViewConfigurationChanged(ViewConfiguration configuration)
         {
-            DecodedFramesVisibilityChanged?.Invoke(new object(), e);
-        }
-
-        public static void OnCodingUnitsVisibilityChanged(VisibilityChangedEventArgs e)
-        {
-            CodingUnitsVisibilityChanged?.Invoke(new object(), e);
-        }
-
-        public static void OnPredictionTypeVisibilityChanged(VisibilityChangedEventArgs e)
-        {
-            PredictionTypeVisibilityChanged?.Invoke(new object(), e);
-        }
-
-        public static void OnIntraPredictionVisibilityChanged(VisibilityChangedEventArgs e)
-        {
-            IntraPredictionVisibilityChanged?.Invoke(new object(), e);
-        }
-
-        public static void OnInterPredictionVisibilityChanged(VisibilityChangedEventArgs e)
-        {
-            InterPredictionVisibilityChanged?.Invoke(new object(), e);
-        }
-
-        public static void OnVectorsStartVisibilityChanged(VisibilityChangedEventArgs e)
-        {
-            VectorsStartVisibilityChanged?.Invoke(new object(), e);
+            ViewConfigurationChanged?.Invoke(new object(), new ViewConfigurationChangedEventArgs { ViewConfiguration = configuration });
         }
 
         public static void OnSelectVideoClicked()
