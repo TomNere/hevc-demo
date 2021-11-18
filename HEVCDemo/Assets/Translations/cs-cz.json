@@ -379,6 +379,10 @@
       "Header": "O aplikaci"
     },
     {
+      "Id": "IncompleteData",
+      "Text": "Data ve snímku {0} jsou nekompletní!"
+    },
+    {
       "Id": "PlayingState",
       "Text": "Automatické přehrávání"
     },

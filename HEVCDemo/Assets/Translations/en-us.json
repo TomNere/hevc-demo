@@ -15,6 +15,10 @@
       "Text": "H.265 video in container|*.mp4|H.265 video as byte stream|*.bin;*.h265"
     },
     {
+      "Id": "IncompleteData",
+      "Text": "Incomplete data in frame {0}!"
+    },
+    {
       "Id": "StartButton",
       "Content": "Start by selecting a HEVC (h.265) video file"
     },

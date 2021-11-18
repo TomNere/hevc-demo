@@ -676,6 +676,11 @@ namespace HEVCDemo.ViewModels
             if (cache == null) return;
 
             CurrentFrame = await cache.GetFrameBitmaps(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize(), viewConfiguration);
+            if (!CurrentFrame.IsValid)
+            {
+                MessageBox.Show(string.Format("IncompleteData,Text".Localize(), index + 1), "AppTitle,Title".Localize());
+            }
+
             CurrentFrameDescription = string.Format("CurrentFrameDescription,Text".Localize(), index + 1, cache.VideoSequence.FramesCount);
 
             StepForwardCommand.RaiseCanExecuteChanged();
