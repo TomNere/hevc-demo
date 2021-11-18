@@ -359,8 +359,16 @@
       "Text": "Nastal problém při načítání ukázkových dat. Může jít o poškození nacachovaných dat, nedostatek volného místa na disku, nebo jste se pokusili otevřít neplatný video soubor."
     },
     {
+      "Id": "DoYouWantToConvert",
+      "Text": "Aplikace se pokusí o konverzi na platný H.265 soubor. Přejete si pokračovat?"
+    },
+    {
       "Id": "ShowHelpHeader",
       "Header": "Zobrazit nápovědu"
+    },
+    {
+      "Id": "SelectFileFilter",
+      "Text": "H.265 video v kontejneru|*.mp4|H.265 video jako tok bajtů|*.bin;*.h265"
     },
     {
       "Id": "LicensesHeader",
@@ -393,6 +401,10 @@
     {
       "Id": "Timeline",
       "Content": "Pozice snímku na časové ose"
+    },
+    {
+      "Id": "ConvertingToHevcState",
+      "Text": "Převod na formát H.265"
     },
     {
       "Id": "Framerate",

@@ -14,22 +14,23 @@ namespace HEVCDemo.Models
 {
     public class VideoCache
     {
-        public readonly string LoadedFilePath;
-
         private const int precachedBitmapsRange = 5;
         private const string cachePrefix = "cache";
 
         private const string textExtension = ".txt";
         private const string annexBExtension = ".bin";
         private const string yuvExtension = ".yuv";
+        private const string mp4Extension = ".mp4";
 
         private readonly string cacheDirPath;
-
-        private List<FileInfo> orderedYuvFramesFiles;
         private readonly Dictionary<int, HevcBitmaps> PrecachedHevcBitmaps = new Dictionary<int, HevcBitmaps>();
 
+        private List<FileInfo> orderedYuvFramesFiles;
+
+        public string LoadedFilePath;
+
         public bool CacheExists => File.Exists(PropsFilePath);
-        public bool IsMp4 => Path.GetExtension(LoadedFilePath) == ".mp4";
+        public bool IsMp4 => Path.GetExtension(LoadedFilePath) == mp4Extension;
         public string StatsDirPath;
         public string CodingUnitsFilePath;
         public string PropsFilePath;
@@ -37,6 +38,7 @@ namespace HEVCDemo.Models
         public string IntraPredictionFilePath;
         public string InterPredictionFilePath;
         public string AnnexBFilePath;
+        public string HevcFilePath;
         public string YuvFilePath;
         public string YuvFramesDirPath;
 
@@ -61,10 +63,11 @@ namespace HEVCDemo.Models
             // Set paths
             YuvFramesDirPath = $@"{cacheDirPath}\yuvFrames";
             AnnexBFilePath = $@"{cacheDirPath}\annexBFile{annexBExtension}";
+            HevcFilePath = $@"{cacheDirPath}\hevcConverted{mp4Extension}";
             YuvFilePath = $@"{cacheDirPath}\yuvFile{yuvExtension}";
         }
 
-        public async Task CreateCache(int startSecond, int endSecond)
+        public async Task CreateCache(int startSecond, int endSecond, bool convert)
         {
             // Clear at first
             if (Directory.Exists(cacheDirPath))
@@ -73,6 +76,14 @@ namespace HEVCDemo.Models
             }
 
             InitCacheFolders();
+
+            // Try to convert to hevc
+            if (convert)
+            {
+                GlobalActionsHelper.OnAppStateChanged("ConvertingToHevcState,Text".Localize(), false, true);
+                await FFmpegHelper.ConvertToHevc(this);
+                LoadedFilePath = HevcFilePath;
+            }
 
             // Check if already annexB format and convert if not
             if (Path.GetExtension(LoadedFilePath).ToLower() != annexBExtension)
@@ -102,6 +113,10 @@ namespace HEVCDemo.Models
             InitializeYuvFramesFiles();
             File.Delete(AnnexBFilePath);
             File.Delete(YuvFilePath);
+            if (LoadedFilePath == HevcFilePath)
+            {
+                File.Delete(HevcFilePath);
+            }
         }
 
         public async Task ProcessFiles()

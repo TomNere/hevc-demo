@@ -409,75 +409,88 @@ namespace HEVCDemo.ViewModels
 
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "h.265 video file|*.mp4|h.265 annexB binary file|*.bin;*.h265"
+                Filter = "SelectFileFilter,Text".Localize()
             };
 
             if (openFileDialog.ShowDialog() == true)
             {
                 SelectVideoVisibility = Visibility.Hidden;
+                string filePath = openFileDialog.FileName;
 
-                await OperationsHelper.InvokeSafelyAsync(async () =>
+                if (!await OpenVideo(filePath, false))
                 {
-                    string filePath = openFileDialog.FileName;
-
-                    if (cache?.LoadedFilePath == filePath)
+                    if(MessageBox.Show("DoYouWantToConvert,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
-                        GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true, false);
-                        return;
+                        await OpenVideo(filePath, true);
                     }
-
-                    Clear();
-
-                    var cacheToCreate = new VideoCache(filePath);
-                    if (cacheToCreate.CacheExists)
-                    {
-                        var result = MessageBox.Show("CacheExistsMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            if (!await CreateCache(cacheToCreate))
-                            {
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, true);
-                            await FFmpegHelper.InitProperties(cacheToCreate);
-                            cacheToCreate.ParseProps();
-                            await cacheToCreate.ProcessFiles();
-                            cacheToCreate.InitializeYuvFramesFiles();
-                        }
-                    }
-                    else if (!await CreateCache(cacheToCreate))
-                    {
-                        return;
-                    }
-
-                    cache = cacheToCreate;
-                    zoom = 1;
-                    ViewerContentHeight = cache.VideoSequence.Height;
-                    ViewerContentWidth = cache.VideoSequence.Width;
-
-                    string resolution = $"{cache.VideoSequence.Width} x {cache.VideoSequence.Height}";
-                    string fileSize = FormattingHelper.GetFileSize(cache.FileSize);
-                    string framerate = $"{cache.Framerate} fps";
-                    GlobalActionsHelper.OnVideoLoaded(resolution, fileSize);
-
-                    Framerate = string.Format("Framerate,Text".Localize(), cache.Framerate);
-                    SliderTickFrequency = (int) Math.Round(cache.VideoSequence.FramesCount / 10.0);
-                    MaxSliderValue = cache.VideoSequence.FramesCount - 1;
-                    CurrentFrameIndex = 0;
-                },
-                "CreatingCache,Text".Localize(),
-                false,
-                "OpeningFile,Text".Localize(),
-                "ReadyState,Text".Localize()
-                );
+                }
+            }
+            if (cache == null)
+            {
+                SelectVideoVisibility = Visibility.Visible;
             }
         }
 
-        private async Task<bool> CreateCache(VideoCache cache)
+        private async Task<bool>OpenVideo(string filePath, bool convert)
+        {
+            return await OperationsHelper.InvokeSafelyAsync(async () =>
+            {
+                if (cache?.LoadedFilePath == filePath)
+                {
+                    MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
+                    GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true, false);
+                    return;
+                }
+
+                Clear();
+
+                var cacheToCreate = new VideoCache(filePath);
+
+                // Always overwrite when converting to Hevc
+                if (!convert && cacheToCreate.CacheExists)
+                {
+                    var result = MessageBox.Show("CacheExistsMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        if (!await CreateCache(cacheToCreate, convert)) return;
+                    }
+                    else
+                    {
+                        GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, true);
+                        await FFmpegHelper.InitProperties(cacheToCreate);
+                        cacheToCreate.ParseProps();
+                        await cacheToCreate.ProcessFiles();
+                        cacheToCreate.InitializeYuvFramesFiles();
+                    }
+                }
+                else if (!await CreateCache(cacheToCreate, convert))
+                {
+                    return;
+                }
+
+                cache = cacheToCreate;
+                zoom = 1;
+                ViewerContentHeight = cache.VideoSequence.Height;
+                ViewerContentWidth = cache.VideoSequence.Width;
+
+                string resolution = $"{cache.VideoSequence.Width} x {cache.VideoSequence.Height}";
+                string fileSize = FormattingHelper.GetFileSize(cache.FileSize);
+                string framerate = $"{cache.Framerate} fps";
+                GlobalActionsHelper.OnVideoLoaded(resolution, fileSize);
+
+                Framerate = string.Format("Framerate,Text".Localize(), cache.Framerate);
+                SliderTickFrequency = (int)Math.Round(cache.VideoSequence.FramesCount / 10.0);
+                MaxSliderValue = cache.VideoSequence.FramesCount - 1;
+                CurrentFrameIndex = 0;
+            },
+            "CreatingCache,Text".Localize(),
+            false,
+            "OpeningFile,Text".Localize(),
+            "ReadyState,Text".Localize()
+            );
+        }
+
+        private async Task<bool> CreateCache(VideoCache cache, bool convert)
         {
             if (cache.IsMp4)
             {
@@ -491,7 +504,7 @@ namespace HEVCDemo.ViewModels
 
                 if (dialogResult ?? false)
                 {
-                    await cache.CreateCache(dialog.StartSecond, dialog.EndSecond);
+                    await cache.CreateCache(dialog.StartSecond, dialog.EndSecond, convert);
                     return true;
                 }
                 else
@@ -505,7 +518,7 @@ namespace HEVCDemo.ViewModels
                 MessageBox.Show("CantCrop,Text".Localize(), "AppTitle,Title".Localize());
 
                 await initLoading;
-                await cache.CreateCache(0, 0);
+                await cache.CreateCache(0, 0, false);
                 return true;
             }
         }

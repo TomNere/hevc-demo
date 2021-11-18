@@ -8,12 +8,12 @@ namespace HEVCDemo.Helpers
 {
     public static class OperationsHelper
     {
-        public static async Task InvokeSafelyAsync(Action action, string actionDescription, bool allowEnableViewer, string stateBefore, string stateAfter)
+        public static async Task<bool> InvokeSafelyAsync(Action action, string actionDescription, bool allowEnableViewer, string stateBefore, string stateAfter)
         {
-            await InvokeSafelyAsync(async() => await Task.Run(action), actionDescription, allowEnableViewer, stateBefore, stateAfter);
+            return await InvokeSafelyAsync(async() => await Task.Run(action), actionDescription, allowEnableViewer, stateBefore, stateAfter);
         }
 
-        public static async Task InvokeSafelyAsync(Func<Task> action, string actionDescription, bool allowEnableViewer, string stateBefore, string stateAfter)
+        public static async Task<bool> InvokeSafelyAsync(Func<Task> action, string actionDescription, bool allowEnableViewer, string stateBefore, string stateAfter)
         {
             try
             {
@@ -25,12 +25,15 @@ namespace HEVCDemo.Helpers
             {
                 GlobalActionsHelper.OnAppStateChanged("ErrorOccuredState,Text".Localize(), allowEnableViewer ? true : (bool?)null, false);
                 MessageBox.Show($"{"ErrorOccuredTitle,Title".Localize()} - {actionDescription}\n\n{e.Message}", "AppTitle,Title".Localize());
+                return false;
             }
             finally
             {
-                GlobalActionsHelper.OnAppStateChanged(stateAfter, true, false);
                 Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
             }
+
+            GlobalActionsHelper.OnAppStateChanged(stateAfter, true, false);
+            return true;
         }
     }
 }

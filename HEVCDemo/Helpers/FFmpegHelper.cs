@@ -2,6 +2,7 @@
 using Rasyidf.Localization;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Xabe.FFmpeg;
@@ -72,6 +73,26 @@ namespace HEVCDemo.Helpers
         public async static Task ConvertToAnnexB(VideoCache cacheProvider, int startSecond, int endSecond)
         {
             await ProcessHelper.RunProcessAsync("ffmpeg.exe", $"-ss {TimeSpan.FromSeconds(startSecond)} -t {endSecond} -i {cacheProvider.LoadedFilePath} -c:v copy -bsf hevc_mp4toannexb -f hevc {cacheProvider.AnnexBFilePath}");
+        }
+
+        public async static Task<bool> ConvertToHevc(VideoCache cache)
+        {
+            var mediaInfo = await FFmpeg.GetMediaInfo(cache.LoadedFilePath);
+            var videoStream = mediaInfo?.VideoStreams.FirstOrDefault()?.SetCodec(VideoCodec.hevc);
+
+            if (videoStream == null) return false;
+
+            var framerate = videoStream.Framerate;
+            var bitrate = videoStream.Bitrate;
+
+            await FFmpeg.Conversions.New()
+                .AddStream(videoStream)
+                .SetOutput(cache.HevcFilePath)
+                .SetFrameRate(framerate)
+                .SetVideoBitrate(bitrate)
+                .Start();
+
+            return true;
         }
     }
 }
