@@ -45,7 +45,9 @@ namespace HEVCDemo.Models
         public TimeSpan Duration { get; set; }
         public double FileSize { get; set; }
         public double Framerate { get; set; }
-        public VideoSequence VideoSequence = new VideoSequence();
+        public int StartSecond { get; set; }
+        public int EndSecond { get; set; }
+        public VideoSequence VideoSequence;
 
         public VideoCache(string filePath)
         {
@@ -69,6 +71,9 @@ namespace HEVCDemo.Models
 
         public async Task CreateCache(int startSecond, int endSecond, bool convert)
         {
+            StartSecond = startSecond;
+            EndSecond = endSecond;
+
             // Clear at first
             if (Directory.Exists(cacheDirPath))
             {
@@ -100,6 +105,8 @@ namespace HEVCDemo.Models
             // Get stats data from annexB file
             GlobalActionsHelper.OnAppStateChanged("CreatingDemoData,Text".Localize(), false, true);
             _ = await ProcessHelper.RunProcessAsync($@".\TAppDecoder.exe", $@"-b {AnnexBFilePath} -o {YuvFilePath} -p {StatsDirPath}");
+
+            VideoSequence = new VideoSequence();
 
             // Parse properties
             ParseProps();

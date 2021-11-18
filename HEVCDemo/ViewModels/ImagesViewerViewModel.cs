@@ -7,7 +7,6 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -416,12 +415,13 @@ namespace HEVCDemo.ViewModels
             {
                 SelectVideoVisibility = Visibility.Hidden;
                 string filePath = openFileDialog.FileName;
+                var cacheToCreate = new VideoCache(filePath);
 
-                if (!await OpenVideo(filePath, false))
+                if (!await OpenVideo(cacheToCreate, false))
                 {
                     if(MessageBox.Show("DoYouWantToConvert,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        await OpenVideo(filePath, true);
+                        await OpenVideo(cacheToCreate, true, cacheToCreate.StartSecond, cacheToCreate.EndSecond);
                     }
                 }
             }
@@ -431,11 +431,11 @@ namespace HEVCDemo.ViewModels
             }
         }
 
-        private async Task<bool>OpenVideo(string filePath, bool convert)
+        private async Task<bool>OpenVideo(VideoCache cacheToCreate, bool convert, int? startSecond = null, int? endSecond = null)
         {
             return await OperationsHelper.InvokeSafelyAsync(async () =>
             {
-                if (cache?.LoadedFilePath == filePath)
+                if (cache?.LoadedFilePath == cacheToCreate.LoadedFilePath)
                 {
                     MessageBox.Show("FileAlreadyLoadedMsg,Text".Localize(), "AppTitle,Title".Localize());
                     GlobalActionsHelper.OnAppStateChanged("ReadyState,Text".Localize(), true, false);
@@ -444,15 +444,13 @@ namespace HEVCDemo.ViewModels
 
                 Clear();
 
-                var cacheToCreate = new VideoCache(filePath);
-
                 // Always overwrite when converting to Hevc
                 if (!convert && cacheToCreate.CacheExists)
                 {
                     var result = MessageBox.Show("CacheExistsMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
-                        if (!await CreateCache(cacheToCreate, convert)) return;
+                        if (!await CreateCache(cacheToCreate, convert, startSecond, endSecond)) return;
                     }
                     else
                     {
@@ -463,7 +461,7 @@ namespace HEVCDemo.ViewModels
                         cacheToCreate.InitializeYuvFramesFiles();
                     }
                 }
-                else if (!await CreateCache(cacheToCreate, convert))
+                else if (!await CreateCache(cacheToCreate, convert, startSecond, endSecond))
                 {
                     return;
                 }
@@ -490,34 +488,38 @@ namespace HEVCDemo.ViewModels
             );
         }
 
-        private async Task<bool> CreateCache(VideoCache cache, bool convert)
+        private async Task<bool> CreateCache(VideoCache cache, bool convert, int? startSecond, int? endSecond)
         {
+            await FFmpegHelper.InitProperties(cache);
+
             if (cache.IsMp4)
             {
-                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
-
-                await FFmpegHelper.InitProperties(cache);
-                var dialog = new SelectRangeDialog((int)cache.Duration.TotalSeconds);
-                var dialogResult = dialog.ShowDialog();
-
-                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
-
-                if (dialogResult ?? false)
+                if (startSecond == null || endSecond == null)
                 {
-                    await cache.CreateCache(dialog.StartSecond, dialog.EndSecond, convert);
-                    return true;
+                    Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
+                    var dialog = new SelectRangeDialog((int)cache.Duration.TotalSeconds);
+                    var dialogResult = dialog.ShowDialog();
+                    Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
+
+                    if (dialogResult ?? false)
+                    {
+                        await cache.CreateCache(dialog.StartSecond, dialog.EndSecond, convert);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
-                    return false;
+                    await cache.CreateCache((int)startSecond, (int)endSecond, convert);
+                    return true;
                 }
             }
             else
             {
-                var initLoading = FFmpegHelper.InitProperties(cache);
                 MessageBox.Show("CantCrop,Text".Localize(), "AppTitle,Title".Localize());
-
-                await initLoading;
                 await cache.CreateCache(0, 0, false);
                 return true;
             }
