@@ -70,7 +70,7 @@ namespace HEVCDemo.Parsers
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show($"{"ErrorParsingPredictionEx,Text".Localize()}\n\n{e.Message}", "AppTitle,Title".Localize());
+                    MessageBox.Show($"{"ErrorParsingEx,Text".Localize()}\n\n{e.Message}", "AppTitle,Title".Localize());
                     return false;
                 }
 

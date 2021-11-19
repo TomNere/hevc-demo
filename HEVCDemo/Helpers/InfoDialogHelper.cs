@@ -9,19 +9,19 @@ namespace HEVCDemo.Helpers
     {
         public static void ShowResolutionInfoDialog()
         {
-            var infoDialog = new InfoDialog("VideoResolutionTitle,Title".Localize(), "VideoResolution", null);
+            var infoDialog = new InfoDialog("VideoResolutionTitle,Text".Localize(), "VideoResolution", null);
             infoDialog.Show();
         }
 
         public static void ShowFileSizeInfoDialog()
         {
-            var infoDialog = new InfoDialog("FileSizeTitle,Title".Localize(), "FileSize", null);
+            var infoDialog = new InfoDialog("FileSizeTitle,Text".Localize(), "FileSize", null);
             infoDialog.Show();
         }
 
         public static void ShowDecodedFramesInfoDialog()
         {
-            var infoDialog = new InfoDialog("DecodedFramesLabel,Content".Localize(), "DecodedFrames", null);
+            var infoDialog = new InfoDialog("DecodedFrames,Content".Localize(), "DecodedFrames", null);
             infoDialog.Show();
         }
 
@@ -29,10 +29,10 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "CodingUnitsFig1,Content".Localize(), ImagePath = "../Assets/Images/cupuStructure.png" }
+                new InfoImage { Name = "CodingUnitsFig1,Text".Localize(), ImagePath = "../Assets/Images/cupuStructure.png" }
             };
 
-            var infoDialog = new InfoDialog("CodingUnitsLabel,Content".Localize(), "CodingUnits", images);
+            var infoDialog = new InfoDialog("CodingPredictionUnits,Content".Localize(), "CodingUnits", images);
             infoDialog.Show();
         }
 
@@ -46,13 +46,13 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "IntraPredictionFig1,Content".Localize(), ImagePath = "../Assets/Images/intraNotation.png"},
-                new InfoImage { Name = "IntraPredictionFig2,Content".Localize(), ImagePath = "../Assets/Images/referencePixels.png"},
-                new InfoImage { Name = "IntraPredictionFig3,Content".Localize(), ImagePath = "../Assets/Images/intraInterpolation.png"},
-                new InfoImage { Name = "IntraPredictionFig4,Content".Localize(), ImagePath = "../Assets/Images/intraModes.png"},
+                new InfoImage { Name = "IntraPredictionFig1,Text".Localize(), ImagePath = "../Assets/Images/intraNotation.png"},
+                new InfoImage { Name = "IntraPredictionFig2,Text".Localize(), ImagePath = "../Assets/Images/referencePixels.png"},
+                new InfoImage { Name = "IntraPredictionFig3,Text".Localize(), ImagePath = "../Assets/Images/intraInterpolation.png"},
+                new InfoImage { Name = "IntraPredictionFig4,Text".Localize(), ImagePath = "../Assets/Images/intraModes.png"},
             };
 
-            var infoDialog = new InfoDialog("IntraLabel,Content".Localize(), "IntraPrediction", images);
+            var infoDialog = new InfoDialog("IntraPredictionMode,Content".Localize(), "IntraPrediction", images);
             infoDialog.Show();
         }
 
@@ -60,10 +60,10 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "InterPredictionFig1,Content".Localize(), ImagePath = "../Assets/Images/vectorsCandidateBlocks.png"},
+                new InfoImage { Name = "InterPredictionFig1,Text".Localize(), ImagePath = "../Assets/Images/vectorsCandidateBlocks.png"},
             };
 
-            var infoDialog = new InfoDialog("InterPrediction,Content".Localize(), "InterPrediction", images);
+            var infoDialog = new InfoDialog("InterPredictionTitle,Text".Localize(), "InterPrediction", images);
             infoDialog.Show();
         }
     }

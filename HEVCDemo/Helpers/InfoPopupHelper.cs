@@ -80,16 +80,16 @@ namespace HEVCDemo.Helpers
             string intraMode;
             if (predictionUnit.IntraDirLuma == 0)
             {
-                intraMode = "PredictionPlanar,Content".Localize();
+                intraMode = "PredictionPlanar,Text".Localize();
 
             }
             else if (predictionUnit.IntraDirLuma == 1)
             {
-                intraMode = "PredictionDC,Content".Localize();
+                intraMode = "PredictionDC,Text".Localize();
             }
             else
             {
-                intraMode = $"{"PredictionAngular,Content".Localize()} ({predictionUnit.IntraDirLuma})";
+                intraMode = $"{"PredictionAngular,Text".Localize()} ({predictionUnit.IntraDirLuma})";
             }
 
             parameters.IntraMode = $"{intraMode}";

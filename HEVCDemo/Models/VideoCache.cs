@@ -103,7 +103,7 @@ namespace HEVCDemo.Models
             }
 
             // Get stats data from annexB file
-            GlobalActionsHelper.OnAppStateChanged("CreatingDemoData,Text".Localize(), false, true);
+            GlobalActionsHelper.OnAppStateChanged("CreatingDemoDataState,Text".Localize(), false, true);
             _ = await ProcessHelper.RunProcessAsync($@".\TAppDecoder.exe", $@"-b {AnnexBFilePath} -o {YuvFilePath} -p {StatsDirPath}");
 
             VideoSequence = new VideoSequence();
@@ -112,7 +112,7 @@ namespace HEVCDemo.Models
             ParseProps();
 
             // Extract frames
-            GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, true);
+            GlobalActionsHelper.OnAppStateChanged("LoadingDemoDataState,Text".Localize(), false, true);
             var framesLoading = FFmpegHelper.ExtractFrames(this);
 
             await ProcessFiles();
@@ -165,7 +165,7 @@ namespace HEVCDemo.Models
 
             if (files.Length != VideoSequence.FramesCount)
             {
-                throw new Exception("ErrorCreatingDemoData,Text".Localize());
+                throw new Exception("ErrorCreatingDemoDataEx,Text".Localize());
             }
         }
 
@@ -273,7 +273,7 @@ namespace HEVCDemo.Models
                     {
                         if (ex is OutOfMemoryException || ex is InsufficientMemoryException)
                         {
-                            MessageBox.Show($"{"InsufficientMemory,Text".Localize()}\n\n{ex.Message}", "AppTitle,Title".Localize());
+                            MessageBox.Show($"{"InsufficientMemoryEx,Text".Localize()}\n\n{ex.Message}", "AppTitle,Title".Localize());
                             return null;
                         }
                         else
@@ -306,9 +306,9 @@ namespace HEVCDemo.Models
                 // Load only 3 frames to save time
                 toReturn = await PrecacheHevcBitmaps(index, 1, configuration);
                 },
-                "LoadingIntoCache,Text".Localize(),
+                "LoadingIntoCacheState,Text".Localize(),
                 true,
-                "LoadingIntoCache,Text".Localize(),
+                "LoadingIntoCacheState,Text".Localize(),
                 afterStateText);
             }
 
@@ -380,9 +380,9 @@ namespace HEVCDemo.Models
 
             await OperationsHelper.InvokeSafelyAsync(
                 () => Directory.Delete(cachePrefix, true),
-                "ClearingCache,Text".Localize(),
+                "ClearingCacheState,Text".Localize(),
                 true,
-                "ClearingCache,Text".Localize(),
+                "ClearingCacheState,Text".Localize(),
                 "ReadyState,Text".Localize());
 
             GlobalActionsHelper.OnCacheCleared();

@@ -84,10 +84,10 @@
                        HorizontalAlignment="Center"
                        FontWeight="SemiBold"
                        FontSize="14"
-                       Content="{rf:Tr Uid='VideoPropertiesLabel'}" />
+                       Content="{rf:Tr Uid='VideoProperties'}" />
                 <Label Grid.Row="1"
                        VerticalAlignment="Center"
-                       Content="{rf:Tr Uid='ResolutionLabel'}" />
+                       Content="{rf:Tr Uid='Resolution'}" />
                 <Label Grid.Row="1"
                        Grid.Column="1"
                        VerticalAlignment="Center"
@@ -103,7 +103,7 @@
                 </Button>
                 <Label Grid.Row="2"
                        VerticalAlignment="Center"
-                       Content="{rf:Tr Uid='FileSizeLabel'}" />
+                       Content="{rf:Tr Uid='FileSize'}" />
                 <Label Grid.Row="2"
                        Grid.Column="1"
                        VerticalAlignment="Center"
@@ -123,7 +123,7 @@
                        HorizontalAlignment="Center"
                        FontWeight="SemiBold"
                        FontSize="14"
-                       Content="{rf:Tr Uid='ViewOptionsLabel'}" />
+                       Content="{rf:Tr Uid='ViewOptions'}" />
                 <!--Yuv frame-->
                 <Border Grid.Row="4"
                         Grid.ColumnSpan="3"
@@ -143,7 +143,7 @@
                                   VerticalAlignment="Center" />
                         <Label Grid.Column="1"
                                VerticalAlignment="Center"
-                               Content="{rf:Tr Uid='DecodedFramesLabel'}" />
+                               Content="{rf:Tr Uid='DecodedFrames'}" />
                         <Button Grid.Column="2"
                                 Height="24"
                                 Width="24"
@@ -176,7 +176,7 @@
                                           VerticalAlignment="Center" />
                                 <Label Grid.Column="1"
                                        VerticalAlignment="Center"
-                                       Content="{rf:Tr Uid='CodingUnitsLabel'}" />
+                                       Content="{rf:Tr Uid='CodingPredictionUnits'}" />
                                 <Button Grid.Column="2"
                                         Height="24"
                                         Width="24"
@@ -187,7 +187,7 @@
                                 </Button>
                             </Grid>
                             <TreeViewItem Margin="0,0,8,0"
-                                          Header="{rf:Tr Uid='ShowDescriptionHeader'}"
+                                          Header="{rf:Tr Uid='Legend'}"
                                           IsExpanded="True"
                                           MaxWidth="350">
                                 <Grid Height="120"
@@ -246,7 +246,7 @@
                                           VerticalAlignment="Center" />
                                 <Label Grid.Column="1"
                                        VerticalAlignment="Center"
-                                       Content="{rf:Tr Uid='PredictionLabel'}" />
+                                       Content="{rf:Tr Uid='PredictionType'}" />
                                 <Button Grid.Column="2"
                                         Height="24"
                                         Width="24"
@@ -257,7 +257,7 @@
                                 </Button>
                             </Grid>
                             <TreeViewItem Margin="0,0,8,0"
-                                          Header="{rf:Tr Uid='ShowDescriptionHeader'}"
+                                          Header="{rf:Tr Uid='Legend'}"
                                           IsExpanded="False"
                                           MaxWidth="350">
                                 <Grid Height="120"
@@ -316,7 +316,7 @@
                                           VerticalAlignment="Center" />
                                 <Label Grid.Column="1"
                                        VerticalAlignment="Center"
-                                       Content="{rf:Tr Uid='IntraLabel'}" />
+                                       Content="{rf:Tr Uid='IntraPredictionMode'}" />
                                 <Button Grid.Column="2"
                                         Height="24"
                                         Width="24"
@@ -327,7 +327,7 @@
                                 </Button>
                             </Grid>
                             <TreeViewItem Margin="0,0,4,0"
-                                          Header="{rf:Tr Uid='ShowDescriptionHeader'}"
+                                          Header="{rf:Tr Uid='Legend'}"
                                           IsExpanded="False"
                                           MaxWidth="350">
                                 <Grid Height="120"
@@ -413,7 +413,7 @@
                                           VerticalAlignment="Center" />
                                 <Label Grid.Column="1"
                                        VerticalAlignment="Center"
-                                       Content="{rf:Tr Uid='MotionVectorsLabel'}" />
+                                       Content="{rf:Tr Uid='InterPrediction'}" />
                                 <CheckBox Grid.Row="1"
                                           Grid.Column="0"
                                           IsChecked="{Binding IsVectorsStartEnabled}"
@@ -421,7 +421,7 @@
                                 <Label Grid.Row="1"
                                        Grid.Column="1"
                                        VerticalAlignment="Center"
-                                       Content="{rf:Tr Uid='VectorsStartLabel'}" />
+                                       Content="{rf:Tr Uid='VectorsStart'}" />
                                 <Button Grid.Row="0"
                                         Grid.Column="2"
                                         Height="24"
@@ -433,7 +433,7 @@
                                 </Button>
                             </Grid>
                             <TreeViewItem Margin="0,0,8,0"
-                                          Header="{rf:Tr Uid='ShowDescriptionHeader'}"
+                                          Header="{rf:Tr Uid='Legend'}"
                                           IsExpanded="False"
                                           MaxWidth="350">
                                 <Grid Height="150"
@@ -487,7 +487,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
-                   Content="{rf:Tr Uid='AppStateLabel'}"/>
+                   Content="{rf:Tr Uid='AppState'}"/>
             <Label Grid.Column="1"
                    Content="{Binding AppState}" />
         </Grid>

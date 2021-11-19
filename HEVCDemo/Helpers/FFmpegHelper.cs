@@ -33,8 +33,8 @@ namespace HEVCDemo.Helpers
                         return;
                     }
                 }
-            }, 
-            "DownloadFFmpegTitle,Title".Localize(),
+            },
+            "CheckingFFmpegState,Text".Localize(),
             false,
             "CheckingFFmpegState,Text".Localize(),
             "ReadyState,Text".Localize()

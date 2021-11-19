@@ -42,7 +42,7 @@ namespace HEVCDemo.Views
 
             if (e.Exception is OutOfMemoryException || e.Exception is InsufficientMemoryException)
             {
-                MessageBox.Show($"{"InsufficientMemory,Text".Localize()}\n\n{e.Exception.Message}", "AppTitle,Title".Localize());
+                MessageBox.Show($"{"InsufficientMemoryEx,Text".Localize()}\n\n{e.Exception.Message}", "AppTitle,Title".Localize());
             }
             else
             {

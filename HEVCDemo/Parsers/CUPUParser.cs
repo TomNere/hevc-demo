@@ -25,7 +25,7 @@ namespace HEVCDemo.Parsers
             {
                 if (videoSequence.Width == 0 || videoSequence.MaxCUSize == 0)
                 {
-                    throw new FormatException("InvalidWidthEx,Text".Localize());
+                    throw new FormatException("InvalidHeightWidthEx,Text".Localize());
                 }
 
                 int iCUOneRow = (videoSequence.Width + videoSequence.MaxCUSize - 1) / videoSequence.MaxCUSize;
@@ -98,7 +98,7 @@ namespace HEVCDemo.Parsers
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show($"{"ErrorParsingCupuEx,Text".Localize()}\n\n{e.Message}", "AppTitle,Title".Localize());
+                    MessageBox.Show($"{"ErrorParsingEx,Text".Localize()}\n\n{e.Message}", "AppTitle,Title".Localize());
                     return false;
                 }
 

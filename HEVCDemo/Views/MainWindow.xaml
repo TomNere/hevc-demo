@@ -25,7 +25,7 @@
                           Command="{Binding SelectVideoCommand}" />
                 <MenuItem Header="{rf:Tr Uid='ClearCacheHeader'}"
                           Command="{Binding ClearCacheCommand}" />
-                <MenuItem Header="{rf:Tr Uid='ShowTerminal'}"
+                <MenuItem Header="{rf:Tr Uid='ShowOperationsInTerminal'}"
                           IsCheckable="True"
                           IsChecked="{Binding IsTerminalEnabled}" />
                 <MenuItem Header="{rf:Tr Uid='ExitHeader'}"

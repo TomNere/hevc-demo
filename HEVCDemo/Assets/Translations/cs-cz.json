@@ -7,241 +7,110 @@
   "Culture": "cs-cz",
   "Data": [
     {
+      "Id": "FileHeader",
+      "Header": "Soubor"
+    },
+    {
       "Id": "LanguageHeader",
       "Header": "Jazyk"
     },
     {
-      "Id": "StartButton",
-      "Content": "Začněte volbou HEVC (h.265) video souboru"
+      "Id": "HelpHeader",
+      "Header": "Nápověda"
     },
     {
       "Id": "SelectVideoHeader",
       "Header": "Vybrat video soubor"
     },
     {
-      "Id": "VideoPropertiesLabel",
-      "Content": "Vlastnosti videa"
+      "Id": "ClearCacheHeader",
+      "Header": "Vyčistit ukázková data"
     },
     {
-      "Id": "ResolutionLabel",
-      "Content": "Rozlišení:"
+      "Id": "ShowOperationsInTerminal",
+      "Header": "Zobrazovat průbeh operací"
     },
     {
-      "Id": "FileSizeLabel",
-      "Content": "Velikost souboru:"
+      "Id": "ExitHeader",
+      "Header": "Ukončit aplikaci"
     },
     {
-      "Id": "ViewOptionsLabel",
-      "Content": "Možnosti zobrazení"
+      "Id": "ShowHelpHeader",
+      "Header": "Zobrazit nápovědu"
     },
     {
-      "Id": "DecodedFramesLabel",
-      "Content": "Dekódované snímky"
+      "Id": "ShowTipsHeader",
+      "Header": "Zobrazovat tipy"
     },
     {
-      "Id": "CodingUnitsLabel",
-      "Content": "Kódovací a predikční jednotky"
+      "Id": "LicensesHeader",
+      "Header": "Licence"
+    },
+    {
+      "Id": "AboutHeader",
+      "Header": "O aplikaci"
+    },
+    {
+      "Id": "StartButton",
+      "Content": "Začněte volbou H.265 (HEVC) video souboru"
+    },
+    {
+      "Id": "TimelineDescription",
+      "Content": "Pozice snímku na časové ose"
+    },
+    {
+      "Id": "Framerate",
+      "Text": "Snímková frekvence: {0} fps"
     },
     {
       "Id": "CurrentFrameDescription",
       "Text": "Aktuální snímek: {0} ze {1}"
     },
     {
-      "Id": "AppStateLabel",
-      "Content": "Stav aplikace:"
+      "Id": "VideoProperties",
+      "Content": "Vlastnosti videa"
     },
     {
-      "Id": "ConvertingAnnexBState",
-      "Text": "Převod na tok bajtů a ořezávání videa"
+      "Id": "Resolution",
+      "Content": "Rozlišení:"
     },
     {
-      "Id": "CantCrop",
-      "Text": "Aplikace nepodporuje ořezání tohoto typu souboru. Video bude spracováno v plné délce."
+      "Id": "FileSize",
+      "Content": "Velikost souboru:"
     },
     {
-      "Id": "CreatingDemoData",
-      "Text": "Vytvářění ukázkových dat"
+      "Id": "ViewOptions",
+      "Content": "Možnosti zobrazení"
     },
     {
-      "Id": "LoadingDemoData",
-      "Text": "Načítání ukázkových dat"
+      "Id": "DecodedFrames",
+      "Content": "Dekódované snímky"
     },
     {
-      "Id": "LoadingIntoCache",
-      "Text": "Načítání snímků do paměti"
+      "Id": "CodingPredictionUnits",
+      "Content": "Kódovací a predikční jednotky"
     },
     {
-      "Id": "ReadyState",
-      "Text": "Připraven"
-    },
-    {
-      "Id": "InvalidWidthEx",
-      "Text": "Výška nebo šířka video sekvence je neplatná."
-    },
-    {
-      "Id": "ErrorParsingCupuEx",
-      "Text": "Problém při parsování cupu.txt"
-    },
-    {
-      "Id": "ErrorOccuredState",
-      "Text": "Nastala chyba"
-    },
-    {
-      "Id": "CheckingFFmpegState",
-      "Text": "Kontrola přítomnosti FFmpeg"
-    },
-    {
-      "Id": "FFmpegNotFoundMsg",
-      "Text": "FFmpeg, který je potřebný k běhu aplikace nebyl nalezen. Přejete si ho automaticky stáhnout?"
-    },
-    {
-      "Id": "FFmpegMissingState",
-      "Text": "FFmpeg nebyl nalezen"
-    },
-    {
-      "Id": "DownloadingFFmpegState",
-      "Text": "Stahování FFmpeg"
-    },
-    {
-      "Id": "FFmpegDownloadedMsg",
-      "Text": "FFmpeg byl úspešně stažen."
-    },
-    {
-      "Id": "DownloadFFmpegTitle",
-      "Title": "Stáhování FFmpeg"
-    },
-    {
-      "Id": "CacheExistsMsg",
-      "Text": "Ukázková data k dané video sekvenci již existují. Přejete si je přepsat?"
-    },
-    {
-      "Id": "CreatingCache",
-      "Text": "Vytváření ukázkových dat"
-    },
-    {
-      "Id": "UnhandledEx",
-      "Text": "Nastal neočekávaný problém:"
-    },
-    {
-      "Id": "ErrorOccuredTitle",
-      "Title": "Nastal problém"
-    },
-    {
-      "Id": "ErrorMessageMsg",
-      "Text": "Popis problému:"
-    },
-    {
-      "Id": "ErrorParsingPredictionEx",
-      "Text": "Problém při parsování prediction.txt"
-    },
-    {
-      "Id": "ErrorParsingIntraEx",
-      "Text": "Problém při parsování intra.txt"
-    },
-    {
-      "Id": "PredictionLabel",
+      "Id": "PredictionType",
       "Content": "Typ predikce"
     },
     {
-      "Id": "IntraLabel",
+      "Id": "IntraPredictionMode",
       "Content": "Mód vnitřního kódování"
     },
     {
-      "Id": "FileAlreadyLoadedMsg",
-      "Text": "Vybraný soubor je již otevřen."
+      "Id": "InterPrediction",
+      "Content": "Vnejší kódování (vektory pohybu)"
     },
     {
-      "Id": "ErrorParsingVectorsEx",
-      "Text": "Problém při parsování vectors.txt"
-    },
-    {
-      "Id": "MotionVectorsLabel",
-      "Content": "Vektory pohybu"
-    },
-    {
-      "Id": "VectorsStartLabel",
+      "Id": "VectorsStart",
       "Content": "Počáteční bod vektoru"
     },
     {
-      "Id": "VideoResolutionTitle",
-      "Title": "Rozlišení videa"
+      "Id": "Legend",
+      "Header": "Legenda"
     },
-    {
-      "Id": "FileSizeTitle",
-      "Title": "Velikost souboru"
-    },
-    {
-      "Id": "PredictionAngular",
-      "Content": "Angular"
-    },
-    {
-      "Id": "PredictionPlanar",
-      "Content": "Planar"
-    },
-    {
-      "Id": "PredictionDC",
-      "Content": "DC"
-    },
-    {
-      "Id": "PredictionUnitAt",
-      "Content": "Jednotka predikce v pozici"
-    },
-    {
-      "Id": "MODE_SKIP",
-      "Content": "-"
-    },
-    {
-      "Id": "MODE_INTRA",
-      "Content": "Vnitřní"
-    },
-    {
-      "Id": "MODE_INTER",
-      "Content": "Mezisnímková"
-    },
-    {
-      "Id": "MODE_NONE",
-      "Content": "Žádná"
-    },
-    {
-      "Id": "Size",
-      "Content": "Velikost"
-    },
-    {
-      "Id": "InterLabel",
-      "Content": "Mód mezisnímkového kódování"
-    },
-    {
-      "Id": "Ok",
-      "Content": "Ok"
-    },
-    {
-      "Id": "CodingUnitsFig1",
-      "Content": "Obr.1: Hranice CTU (hrubá linka), CU (tenká) a PU (tečkovaná). Čísla reprezentují pořadí přístupu k jednotkám při kódování."
-    },
-    {
-      "Id": "IntraPredictionFig2",
-      "Content": "Obr.2: Blok C je kódován pomocí referenčních pixelů (šedá barva) z ostatních bloků"
-    },
-    {
-      "Id": "IntraPredictionFig1",
-      "Content": "Obr.1: Notace pro popis vnitřno-predikčních módů"
-    },
-    {
-      "Id": "IntraPredictionFig3",
-      "Content": "Obr.3: Interpolace v horizontálním a vertikálním směru u MÓDU 1 (Planar)"
-    },
-    {
-      "Id": "IntraPredictionFig4",
-      "Content": "Obr.4: Čísla a směry MÓDŮ 2-34 (Angular)"
-    },
-    {
-      "Id": "InterPrediction",
-      "Content": "Mezisnímková predikce"
-    },
-    {
-      "Id": "InterPredictionFig1",
-      "Content": "Obr.1: šedou barvou je znázorněna aktuálně kódovaná jednotka, CandAx a CandBx jsou kandidáti pro použití vektoru"
-    },
+    // Settings panel legend
     {
       "Id": "ViewCu",
       "Text": "Modrými čtverci jsou znázorněny kódovací jednotky."
@@ -283,24 +152,188 @@
       "Text": "2 vektory (oboustranná predikce). Barva opět znázorňuje, o který vektor se jedná. Červená barva znamená druhý vektor z dvojice."
     },
     {
-      "Id": "HelpHeader",
-      "Header": "Nápověda"
+      "Id": "AppState",
+      "Content": "Stav aplikace:"
     },
     {
-      "Id": "FileHeader",
-      "Header": "Soubor"
+      "Id": "ConvertingAnnexBState",
+      "Text": "Převod na tok bajtů a ořezávání videa"
+    },
+    {
+      "Id": "ErrorOccuredState",
+      "Text": "Nastala chyba"
+    },
+    {
+      "Id": "CheckingFFmpegState",
+      "Text": "Kontrola přítomnosti FFmpeg"
+    },
+    {
+      "Id": "ReadyState",
+      "Text": "OK"
+    },
+    {
+      "Id": "FFmpegMissingState",
+      "Text": "FFmpeg nebyl nalezen"
+    },
+    {
+      "Id": "DownloadingFFmpegState",
+      "Text": "Stahování FFmpeg"
+    },
+    {
+      "Id": "ConvertingToHevcState",
+      "Text": "Převod na platný formát H.265"
+    },
+    {
+      "Id": "PlayingState",
+      "Text": "Automatické přepínání snímků"
+    },
+    {
+      "Id": "CreatingDemoDataState",
+      "Text": "Vytvářění ukázkových dat"
+    },
+    {
+      "Id": "LoadingDemoDataState",
+      "Text": "Načítání ukázkových dat"
+    },
+    {
+      "Id": "LoadingIntoCacheState",
+      "Text": "Načítání snímků do paměti"
+    },
+    {
+      "Id": "DownloadingFFmpegState",
+      "Text": "Stáhování FFmpeg"
+    },
+    {
+      "Id": "ClearingCacheState",
+      "Text": "Čištení ukázkových dat"
+    },
+    {
+      "Id": "OpeningFileState",
+      "Text": "Otvírání souboru"
+    },
+    {
+      "Id": "CantCropMsg",
+      "Text": "Aplikace nepodporuje ořezání tohoto typu souboru. Video bude spracováno v plné délce."
+    },
+    {
+      "Id": "FFmpegNotFoundMsg",
+      "Text": "FFmpeg, který je potřebný k běhu aplikace nebyl nalezen. Přejete si ho automaticky stáhnout?"
+    },
+    {
+      "Id": "FFmpegDownloadedMsg",
+      "Text": "FFmpeg byl úspešně stažen."
+    },
+    {
+      "Id": "CacheExistsMsg",
+      "Text": "Ukázková data k dané video sekvenci již existují. Přejete si je přepsat?"
+    },
+    {
+      "Id": "FileAlreadyLoadedMsg",
+      "Text": "Vybraný soubor je již otevřen."
+    },
+    {
+      "Id": "DoYouWantToConvertMsg",
+      "Text": "Aplikace se pokusí o konverzi na platný H.265 soubor. Přejete si pokračovat?"
+    },
+    {
+      "Id": "IncompleteDataMsg",
+      "Text": "Data ve snímku {0} jsou nekompletní!"
+    },
+    {
+      "Id": "ClearCacheMsg",
+      "Text": "Opravdu si přejete vyčistit ukázková data všech doteď otevřených video sekvencí?"
+    },
+    {
+      "Id": "InvalidHeightWidthEx",
+      "Text": "Výška nebo šířka video sekvence je neplatná."
+    },
+    {
+      "Id": "ErrorParsingEx",
+      "Text": "Problém při parsování vygenerovaných souborů s ukázkovými daty."
+    },
+    {
+      "Id": "UnhandledEx",
+      "Text": "Nastal neočekávaný problém:"
+    },
+    {
+      "Id": "ErrorCreatingDemoDataEx",
+      "Text": "Nastal problém při načítání ukázkových dat. Může jít o poškození nacachovaných dat, nedostatek volného místa na disku, nebo jste se pokusili otevřít neplatný video soubor."
+    },
+    {
+      "Id": "InsufficientMemoryEx",
+      "Text": "Nedostatek operační paměti!"
+    },
+    {
+      "Id": "VideoResolutionTitle",
+      "Text": "Rozlišení videa"
+    },
+    {
+      "Id": "FileSizeTitle",
+      "Text": "Velikost souboru"
+    },
+    {
+      "Id": "InterPredictionTitle",
+      "Text": "Vnejší predikce"
+    },
+    {
+      "Id": "PredictionAngular",
+      "Text": "Angular"
+    },
+    {
+      "Id": "PredictionPlanar",
+      "Text": "Planar"
+    },
+    {
+      "Id": "PredictionDC",
+      "Text": "DC"
+    },
+    {
+      "Id": "PredictionUnitAt",
+      "Content": "Jednotka predikce v pozici"
+    },
+    {
+      "Id": "PredictionUnitSize",
+      "Content": "Velikost"
+    },
+    {
+      "Id": "InterPredictionMode",
+      "Content": "Mód vnejšího kódování"
     },
     {
       "Id": "UniPrediction1",
-      "Content": "uni-predikce, vektor 1"
+      "Content": "jednostranná predikce, vektor 1"
     },
     {
       "Id": "UniPrediction2",
-      "Content": "uni-predikce, vektor 2"
+      "Content": "jednostranná predikce, vektor 2"
     },
     {
       "Id": "BiPrediction",
-      "Content": "bi-predikce"
+      "Content": "oboustranná predikce"
+    },
+    {
+      "Id": "CodingUnitsFig1",
+      "Text": "Obr.1: Hranice CTU (hrubá linka), CU (tenká) a PU (tečkovaná). Čísla reprezentují pořadí přístupu k jednotkám při kódování."
+    },
+    {
+      "Id": "IntraPredictionFig2",
+      "Text": "Obr.2: Blok C je kódován pomocí referenčních pixelů (šedá barva) z ostatních bloků"
+    },
+    {
+      "Id": "IntraPredictionFig1",
+      "Text": "Obr.1: Notace pro popis vnitřno-predikčních módů"
+    },
+    {
+      "Id": "IntraPredictionFig3",
+      "Text": "Obr.3: Interpolace v horizontálním a vertikálním směru u MÓDU 1 (Planar)"
+    },
+    {
+      "Id": "IntraPredictionFig4",
+      "Text": "Obr.4: Čísla a směry MÓDŮ 2-34 (Angular)"
+    },
+    {
+      "Id": "InterPredictionFig1",
+      "Text": "Obr.1: šedou barvou je znázorněna aktuálně kódovaná jednotka, CandAx a CandBx jsou kandidáti pro použití vektoru"
     },
     {
       "Id": "PopupHelp1",
@@ -343,86 +376,6 @@
       "Content": "Věděli jste, že..."
     },
     {
-      "Id": "FileHeader",
-      "Header": "File"
-    },
-    {
-      "Id": "ClearCacheHeader",
-      "Header": "Vyčistit ukázková data"
-    },
-    {
-      "Id": "ExitHeader",
-      "Header": "Ukončit aplikaci"
-    },
-    {
-      "Id": "ErrorCreatingDemoData",
-      "Text": "Nastal problém při načítání ukázkových dat. Může jít o poškození nacachovaných dat, nedostatek volného místa na disku, nebo jste se pokusili otevřít neplatný video soubor."
-    },
-    {
-      "Id": "DoYouWantToConvert",
-      "Text": "Aplikace se pokusí o konverzi na platný H.265 soubor. Přejete si pokračovat?"
-    },
-    {
-      "Id": "ShowHelpHeader",
-      "Header": "Zobrazit nápovědu"
-    },
-    {
-      "Id": "SelectFileFilter",
-      "Text": "H.265 video v kontejneru|*.mp4|H.265 video jako tok bajtů|*.bin;*.h265"
-    },
-    {
-      "Id": "LicensesHeader",
-      "Header": "Licence"
-    },
-    {
-      "Id": "AboutHeader",
-      "Header": "O aplikaci"
-    },
-    {
-      "Id": "IncompleteData",
-      "Text": "Data ve snímku {0} jsou nekompletní!"
-    },
-    {
-      "Id": "PlayingState",
-      "Text": "Automatické přehrávání"
-    },
-    {
-      "Id": "ShowDescriptionHeader",
-      "Header": "Popis"
-    },
-    {
-      "Id": "ShowTipsHeader",
-      "Header": "Zobrazovat tipy"
-    },
-    {
-      "Id": "ClearCacheMessage",
-      "Text": "Opravdu si přejete vyčistit ukázková data všech doteď otevřených video sekvencí?"
-    },
-    {
-      "Id": "ClearingCache",
-      "Text": "Čištení ukázkových dat"
-    },
-    {
-      "Id": "Timeline",
-      "Content": "Pozice snímku na časové ose"
-    },
-    {
-      "Id": "ConvertingToHevcState",
-      "Text": "Převod na formát H.265"
-    },
-    {
-      "Id": "Framerate",
-      "Text": "Snímková frekvence: {0} fps"
-    },
-    {
-      "Id": "OpeningFile",
-      "Text": "Otvírání souboru"
-    },
-    {
-      "Id": "AppTitle",
-      "Title": "HEVC Demo"
-    },
-    {
       "Id": "ShowFullHelp",
       "Content": "Zobrazit plnou nápovědu"
     },
@@ -443,12 +396,24 @@
       "Content": "Konec (s):"
     },
     {
-      "Id": "InsufficientMemory",
-      "Text": "Nedostatek operační paměti!"
+      "Id": "CreatingCacheOperation",
+      "Text": "Vytváření ukázkových dat"
     },
     {
-      "Id": "ShowTerminal",
-      "Header": "Zobrazovat průbeh operací"
+      "Id": "ErrorOccured",
+      "Text": "Nastal problém"
+    },
+    {
+      "Id": "Ok",
+      "Content": "Ok"
+    },
+    {
+      "Id": "SelectFileFilter",
+      "Text": "H.265 video v kontejneru|*.mp4|H.265 video jako tok bajtů|*.bin;*.h265"
+    },
+    {
+      "Id": "AppTitle",
+      "Title": "HEVC Demo"
     }
   ]
 }

@@ -34,25 +34,33 @@
             <Label Grid.Row="0" Grid.Column="0" Content="{rf:Tr Uid='PredictionUnitAt'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Parameters.Location, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" />
             <!--Size-->
-            <Label Grid.Row="1" Grid.Column="0" Content="{rf:Tr Uid='Size'}" VerticalAlignment="Center" FontWeight="Bold"/>
+            <Label Grid.Row="1"
+                   Grid.Column="0"
+                   Content="{rf:Tr Uid='PredictionUnitSize'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=Parameters.Size, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" />
             <Button Grid.Row="1" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Click="ShowCodingUnitsInfo_Click">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
             <!--Prediction type-->
-            <Label Grid.Row="2" Grid.Column="0" Content="{rf:Tr Uid='PredictionLabel'}" VerticalAlignment="Center" FontWeight="Bold"/>
+            <Label Grid.Row="2"
+                   Grid.Column="0"
+                   Content="{rf:Tr Uid='PredictionType'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=Parameters.PredictionMode, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center"/>
             <Button Grid.Row="2" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Click="ShowPredictionTypeInfo_Click">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
             <!--Intra mode-->
-            <Label Grid.Row="3" Grid.Column="0" Content="{rf:Tr Uid='IntraLabel'}" VerticalAlignment="Center" FontWeight="Bold"/>
+            <Label Grid.Row="3"
+                   Grid.Column="0"
+                   Content="{rf:Tr Uid='IntraPredictionMode'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Path=Parameters.IntraMode, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" />
             <Button Grid.Row="3" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Click="ShowIntraPredictionInfo_Click">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Button>
             <!--Inter mode-->
-            <Label Grid.Row="4" Grid.Column="0" Content="{rf:Tr Uid='InterLabel'}" VerticalAlignment="Center" FontWeight="Bold"/>
+            <Label Grid.Row="4"
+                   Grid.Column="0"
+                   Content="{rf:Tr Uid='InterPredictionMode'}" VerticalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Path=Parameters.InterMode, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center"/>
             <Button Grid.Row="4" Grid.Column="2" Margin="0,0,4,0" Height="24" Width="24" Click="ShowInterPredictionInfo_Click">
                 <iconPacks:PackIconModern Kind="Information" VerticalAlignment="Center" HorizontalAlignment="Center" />

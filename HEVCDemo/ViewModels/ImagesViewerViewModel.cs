@@ -1,5 +1,6 @@
 using HEVCDemo.CustomEventArgs;
 using HEVCDemo.Helpers;
+using HEVCDemo.Hevc;
 using HEVCDemo.Models;
 using HEVCDemo.Views;
 using Microsoft.Win32;
@@ -419,7 +420,7 @@ namespace HEVCDemo.ViewModels
 
                 if (!await OpenVideo(cacheToCreate, false))
                 {
-                    if(MessageBox.Show("DoYouWantToConvert,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if(MessageBox.Show("DoYouWantToConvertMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         await OpenVideo(cacheToCreate, true, cacheToCreate.StartSecond, cacheToCreate.EndSecond);
                     }
@@ -454,8 +455,9 @@ namespace HEVCDemo.ViewModels
                     }
                     else
                     {
-                        GlobalActionsHelper.OnAppStateChanged("LoadingDemoData,Text".Localize(), false, true);
+                        GlobalActionsHelper.OnAppStateChanged("LoadingDemoDataState,Text".Localize(), false, true);
                         await FFmpegHelper.InitProperties(cacheToCreate);
+                        cacheToCreate.VideoSequence = new VideoSequence();
                         cacheToCreate.ParseProps();
                         await cacheToCreate.ProcessFiles();
                         cacheToCreate.InitializeYuvFramesFiles();
@@ -481,9 +483,9 @@ namespace HEVCDemo.ViewModels
                 MaxSliderValue = cache.VideoSequence.FramesCount - 1;
                 CurrentFrameIndex = 0;
             },
-            "CreatingCache,Text".Localize(),
+            "CreatingCacheOperation,Text".Localize(),
             false,
-            "OpeningFile,Text".Localize(),
+            "OpeningFileState,Text".Localize(),
             "ReadyState,Text".Localize()
             );
         }
@@ -519,7 +521,7 @@ namespace HEVCDemo.ViewModels
             }
             else
             {
-                MessageBox.Show("CantCrop,Text".Localize(), "AppTitle,Title".Localize());
+                MessageBox.Show("CantCropMsg,Text".Localize(), "AppTitle,Title".Localize());
                 await cache.CreateCache(0, 0, false);
                 return true;
             }
@@ -680,7 +682,7 @@ namespace HEVCDemo.ViewModels
             CurrentFrame = await cache.GetFrameBitmaps(index, $"{(isPlaying ? "Playing" : "Ready")}State,Text".Localize(), viewConfiguration);
             if (!CurrentFrame.IsValid)
             {
-                MessageBox.Show(string.Format("IncompleteData,Text".Localize(), index + 1), "AppTitle,Title".Localize());
+                MessageBox.Show(string.Format("IncompleteDataMsg,Text".Localize(), index + 1), "AppTitle,Title".Localize());
             }
 
             CurrentFrameDescription = string.Format("CurrentFrameDescription,Text".Localize(), index + 1, cache.VideoSequence.FramesCount);
