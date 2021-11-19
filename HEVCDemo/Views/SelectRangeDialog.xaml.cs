@@ -18,6 +18,7 @@ namespace HEVCDemo.Views
 
         public SelectRangeDialog(int maximum)
         {
+            Owner = Application.Current.MainWindow;
             InitializeComponent();
             viewModel = new SelectRangeDialogViewModel(maximum);
             DataContext = viewModel;

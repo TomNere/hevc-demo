@@ -4,6 +4,7 @@ using HEVCDemo.ViewModels;
 using MahApps.Metro.Controls;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 
 namespace HEVCDemo.Views
@@ -15,6 +16,7 @@ namespace HEVCDemo.Views
     {
         public InfoDialog(string title, string textKey, List<InfoImage> images)
         {
+            Owner = Application.Current.MainWindow;
             InitializeComponent();
             AddNavigationCommandBinding();
 

@@ -13,7 +13,8 @@
                  MinWidth="600"
                  Width="600"
                  MaxHeight="768"
-                 MaxWidth="1024">
+                 MaxWidth="1024"
+                 WindowStartupLocation="CenterOwner">
     <ScrollViewer  VerticalScrollBarVisibility="Auto">
         <Grid Margin="30,0,30,10">
             <Grid.RowDefinitions>
