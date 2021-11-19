@@ -1,4 +1,4 @@
-{
+﻿{
   "AppId": "HEVCDemo",
   "Version": "0.1",
   "Type": "Single",
@@ -7,88 +7,156 @@
   "Culture": "en-us",
   "Data": [
     {
+      "Id": "FileHeader",
+      "Header": "File"
+    },
+    {
       "Id": "LanguageHeader",
       "Header": "Language"
     },
     {
-      "Id": "SelectFileFilter",
-      "Text": "H.265 video in container|*.mp4|H.265 video as byte stream|*.bin;*.h265"
-    },
-    {
-      "Id": "IncompleteData",
-      "Text": "Incomplete data in frame {0}!"
-    },
-    {
-      "Id": "StartButton",
-      "Content": "Start by selecting a HEVC (h.265) video file"
+      "Id": "HelpHeader",
+      "Header": "Help"
     },
     {
       "Id": "SelectVideoHeader",
       "Header": "Select video file"
     },
     {
-      "Id": "VideoPropertiesLabel",
-      "Content": "Video Properties"
+      "Id": "ClearCacheHeader",
+      "Header": "Clear demo data"
     },
     {
-      "Id": "ResolutionLabel",
-      "Content": "Resolution:"
+      "Id": "ShowOperationsInTerminal",
+      "Header": "Show progress of operations"
     },
     {
-      "Id": "FileSizeLabel",
+      "Id": "ExitHeader",
+      "Header": "Exit"
+    },
+    {
+      "Id": "ShowHelpHeader",
+      "Header": "Show help"
+    },
+    {
+      "Id": "ShowTipsHeader",
+      "Header": "Show tips"
+    },
+    {
+      "Id": "LicensesHeader",
+      "Header": "Licenses"
+    },
+    {
+      "Id": "AboutHeader",
+      "Header": "About"
+    },
+    {
+      "Id": "StartButton",
+      "Content": "Start by selecting a H.265 (HEVC) video file"
+    },
+    {
+      "Id": "TimelineDescription",
+      "Content": "Frame position on timeline"
+    },
+    {
+      "Id": "Framerate",
+      "Text": "Framerate: {0} fps"
+    },
+    {
+      "Id": "CurrentFrameDescription",
+      "Text": "Current frame: {0} out of {1}"
+    },
+    {
+      "Id": "VideoProperties",
+      "Content": "Video properties"
+    },
+    {
+      "Id": "Resolution",
+      "Content": "Rosolution:"
+    },
+    {
+      "Id": "FileSize",
       "Content": "File size:"
     },
     {
-      "Id": "ViewOptionsLabel",
-      "Content": "View Options"
+      "Id": "ViewOptions",
+      "Content": "View options"
     },
     {
-      "Id": "DecodedFramesLabel",
-      "Content": "Decoded Frames"
+      "Id": "DecodedFrames",
+      "Content": "Decoded frames"
     },
     {
-      "Id": "CodingUnitsLabel",
-      "Content": "Coding and Prediction Units"
+      "Id": "CodingPredictionUnits",
+      "Content": "Coding and prediction units"
     },
     {
-      "Id": "CurrentFrameLabel",
-      "Content": "Current frame: "
+      "Id": "PredictionType",
+      "Content": "Prediction type"
     },
     {
-      "Id": "AppStateLabel",
-      "Content": "App State:"
+      "Id": "IntraPredictionMode",
+      "Content": "Intra prediction type"
+    },
+    {
+      "Id": "InterPrediction",
+      "Content": "Inter prediction (motion vectors)"
+    },
+    {
+      "Id": "VectorsStart",
+      "Content": "Starting point of vector"
+    },
+    {
+      "Id": "Legend",
+      "Header": "Legend"
+    },
+    {
+      "Id": "ViewCu",
+      "Text": "Blue squares are coding units."
+    },
+    {
+      "Id": "ViewPu",
+      "Text": "Yellow color shows division to prediction units."
+    },
+    {
+      "Id": "ViewIntra",
+      "Text": "Pink tint means intra prediction."
+    },
+    {
+      "Id": "ViewInter",
+      "Text": "Blue tint means inter prediction."
+    },
+    {
+      "Id": "ViewPlanar",
+      "Text": "Planar (0)"
+    },
+    {
+      "Id": "ViewDc",
+      "Text": "DC (1)"
+    },
+    {
+      "Id": "ViewAngular2",
+      "Text": "Angular (2-17)"
+    },
+    {
+      "Id": "ViewAngular18",
+      "Text": "Angular (18-34)"
+    },
+    {
+      "Id": "ViewUniPrediction",
+      "Text": "1 vector (uni-prediction). Dot symbolizes starting point of the vector. Blue color means first of the two vectors was used."
+    },
+    {
+      "Id": "ViewBiPrediction",
+      "Text": "2 vectors (bi-prediction). Again, color symbolizes which vector is which. Red color means second of the two vectors was used."
+    },
+    {
+      "Id": "AppState",
+      "Content": "App state:"
     },
     {
       "Id": "ConvertingAnnexBState",
-      "Text": "Converting to byte stream"
-    },
-    {
-      "Id": "CreatingDemoData",
-      "Text": "Processing byte stream"
-    },
-    {
-      "Id": "LoadingDemoData",
-      "Text": "Creating demo data"
-    },
-    {
-      "Id": "LoadingIntoCacheState",
-      "Text": "Loading into cache"
-    },
-    {
-      "Id": "ReadyState",
-      "Text": "Ready"
-    },
-    {
-      "Id": "LoadIntoCacheTitle",
-      "Title": "Load into cache"
-    },
-    {
-      "Id": "InvalidWidthEx",
-      "Text": "Invalid sequence width or height"
-    },
-    {
-      "Id": "ErrorParsingCupuEx",
-      "Text": "Error parsing cupu.txt"
+      "Text": "Converting to byte stream and cropping"
     },
     {
       "Id": "ErrorOccuredState",
@@ -96,143 +164,251 @@
     },
     {
       "Id": "CheckingFFmpegState",
-      "Text": "Checking FFmpeg"
+      "Text": "Checking if FFmpeg is present"
     },
     {
-      "Id": "FFmpegNotFoundMsg",
-      "Text": "FFmpeg not found. Do you wish to automatically download it?"
+      "Id": "ReadyState",
+      "Text": "OK"
     },
     {
       "Id": "FFmpegMissingState",
-      "Text": "FFmpeg missing"
+      "Text": "FFmpeg not found"
     },
     {
       "Id": "DownloadingFFmpegState",
-      "Text": "Downloading FFmpeg"
+      "Text": "FFmpeg downloading"
+    },
+    {
+      "Id": "ConvertingToHevcState",
+      "Text": "Converting to valid H.265 format"
+    },
+    {
+      "Id": "PlayingState",
+      "Text": "Auto frame switching"
+    },
+    {
+      "Id": "CreatingDemoDataState",
+      "Text": "Creating demo data"
+    },
+    {
+      "Id": "LoadingDemoDataState",
+      "Text": "Loading demo data"
+    },
+    {
+      "Id": "LoadingIntoCacheState",
+      "Text": "Loading frames into memory"
+    },
+    {
+      "Id": "ClearingCacheState",
+      "Text": "Clearing demo data"
+    },
+    {
+      "Id": "OpeningFileState",
+      "Text": "Opening file"
+    },
+    {
+      "Id": "CantCropMsg",
+      "Text": "Cropping of this file format is not supported. Video will be processed in full length."
+    },
+    {
+      "Id": "FFmpegNotFoundMsg",
+      "Text": "FFmpeg not found. Do you want to download it automatically?"
     },
     {
       "Id": "FFmpegDownloadedMsg",
-      "Text": "FFmpeg sucessfully downloaded."
-    },
-    {
-      "Id": "DownloadFFmpegTitle",
-      "Title": "Download FFmpeg"
+      "Text": "FFmpeg successfully downloaded."
     },
     {
       "Id": "CacheExistsMsg",
-      "Text": "Cache exists. Do you wish to overwrite?"
-    },
-    {
-      "Id": "CreateCacheTitle",
-      "Title": "Create cache"
-    },
-    {
-      "Id": "UnhandledEx",
-      "Text": "Unhandled exception occured:"
-    },
-    {
-      "Id": "ErrorOccuredTitle",
-      "Title": "Error occured:"
-    },
-    {
-      "Id": "ErrorMessageMsg",
-      "Text": "Error message:"
-    },
-    {
-      "Id": "ErrorParsingPredictionEx",
-      "Text": "Error parsing prediction.txt"
-    },
-    {
-      "Id": "ErrorParsingIntraEx",
-      "Text": "Error parsing intra.txt"
-    },
-    {
-      "Id": "PredictionLabel",
-      "Content": "Prediction Type"
-    },
-    {
-      "Id": "IntraLabel",
-      "Content": "Intra prediction mode"
-    },
-    {
-      "Id": "InterLabel",
-      "Content": "Inter prediction mode"
+      "Text": "Demo data exists. Do you want to overwrite it?"
     },
     {
       "Id": "FileAlreadyLoadedMsg",
-      "Text": "File is already open."
+      "Text": "Selected file is already open."
     },
     {
-      "Id": "ErrorParsingVectorsEx",
-      "Text": "Error parsing vectors.txt"
+      "Id": "DoYouWantToConvertMsg",
+      "Text": "The app can try to convert to valid H.265 format. Do you want to proceed?"
     },
     {
-      "Id": "MotionVectorsLabel",
-      "Content": "Motion Vectors"
+      "Id": "IncompleteDataMsg",
+      "Text": "Data in frame {0} incomplete!"
     },
     {
-      "Id": "VectorsStartLabel",
-      "Content": "Vectors starting point"
+      "Id": "ClearCacheMsg",
+      "Text": "Do you really want to clear demo data of all previously open video files?"
     },
     {
-      "Id": "InfoDialogTitle",
-      "Title": "Info"
+      "Id": "InvalidHeightWidthEx",
+      "Text": "Height or width of the video is invalid."
+    },
+    {
+      "Id": "ErrorParsingEx",
+      "Text": "Error parsing demo data."
+    },
+    {
+      "Id": "UnhandledEx",
+      "Text": "Unexpected error occured:"
+    },
+    {
+      "Id": "ErrorCreatingDemoDataEx",
+      "Text": "Error occurred when loading demo data. It could be invalid data on disk, insufficient free space, or invalid video file."
+    },
+    {
+      "Id": "InsufficientMemoryEx",
+      "Text": "Insufficient ram memory!"
     },
     {
       "Id": "VideoResolutionTitle",
-      "Title": "Video resolution"
+      "Text": "Video resolution"
     },
     {
       "Id": "FileSizeTitle",
-      "Title": "File size"
+      "Text": "File size"
     },
     {
-      "Id": "FileSizeText",
-      "Content": "H.265 was designed for the newest generation of high-resolution video. Compared to H.264, this newer standard offers from 25% to 50% better data compression at the same level of video quality. It basically delivers high-quality videos at the same bitrate. Additionally, H.265/HEVC supports resolutions up to 8192x4320, which includes 8K UHD as well."
+      "Id": "InterPredictionTitle",
+      "Text": "Inter prediction"
     },
     {
       "Id": "PredictionAngular",
-      "Content": "Angular"
+      "Text": "Angular"
     },
     {
       "Id": "PredictionPlanar",
-      "Content": "Planar"
+      "Text": "Planar"
     },
     {
       "Id": "PredictionDC",
-      "Content": "DC"
+      "Text": "DC"
     },
     {
       "Id": "PredictionUnitAt",
-      "Content": "Prediction unit at "
+      "Content": "Prediction unit at position"
     },
     {
-      "Id": "MODE_SKIP",
-      "Content": "-"
-    },
-    {
-      "Id": "MODE_INTRA",
-      "Content": "Intra"
-    },
-    {
-      "Id": "MODE_INTER",
-      "Content": "Inter"
-    },
-    {
-      "Id": "MODE_NONE",
-      "Content": "None"
-    },
-    {
-      "Id": "Size",
+      "Id": "PredictionUnitSize",
       "Content": "Size"
+    },
+    {
+      "Id": "InterPredictionMode",
+      "Content": "Inter prediction mode"
+    },
+    {
+      "Id": "UniPrediction1",
+      "Content": "uni-prediction, vector 1"
+    },
+    {
+      "Id": "UniPrediction2",
+      "Content": "uni-prediction, vector 2"
+    },
+    {
+      "Id": "BiPrediction",
+      "Content": "bi-prediction"
+    },
+    {
+      "Id": "CodingUnitsFig1",
+      "Text": "Fig.1: Hranice CTU (hrubá linka), CU (tenká) a PU (tečkovaná). Čísla reprezentují pořadí přístupu k jednotkám při kódování."
+    },
+    {
+      "Id": "IntraPredictionFig2",
+      "Text": "Obr.2: Blok C je kódován pomocí referenčních pixelů (šedá barva) z ostatních bloků"
+    },
+    {
+      "Id": "IntraPredictionFig1",
+      "Text": "Obr.1: Notace pro popis vnitřno-predikčních módů"
+    },
+    {
+      "Id": "IntraPredictionFig3",
+      "Text": "Obr.3: Interpolace v horizontálním a vertikálním směru u MÓDU 1 (Planar)"
+    },
+    {
+      "Id": "IntraPredictionFig4",
+      "Text": "Obr.4: Čísla a směry MÓDŮ 2-34 (Angular)"
+    },
+    {
+      "Id": "InterPredictionFig1",
+      "Text": "Obr.1: šedou barvou je znázorněna aktuálně kódovaná jednotka, CandAx a CandBx jsou kandidáti pro použití vektoru"
+    },
+    {
+      "Id": "PopupHelp1",
+      "Content": "By pressing ← and → you can switch the frames. By holding CTRL at the same time, you can jump to start and end."
+    },
+    {
+      "Id": "PopupHelp2",
+      "Content": "Right click in a video frame opens info dialog about prediction unit at cursor position."
+    },
+    {
+      "Id": "PopupHelp3",
+      "Content": "You can zoom in and out by +,- and mouse wheel."
+    },
+    {
+      "Id": "PopupHelp4",
+      "Content": "By dragging the mouse, you can move the video frame horizontally and vertically."
+    },
+    {
+      "Id": "PopupHelp5",
+      "Content": "Coding data of the H.265 can be shown and hidden by clicking on check boxes."
+    },
+    {
+      "Id": "PopupHelp6",
+      "Content": "By clicking the info icon in the panel, you can show detail description of H.265 coding algorithms."
+    },
+    {
+      "Id": "PopupHelp7",
+      "Content": "By expanding sections in the panel, you can show legend."
+    },
+    {
+      "Id": "PopupHelp8",
+      "Content": "By pressing the space, you can start and stop automatic switching of the frames."
+    },
+    {
+      "Id": "PopupHelp9",
+      "Content": "Frames can be also switched by timeline."
+    },
+    {
+      "Id": "DidYouKnow",
+      "Content": "Did you know that..."
+    },
+    {
+      "Id": "ShowFullHelp",
+      "Content": "Show full help"
+    },
+    {
+      "Id": "SelectRange",
+      "Content": "Select time interval (max. 10s) to process."
+    },
+    {
+      "Id": "FullVideoLength",
+      "Content": "Full video length (s):"
+    },
+    {
+      "Id": "StartSecond",
+      "Content": "Start (s):"
+    },
+    {
+      "Id": "EndSecond",
+      "Content": "End (s):"
+    },
+    {
+      "Id": "CreatingCacheOperation",
+      "Text": "Creating demo data"
+    },
+    {
+      "Id": "ErrorOccured",
+      "Text": "Error occured"
     },
     {
       "Id": "Ok",
       "Content": "Ok"
     },
     {
-      "Id": "ErrorCreatingDemoData",
-      "Text": "Error creating demo data. Either the cache is corrupted or format of the given file is invalid."
+      "Id": "SelectFileFilter",
+      "Text": "H.265 video in container|*.mp4|H.265 video byte stream|*.bin;*.h265"
+    },
+    {
+      "Id": "AppTitle",
+      "Title": "HEVC Demo"
     }
   ]
 }

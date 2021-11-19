@@ -110,7 +110,6 @@
       "Id": "Legend",
       "Header": "Legenda"
     },
-    // Settings panel legend
     {
       "Id": "ViewCu",
       "Text": "Modrými čtverci jsou znázorněny kódovací jednotky."
@@ -125,23 +124,23 @@
     },
     {
       "Id": "ViewInter",
-      "Text": "Modrým podbarvením je znázorněna mezisnímková predikce."
+      "Text": "Modrým podbarvením je znázorněna vnejší predikce."
     },
     {
       "Id": "ViewPlanar",
-      "Text": "Planar (0)"
+      "Text": "Plochý (0)"
     },
     {
       "Id": "ViewDc",
-      "Text": "DC (1)"
+      "Text": "Kostantní (1)"
     },
     {
       "Id": "ViewAngular2",
-      "Text": "Angular (2-17)"
+      "Text": "Směrový (2-17)"
     },
     {
       "Id": "ViewAngular18",
-      "Text": "Angular (18-34)"
+      "Text": "Směrový (18-34)"
     },
     {
       "Id": "ViewUniPrediction",
@@ -200,10 +199,6 @@
       "Text": "Načítání snímků do paměti"
     },
     {
-      "Id": "DownloadingFFmpegState",
-      "Text": "Stáhování FFmpeg"
-    },
-    {
       "Id": "ClearingCacheState",
       "Text": "Čištení ukázkových dat"
     },
@@ -233,7 +228,7 @@
     },
     {
       "Id": "DoYouWantToConvertMsg",
-      "Text": "Aplikace se pokusí o konverzi na platný H.265 soubor. Přejete si pokračovat?"
+      "Text": "Aplikace se pokusí o konverzi na platný H.265 formát. Přejete si pokračovat?"
     },
     {
       "Id": "IncompleteDataMsg",
@@ -241,7 +236,7 @@
     },
     {
       "Id": "ClearCacheMsg",
-      "Text": "Opravdu si přejete vyčistit ukázková data všech doteď otevřených video sekvencí?"
+      "Text": "Opravdu si přejete vyčistit ukázková data všech doteď otevřených video souborů?"
     },
     {
       "Id": "InvalidHeightWidthEx",
@@ -257,7 +252,7 @@
     },
     {
       "Id": "ErrorCreatingDemoDataEx",
-      "Text": "Nastal problém při načítání ukázkových dat. Může jít o poškození nacachovaných dat, nedostatek volného místa na disku, nebo jste se pokusili otevřít neplatný video soubor."
+      "Text": "Nastal problém při načítání ukázkových dat. Může jít o poškození dat uložených na disku, nedostatek volného místa na disku, nebo jste se pokusili otevřít neplatný video soubor."
     },
     {
       "Id": "InsufficientMemoryEx",
@@ -277,15 +272,15 @@
     },
     {
       "Id": "PredictionAngular",
-      "Text": "Angular"
+      "Text": "Směrový"
     },
     {
       "Id": "PredictionPlanar",
-      "Text": "Planar"
+      "Text": "Plochý"
     },
     {
       "Id": "PredictionDC",
-      "Text": "DC"
+      "Text": "Konstantní"
     },
     {
       "Id": "PredictionUnitAt",
@@ -353,15 +348,15 @@
     },
     {
       "Id": "PopupHelp5",
-      "Content": "Kódovací mechanizmy algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole."
+      "Content": "Kódovací data algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole."
     },
     {
       "Id": "PopupHelp6",
-      "Content": "Kliknutím na ikonu informace v panelu lze zobrazit detailní popis kódovacích mechanizmů algoritmu H.265."
+      "Content": "Kliknutím na ikonu informace v panelu lze zobrazit detailní popis kódovacích algoritmů kodeku H.265."
     },
     {
       "Id": "PopupHelp7",
-      "Content": "Rozbalením sekcí v panelu lze zobrazit legendu ke kódovacím mechanizmům."
+      "Content": "Rozbalením sekcí v panelu lze zobrazit legendu."
     },
     {
       "Id": "PopupHelp8",
