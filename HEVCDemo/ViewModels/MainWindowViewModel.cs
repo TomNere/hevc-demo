@@ -4,6 +4,7 @@ using HEVCDemo.Views;
 using Prism.Commands;
 using Prism.Mvvm;
 using Rasyidf.Localization;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -13,6 +14,8 @@ namespace HEVCDemo.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+        private List<LocalizationDictionary> culturePacks;
+
         private bool isTerminalEnabled;
         public bool IsTerminalEnabled
         {
@@ -33,16 +36,6 @@ namespace HEVCDemo.ViewModels
                 SetProperty(ref isShowTipsEnabled, value);
                 Properties.Settings.Default.IsShowTipsEnabled = value;
                 GlobalActionsHelper.OnShowTipsEnabledChanged(value);
-            }
-        }
-
-        private ObservableCollection<LocalizationDictionary> cultures = new ObservableCollection<LocalizationDictionary>();
-        public ObservableCollection<LocalizationDictionary> Cultures
-        {
-            get => cultures;
-            set
-            {
-                SetProperty(ref cultures, value);
             }
         }
 
@@ -109,19 +102,29 @@ namespace HEVCDemo.ViewModels
         {
             LocalizationService.ScanLanguagesInFolder("Assets\\Translations");
             var packs = LocalizationService.RegisteredPacks;
-            var cultures = packs.Keys;
-            LocalizationService.Current.ChangeLanguage(LocalizationDictionary.GetResources(cultures.First()));
-            foreach (var culture in cultures)
-            {
-                var pack = LocalizationDictionary.GetResources(culture);
-                Cultures.Add(pack);
+            var packsKeys = packs.Keys;
+            LocalizationService.Current.ChangeLanguage(LocalizationDictionary.GetResources(packsKeys.First()));
 
+            culturePacks = new List<LocalizationDictionary>();
+            foreach (var pack in packsKeys)
+            {
+                culturePacks.Add(LocalizationDictionary.GetResources(pack));
+            }
+            CreateCultureMenuItems();
+        }
+
+        private void CreateCultureMenuItems()
+        {
+            CultureMenuItems.Clear();
+
+            foreach (var pack in culturePacks)
+            {
                 var menuItem = new MenuItem
                 {
                     Header = $"{pack.EnglishName} ({pack.CultureName})",
                     Tag = pack,
-                    IsChecked = cultures.First() == culture, // TODO,
-                    IsEnabled = cultures.First() == culture // TODO,
+                    IsChecked = LocalizationService.Current.Culture == pack.Culture,
+                    IsEnabled = true
                 };
 
                 CultureMenuItems.Add(menuItem);
@@ -133,6 +136,7 @@ namespace HEVCDemo.ViewModels
             if (value != null)
             {
                 LocalizationService.Current.ChangeLanguage(value);
+                CreateCultureMenuItems();
             }
         }
 
