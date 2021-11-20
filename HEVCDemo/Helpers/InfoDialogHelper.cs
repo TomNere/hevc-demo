@@ -38,7 +38,7 @@ namespace HEVCDemo.Helpers
 
         public static void ShowPredictionTypeInfoDialog()
         {
-            var infoDialog = new InfoDialog("PredictionLabel,Content".Localize(), "PredictionType", null);
+            var infoDialog = new InfoDialog("PredictionType,Content".Localize(), "PredictionType", null);
             infoDialog.Show();
         }
 

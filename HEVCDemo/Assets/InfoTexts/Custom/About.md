@@ -1,27 +1,27 @@
-﻿Aplikace HEVC Demo vznikla jako diplomová práce na Fakulte informatiky Masarykovy Univerzity v Brně. Má sloužit jako podpůrný nástroj pro výuku video kodeku H.265 (HEVC) a taky pro všechny ty, kterí chtějí nahlédnout do tajů video komprese. Hlavním cílem aplikace je přehlednost a jednoduchost. Pro profesionální analýzu video kodeků slouží jiné aplikace.
+﻿HEVC Demo app was create as diploma thesis at Faculty of Informatics Masaryk University in Brno. The app should serve as support for teaching **H.265 (HEVC)** codec and also for everyone who wants to dive into secrets of video coding/compression. Main aim of the app is clarity and simplicity. There are other apps for professional video analysis.
 
-**Podporované formáty**
+**Supported formats**
 
-* video kódované pomocí kodeku **H.265** v kontejneru (koncovka **.mp4**)
-* video kódované pomocí kodeku **H.265** ve formě bitového toku  [AnnexB](https://aomedia.org/av1/specification/annex-b/) (koncovky **.bin**, **.h265**)
+* H.265 coded video in container (**.mp4** extension)
+* H.265 coded video as byte stream [AnnexB](https://aomedia.org/av1/specification/annex-b/) (extensions **.bin**, **.h265**)
 
 
-**Doporučené požadavky**
+**System requirements**
 
-* CPU: 4-jádrový procesor Intel nebo AMD
+* CPU: 4-core processor Intel or AMD
 * RAM: > 8GB
-* Místo na disku: > 10GB
+* Available disk space: > 10GB
 * OS: Windows 10
 
 **GitHub**
 
-Aplikace i s jejími zdrojovými kódy je volně dostupná na platformě GitHub:
+App with its source code is available on GitHub:
 * [https://github.com/TomNere/hevc-demo](https://github.com/TomNere/hevc-demo)
 
-**Autor**
+**Author**
 
 Tomáš Nereča
-Masarykova univerzita, Fakulta informatiky
+Masaryk University, Fakulty of Informatics
 
 
 **Copyright(c) 2021**

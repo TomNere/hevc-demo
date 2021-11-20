@@ -25,7 +25,7 @@
 **Xabe.FFmpeg** - [CC BY-NC-SA 3.0](https://ffmpeg.xabe.net/license.html)
 
 
-Samotná aplikace HEVC je poskytována za podmínek licence MIT:
+Samotná aplikace HEVC Demo je poskytována za podmínek licence MIT:
 
 *The MIT License (MIT)*
 *Copyright 2021 Tomáš Nereča*

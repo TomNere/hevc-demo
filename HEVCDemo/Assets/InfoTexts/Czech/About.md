@@ -1,9 +1,9 @@
-﻿Aplikace HEVC Demo vznikla jako diplomová práce na Fakulte informatiky Masarykovy Univerzity v Brně. Má sloužit jako podpůrný nástroj pro výuku video kodeku H.265 (HEVC) a taky pro všechny ty, kterí chtějí nahlédnout do tajů video komprese. Hlavním cílem aplikace je přehlednost a jednoduchost. Pro profesionální analýzu video kodeků slouží jiné aplikace.
+﻿Aplikace HEVC Demo vznikla jako diplomová práce na Fakulte informatiky Masarykovy Univerzity v Brně. Má sloužit jako podpůrný nástroj pro výuku video kodeku **H.265 (HEVC)** a taky pro všechny ty, kterí chtějí nahlédnout do tajů video kódování/komprese. Hlavním cílem aplikace je přehlednost a jednoduchost. Pro profesionální analýzu video kodeků slouží jiné aplikace.
 
 **Podporované formáty**
 
 * video kódované pomocí kodeku **H.265** v kontejneru (koncovka **.mp4**)
-* video kódované pomocí kodeku **H.265** ve formě bitového toku  [AnnexB](https://aomedia.org/av1/specification/annex-b/) (koncovky **.bin**, **.h265**)
+* video kódované pomocí kodeku **H.265** ve formě toku bajtů [AnnexB](https://aomedia.org/av1/specification/annex-b/) (koncovky **.bin**, **.h265**)
 
 
 **Doporučené požadavky**
