@@ -207,6 +207,10 @@
       "Text": "Otvírání souboru"
     },
     {
+      "Id": "IncompleteDataState",
+      "Text": "Data ve snímku {0} jsou nekompletní!"
+    },
+    {
       "Id": "CantCropMsg",
       "Text": "Aplikace nepodporuje ořezání tohoto typu souboru. Video bude spracováno v plné délce."
     },
@@ -229,10 +233,6 @@
     {
       "Id": "DoYouWantToConvertMsg",
       "Text": "Aplikace se pokusí o konverzi na platný H.265 formát. Přejete si pokračovat?"
-    },
-    {
-      "Id": "IncompleteDataMsg",
-      "Text": "Data ve snímku {0} jsou nekompletní!"
     },
     {
       "Id": "ClearCacheMsg",

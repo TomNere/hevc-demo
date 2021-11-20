@@ -207,6 +207,10 @@
       "Text": "Opening file"
     },
     {
+      "Id": "IncompleteDataState",
+      "Text": "Data in frame {0} incomplete!"
+    },
+    {
       "Id": "CantCropMsg",
       "Text": "Cropping of this file format is not supported. Video will be processed in full length."
     },
@@ -229,10 +233,6 @@
     {
       "Id": "DoYouWantToConvertMsg",
       "Text": "The app can try to convert to valid H.265 format. Do you want to proceed?"
-    },
-    {
-      "Id": "IncompleteDataMsg",
-      "Text": "Data in frame {0} incomplete!"
     },
     {
       "Id": "ClearCacheMsg",
