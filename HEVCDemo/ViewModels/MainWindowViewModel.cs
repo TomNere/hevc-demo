@@ -103,13 +103,23 @@ namespace HEVCDemo.ViewModels
             LocalizationService.ScanLanguagesInFolder("Assets\\Translations");
             var packs = LocalizationService.RegisteredPacks;
             var packsKeys = packs.Keys;
-            LocalizationService.Current.ChangeLanguage(LocalizationDictionary.GetResources(packsKeys.First()));
+
+            if (string.IsNullOrEmpty(Properties.Settings.Default.Language))
+            {
+                Properties.Settings.Default.Language = LocalizationDictionary.GetResources(packsKeys.First()).Culture.Name;
+            }
 
             culturePacks = new List<LocalizationDictionary>();
             foreach (var pack in packsKeys)
             {
-                culturePacks.Add(LocalizationDictionary.GetResources(pack));
+                var culturePack = LocalizationDictionary.GetResources(pack);
+                culturePacks.Add(culturePack);
+                if (culturePack.Culture.Name == Properties.Settings.Default.Language)
+                {
+                    LocalizationService.Current.ChangeLanguage(culturePack);
+                }
             }
+
             CreateCultureMenuItems();
         }
 
@@ -123,7 +133,7 @@ namespace HEVCDemo.ViewModels
                 {
                     Header = $"{pack.EnglishName} ({pack.CultureName})",
                     Tag = pack,
-                    IsChecked = LocalizationService.Current.Culture == pack.Culture,
+                    IsChecked = Properties.Settings.Default.Language == pack.Culture.Name,
                     IsEnabled = true
                 };
 
@@ -135,6 +145,7 @@ namespace HEVCDemo.ViewModels
         {
             if (value != null)
             {
+                Properties.Settings.Default.Language = value.Culture.Name;
                 LocalizationService.Current.ChangeLanguage(value);
                 CreateCultureMenuItems();
             }
