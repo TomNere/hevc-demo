@@ -1,4 +1,5 @@
-﻿In H.265 codec, there are 2 types of prediction.
+﻿Video compression removes repetitive images or scenes from video a this way reduces the size of video file.
+To achieve this, prediction of image informations is used. In H.265 codec, there are 2 types of prediction.
 
 **Intra picture**
 

@@ -1,4 +1,5 @@
-﻿V kodeku H.265 existují 2 typy predikce.
+﻿Cílem video komprese je odstranit opakující se obrazy nebo scény a tak zredukovat velikost souboru.
+K tomu se využívá predikce obrazových informací. V kodeku H.265 existují 2 typy predikce.
 
 **Intra picture (vnitřní predikce)** 
 
