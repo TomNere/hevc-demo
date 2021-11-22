@@ -2,13 +2,13 @@
 using HEVCDemo.Views;
 using Rasyidf.Localization;
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Media;
 
 namespace HEVCDemo.Helpers
 {
     public static class InfoDialogHelper
     {
+        private const string subPath = "../Assets/Images/InfoDialogs/";
+
         public static void ShowResolutionInfoDialog()
         {
             var infoDialog = new InfoDialog("VideoResolutionTitle,Text".Localize(), "VideoResolution", null);
@@ -31,7 +31,7 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "CodingUnitsFig1,Text".Localize(), DrawingImage = (DrawingImage)Application.Current.FindResource("cupuStructureDrawingImage") }
+                new InfoImage { Name = "CodingUnitsFig1,Text".Localize(), ImagePath = $"{subPath}cupuStructure.png"}
             };
 
             var infoDialog = new InfoDialog("CodingPredictionUnits,Content".Localize(), "CodingUnits", images);
@@ -48,8 +48,8 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "IntraPredictionFig1,Text".Localize(), DrawingImage = (DrawingImage)Application.Current.FindResource("dcDrawingImage")},
-                new InfoImage { Name = "IntraPredictionFig2,Text".Localize(), DrawingImage = (DrawingImage)Application.Current.FindResource("angularDrawingImage")},
+                new InfoImage { Name = "IntraPredictionFig1,Text".Localize(), ImagePath = $"{subPath}dc.png"},
+                new InfoImage { Name = "IntraPredictionFig2,Text".Localize(), ImagePath = $"{subPath}angular.png"},
             };
 
             var infoDialog = new InfoDialog("IntraPredictionMode,Content".Localize(), "IntraPrediction", images);
@@ -60,7 +60,7 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "InterPredictionFig1,Text".Localize(), DrawingImage = (DrawingImage)Application.Current.FindResource("mvDrawingImage")},
+                new InfoImage { Name = "InterPredictionFig1,Text".Localize(), ImagePath = $"{subPath}mv.png"}
             };
 
             var infoDialog = new InfoDialog("InterPredictionTitle,Text".Localize(), "InterPrediction", images);

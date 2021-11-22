@@ -26,7 +26,7 @@
                    HorizontalAlignment="Center"
                    Content="{Binding Title}"
                    FontSize="24"
-                   Margin="0,0,0,20"/>
+                   Margin="0,0,0,20" />
             <mdx:MarkdownScrollViewer Grid.Row="1"
                                       Markdown="{Binding Text}"
                                       xml:space="preserve"
@@ -43,9 +43,8 @@
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0"
                                     Background="#B3B5B3">
-                            <Image Margin="4"
-                                   Source="{Binding DrawingImage}" />    
-                                </Border>
+                                <Image Source="{Binding ImagePath}" />    
+                            </Border>
                             <TextBlock Grid.Row="1"
                                        Text="{Binding Name}"
                                        HorizontalAlignment="Center"

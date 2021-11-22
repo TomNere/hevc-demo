@@ -1,10 +1,8 @@
-﻿using System.Windows.Media;
-
-namespace HEVCDemo.Models
+﻿namespace HEVCDemo.Models
 {
     public class InfoImage
     {
         public string Name { get; set; }
-        public DrawingImage DrawingImage { get; set; }
+        public string ImagePath { get; set; }
     }
 }
