@@ -7,5 +7,6 @@
 **Selecting vectors:**
 
 * it is considered, that vector for current unit will have small difference comparing to vectors of neighbouring units
-* when to frames are very similar, vector from another frame on similar position can be used
-* finally, vectors from units CandA and CandB (fig. 1) from current frame, vector from another frame from *co-located* unit and zero vector can be selected
+* when to frames are very similar, vector from another frame on similar position (*co-located* unit) can be used
+* finally, one vector from units Ax and one from units Bx (see fig. 1) from current frame, vector from another frame and zero vector can be selected
+* more info at [https://www.elecard.com/page/motion_compensation_in_hevc](https://www.elecard.com/page/motion_compensation_in_hevc)

@@ -7,5 +7,6 @@
 **Výběr vektorů:**
 
 * bere se v potaz, že vektor pro aktuální predikční jednotku bude mít malý rozdíl oproti vektorům sousedních jednotek
-* když se dva snímky velmi podobají, tak se může použít vektor z jiného snímku ve stejné nebo podobné pozici
-* ve výsledku se tedy můžou použít vektory z jednotek CandA a CandB (viz. obr. 1) z aktuálního snímku, vektor z jiného snímku z tzv. *co-located* jednotky, nebo nulový vektor
+* když se dva snímky velmi podobají, tak se může použít vektor z jiného snímku ve stejné nebo podobné pozici - tzv. *co-located* jednotka
+* ve výsledku se tedy může použít jeden vektor z jednotek Ax a jeden z jednotek Bx (viz. obr. 1) z aktuálního snímku, vektor z jiného snímku, nebo nulový vektor
+* bližší info viz. [https://www.elecard.com/page/motion_compensation_in_hevc](https://www.elecard.com/page/motion_compensation_in_hevc)

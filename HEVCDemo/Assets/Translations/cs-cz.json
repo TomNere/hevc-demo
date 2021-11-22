@@ -308,27 +308,19 @@
     },
     {
       "Id": "CodingUnitsFig1",
-      "Text": "Obr.1: Hranice CTU (hrubá linka), CU (tenká) a PU (tečkovaná). Čísla reprezentují pořadí přístupu k jednotkám při kódování."
-    },
-    {
-      "Id": "IntraPredictionFig2",
-      "Text": "Obr.2: Blok C je kódován pomocí referenčních pixelů (šedá barva) z ostatních bloků"
+      "Text": "Obr.1: Hranice CTU (černá linka), CU (modrá) a rozdelení na PU (žlutá). Čísla reprezentují pořadí přístupu k jednotkám při kódování."
     },
     {
       "Id": "IntraPredictionFig1",
-      "Text": "Obr.1: Notace pro popis vnitřno-predikčních módů"
+      "Text": "Obr.1: Konstantní (DC - 0) mód vnitřní predikce."
     },
     {
-      "Id": "IntraPredictionFig3",
-      "Text": "Obr.3: Interpolace v horizontálním a vertikálním směru u MÓDU 1 (Planar)"
-    },
-    {
-      "Id": "IntraPredictionFig4",
-      "Text": "Obr.4: Čísla a směry MÓDŮ 2-34 (Angular)"
+      "Id": "IntraPredictionFig2",
+      "Text": "Obr.2: Směrové (Angular 2-34) módy vnitřní predikce."
     },
     {
       "Id": "InterPredictionFig1",
-      "Text": "Obr.1: šedou barvou je znázorněna aktuálně kódovaná jednotka, CandAx a CandBx jsou kandidáti pro použití vektoru"
+      "Text": "Obr.1: Dva příklady konfigurace jednotek. Žlutou barvou je znázorněna aktuálně kódovaná jednotka, A0/A1 a B0/B1/B2 jsou kandidátní jednotky pro použití vektoru, přičemž výběr závisí na pozicích pixelů pA1 a pA2, resp. pB0, pB1 a pB2."
     },
     {
       "Id": "PopupHelp1",

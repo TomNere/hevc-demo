@@ -12,6 +12,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml" />
                 <!--Custom-->
                 <ResourceDictionary Source="Styles/CustomStyle.xaml"/>
+                <ResourceDictionary x:Name="VectorImages"
+                                    Source="Assets/Images/VectorImages.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

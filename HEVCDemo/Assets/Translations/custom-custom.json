@@ -308,27 +308,19 @@
     },
     {
       "Id": "CodingUnitsFig1",
-      "Text": "Fig.1: Hranice CTU (hrubá linka), CU (tenká) a PU (tečkovaná). Čísla reprezentují pořadí přístupu k jednotkám při kódování."
-    },
-    {
-      "Id": "IntraPredictionFig2",
-      "Text": "Obr.2: Blok C je kódován pomocí referenčních pixelů (šedá barva) z ostatních bloků"
+      "Text": "Fig.1: CTU boundaries (black color), CU (blue) a division into PUs (yellow). Numbers symbolize order of access to units when coding."
     },
     {
       "Id": "IntraPredictionFig1",
-      "Text": "Obr.1: Notace pro popis vnitřno-predikčních módů"
+      "Text": "Fig.1: Intra prediction's DC mode (0)."
     },
     {
-      "Id": "IntraPredictionFig3",
-      "Text": "Obr.3: Interpolace v horizontálním a vertikálním směru u MÓDU 1 (Planar)"
-    },
-    {
-      "Id": "IntraPredictionFig4",
-      "Text": "Obr.4: Čísla a směry MÓDŮ 2-34 (Angular)"
+      "Id": "IntraPredictionFig2",
+      "Text": "Fig.2: Intra prediction's angular modes (2-34)."
     },
     {
       "Id": "InterPredictionFig1",
-      "Text": "Obr.1: šedou barvou je znázorněna aktuálně kódovaná jednotka, CandAx a CandBx jsou kandidáti pro použití vektoru"
+      "Text": "Fig.1: Two examples of possible configurations of units. Currently coded unit has yellow color. A0/A1 and B0/B1/B2 are candidates from which vector is used. Choice depends on the positions of pixels pA1 and pA2, respectively pB0, pB1 and pB2."
     },
     {
       "Id": "PopupHelp1",
@@ -348,7 +340,7 @@
     },
     {
       "Id": "PopupHelp5",
-      "Content": "Coding data of the H.265 can be shown and hidden by clicking on check boxes."
+      "Content": "Coding data of the H.265 can be shown and hidden by clicking the check boxes."
     },
     {
       "Id": "PopupHelp6",

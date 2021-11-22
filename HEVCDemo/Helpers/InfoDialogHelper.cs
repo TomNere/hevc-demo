@@ -2,6 +2,8 @@
 using HEVCDemo.Views;
 using Rasyidf.Localization;
 using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media;
 
 namespace HEVCDemo.Helpers
 {
@@ -29,7 +31,7 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "CodingUnitsFig1,Text".Localize(), ImagePath = "../Assets/Images/cupuStructure.png" }
+                new InfoImage { Name = "CodingUnitsFig1,Text".Localize(), DrawingImage = (DrawingImage)Application.Current.FindResource("cupuStructureDrawingImage") }
             };
 
             var infoDialog = new InfoDialog("CodingPredictionUnits,Content".Localize(), "CodingUnits", images);
@@ -46,10 +48,8 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "IntraPredictionFig1,Text".Localize(), ImagePath = "../Assets/Images/intraNotation.png"},
-                new InfoImage { Name = "IntraPredictionFig2,Text".Localize(), ImagePath = "../Assets/Images/referencePixels.png"},
-                new InfoImage { Name = "IntraPredictionFig3,Text".Localize(), ImagePath = "../Assets/Images/intraInterpolation.png"},
-                new InfoImage { Name = "IntraPredictionFig4,Text".Localize(), ImagePath = "../Assets/Images/intraModes.png"},
+                new InfoImage { Name = "IntraPredictionFig1,Text".Localize(), DrawingImage = (DrawingImage)Application.Current.FindResource("dcDrawingImage")},
+                new InfoImage { Name = "IntraPredictionFig2,Text".Localize(), DrawingImage = (DrawingImage)Application.Current.FindResource("angularDrawingImage")},
             };
 
             var infoDialog = new InfoDialog("IntraPredictionMode,Content".Localize(), "IntraPrediction", images);
@@ -60,7 +60,7 @@ namespace HEVCDemo.Helpers
         {
             var images = new List<InfoImage>
             {
-                new InfoImage { Name = "InterPredictionFig1,Text".Localize(), ImagePath = "../Assets/Images/vectorsCandidateBlocks.png"},
+                new InfoImage { Name = "InterPredictionFig1,Text".Localize(), DrawingImage = (DrawingImage)Application.Current.FindResource("mvDrawingImage")},
             };
 
             var infoDialog = new InfoDialog("InterPredictionTitle,Text".Localize(), "InterPrediction", images);

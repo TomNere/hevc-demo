@@ -10,20 +10,14 @@ namespace HEVCDemo.ViewModels
         public string Title
         {
             get => title;
-            set
-            {
-                SetProperty(ref title, value);
-            }
+            set => SetProperty(ref title, value);
         }
 
         private string text;
         public string Text
         {
             get => text;
-            set
-            {
-                SetProperty(ref text, value);
-            }
+            set => SetProperty(ref text, value);
         }
 
         private List<InfoImage> images;
