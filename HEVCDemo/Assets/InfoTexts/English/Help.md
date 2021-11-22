@@ -14,4 +14,5 @@
 * Right panel:
 	* coding data of the H.265 can be shown and hidden by clicking the check boxes
 	* by clicking the info icon in the panel, you can show detail description of H.265 coding algorithms
+	* dialogs with detail description can be enlarged to zoom the pictures
 	* by expanding sections in the panel, you can show legend

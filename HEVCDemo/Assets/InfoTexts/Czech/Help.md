@@ -14,4 +14,5 @@
 * Pravý panel:
 	* kódovací data algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole
 	* kliknutím na ikonu informace v panelu lze zobrazit detailní popis kódovacích algoritmů H.265
-	* ke kódovacím mechanizmům lze rozbalením sekcí zobrazit legendu 
+	* dialogy s detailním popisem lze zvětšovat a tak docílit přiblížení obrázků
+	* ke kódovacím mechanizmům lze rozbalením sekcí zobrazit legendu

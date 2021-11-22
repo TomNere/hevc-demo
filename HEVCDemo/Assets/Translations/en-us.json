@@ -359,6 +359,10 @@
       "Content": "Frames can be also switched by timeline."
     },
     {
+      "Id": "PopupHelp10",
+      "Content": "Dialogs with detail description can be enlarged to zoom the pictures."
+    },
+    {
       "Id": "DidYouKnow",
       "Content": "Did you know that..."
     },

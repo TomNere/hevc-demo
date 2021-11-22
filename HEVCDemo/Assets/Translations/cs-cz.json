@@ -359,6 +359,10 @@
       "Content": "Snímky lze přepínat taky pomocí časové osy."
     },
     {
+      "Id": "PopupHelp10",
+      "Content": "Dialogy s detailním popisem lze zvětšovat a tak docílit přiblížení obrázků."
+    },
+    {
       "Id": "DidYouKnow",
       "Content": "Věděli jste, že..."
     },
