@@ -412,6 +412,12 @@ namespace HEVCDemo.ViewModels
                 Filter = "SelectFileFilter,Text".Localize()
             };
 
+            // Set directory to samples when probably no video loaded yet
+            if (!VideoCache.CacheDirectoryExists)
+            {
+                openFileDialog.InitialDirectory = $@"{AppDomain.CurrentDomain.BaseDirectory}Samples\";
+            }
+
             if (openFileDialog.ShowDialog() == true)
             {
                 SelectVideoVisibility = Visibility.Hidden;

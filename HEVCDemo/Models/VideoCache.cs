@@ -49,6 +49,8 @@ namespace HEVCDemo.Models
         public int EndSecond { get; set; }
         public VideoSequence VideoSequence;
 
+        public static bool CacheDirectoryExists => Directory.Exists(cachePrefix);
+
         public VideoCache(string filePath)
         {
             LoadedFilePath = filePath;
@@ -260,6 +262,7 @@ namespace HEVCDemo.Models
                         {
                             PrecachedHevcBitmaps.Remove(item.Key);
                         }
+                        GC.Collect();
 
                         // Add to dictionary
                         foreach (var item in bitmapsToPrecache)
