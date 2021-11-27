@@ -327,7 +327,7 @@
       "Content": "Klávesama ← a → se lze přepínat mezi snímky. Při současně stisknuté klávese CTRL lze provést skok na začátek a na konec."
     },
     {
-      "Id": "PopupHelp2",
+      "Id": "PopupHelp6",
       "Content": "Pravým myšítkem lze otevřít dialog s informacemi o predikční jednotce, ve které se nachází kursor."
     },
     {
@@ -343,7 +343,7 @@
       "Content": "Kódovací data algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole."
     },
     {
-      "Id": "PopupHelp6",
+      "Id": "PopupHelp2",
       "Content": "Kliknutím na ikonu informace v panelu lze zobrazit detailní popis kódovacích algoritmů kodeku H.265."
     },
     {
@@ -361,6 +361,10 @@
     {
       "Id": "PopupHelp10",
       "Content": "Dialogy s detailním popisem lze zvětšovat a tak docílit přiblížení obrázků."
+    },
+    {
+      "Id": "PopupHelp11",
+      "Content": "Úpravou 'Custom' souborů ve složkách Assets/Translations a Assets/InfoTexts lze vytvořit vlastní lokalizaci aplikace."
     },
     {
       "Id": "DidYouKnow",

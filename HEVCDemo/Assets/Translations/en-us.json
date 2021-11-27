@@ -327,7 +327,7 @@
       "Content": "By pressing ← and → you can switch the frames. By holding CTRL at the same time, you can jump to start and end."
     },
     {
-      "Id": "PopupHelp2",
+      "Id": "PopupHelp6",
       "Content": "Right click in a video frame opens info dialog about prediction unit at cursor position."
     },
     {
@@ -343,7 +343,7 @@
       "Content": "Coding data of the H.265 can be shown and hidden by clicking the check boxes."
     },
     {
-      "Id": "PopupHelp6",
+      "Id": "PopupHelp2",
       "Content": "By clicking the info icon in the panel, you can show detail description of H.265 coding algorithms."
     },
     {
@@ -361,6 +361,10 @@
     {
       "Id": "PopupHelp10",
       "Content": "Dialogs with detail description can be enlarged to zoom the pictures."
+    },
+    {
+      "Id": "PopupHelp11",
+      "Content": "You can change 'Custom' files Assets/Translations and Assets/InfoTexts to create custom localization of the app."
     },
     {
       "Id": "DidYouKnow",
