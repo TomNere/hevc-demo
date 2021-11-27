@@ -96,11 +96,11 @@
     },
     {
       "Id": "IntraPredictionMode",
-      "Content": "Mód vnitřního kódování"
+      "Content": "Mód vnitřní predikce"
     },
     {
       "Id": "InterPrediction",
-      "Content": "Vnejší kódování (vektory pohybu)"
+      "Content": "Vnější predikce (vektory pohybu)"
     },
     {
       "Id": "VectorsStart",
@@ -124,7 +124,7 @@
     },
     {
       "Id": "ViewInter",
-      "Text": "Modrým podbarvením je znázorněna vnejší predikce."
+      "Text": "Modrým podbarvením je znázorněna vnější predikce."
     },
     {
       "Id": "ViewPlanar",
@@ -268,7 +268,19 @@
     },
     {
       "Id": "InterPredictionTitle",
-      "Text": "Vnejší predikce"
+      "Text": "Vnější predikce"
+    },
+    {
+      "Id": "IntraPredictionTitle",
+      "Text": "Vnitřní predikce"
+    },
+    {
+      "Id": "IntraPredictionType",
+      "Text": "Vnitřní"
+    },
+    {
+      "Id": "InterPredictionType",
+      "Text": "Vnejší"
     },
     {
       "Id": "PredictionAngular",
@@ -292,19 +304,19 @@
     },
     {
       "Id": "InterPredictionMode",
-      "Content": "Mód vnejšího kódování"
+      "Content": "Mód vnější predikce"
     },
     {
       "Id": "UniPrediction1",
-      "Content": "jednostranná predikce, vektor 1"
+      "Content": "Jednostranná, vektor 1"
     },
     {
       "Id": "UniPrediction2",
-      "Content": "jednostranná predikce, vektor 2"
+      "Content": "Jednostranná, vektor 2"
     },
     {
       "Id": "BiPrediction",
-      "Content": "oboustranná predikce"
+      "Content": "Oboustranná predikce"
     },
     {
       "Id": "CodingUnitsFig1",

@@ -52,7 +52,7 @@ namespace HEVCDemo.Helpers
                 new InfoImage { Name = "IntraPredictionFig2,Text".Localize(), ImagePath = $"{subPath}angular.png"},
             };
 
-            var infoDialog = new InfoDialog("IntraPredictionMode,Content".Localize(), "IntraPrediction", images);
+            var infoDialog = new InfoDialog("IntraPredictionTitle,Text".Localize(), "IntraPrediction", images);
             infoDialog.Show();
         }
 

@@ -22,16 +22,17 @@ namespace HEVCDemo.Helpers
             {
                 Pu = predictionUnit,
                 Location = $"{predictionUnit.X}x{predictionUnit.Y}",
-                Size = $"{predictionUnit.Width}x{predictionUnit.Height}",
-                PredictionMode = $"{predictionUnit.PredictionMode},Content".Localize()
+                Size = $"{predictionUnit.Width}x{predictionUnit.Height}"
             };
 
             if (predictionUnit.PredictionMode == PredictionMode.MODE_INTRA)
             {
+                parameters.PredictionMode = "IntraPredictionTitle,Text".Localize();
                 GetIntraParameters(parameters, predictionUnit);
             }
             else if (predictionUnit.PredictionMode == PredictionMode.MODE_INTER)
             {
+                parameters.PredictionMode = "InterPredictionTitle,Text".Localize();
                 GetInterParameters(parameters, predictionUnit);
             }
 

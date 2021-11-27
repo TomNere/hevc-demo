@@ -96,7 +96,7 @@
     },
     {
       "Id": "IntraPredictionMode",
-      "Content": "Intra prediction type"
+      "Content": "Intra prediction mode"
     },
     {
       "Id": "InterPrediction",
@@ -271,6 +271,10 @@
       "Text": "Inter prediction"
     },
     {
+      "Id": "IntraPredictionTitle",
+      "Text": "Intra prediction"
+    },
+    {
       "Id": "PredictionAngular",
       "Text": "Angular"
     },
@@ -296,15 +300,15 @@
     },
     {
       "Id": "UniPrediction1",
-      "Content": "uni-prediction, vector 1"
+      "Content": "Uni, vector 1"
     },
     {
       "Id": "UniPrediction2",
-      "Content": "uni-prediction, vector 2"
+      "Content": "Uni, vector 2"
     },
     {
       "Id": "BiPrediction",
-      "Content": "bi-prediction"
+      "Content": "Bi-prediction"
     },
     {
       "Id": "CodingUnitsFig1",
