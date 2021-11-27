@@ -221,6 +221,7 @@ namespace HEVCDemo.ViewModels
                 "PopupHelp8,Content".Localize(),
                 "PopupHelp9,Content".Localize(),
                 "PopupHelp10,Content".Localize(),
+                "PopupHelp11,Content".Localize(),
             };
 
         private Timer helpPopupTimer;

@@ -415,7 +415,7 @@ namespace HEVCDemo.ViewModels
             // Set directory to samples when probably no video loaded yet
             if (!VideoCache.CacheDirectoryExists)
             {
-                openFileDialog.InitialDirectory = $@"{AppDomain.CurrentDomain.BaseDirectory}Samples\";
+                openFileDialog.InitialDirectory = $@"{AppDomain.CurrentDomain.BaseDirectory}\Assets\Samples\";
             }
 
             if (openFileDialog.ShowDialog() == true)

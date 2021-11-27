@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -186,16 +186,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Samples\BigBuckBunny_1080_25000kbps.mp4">
+    <None Include="Assets\Samples\TestVideos\BigBuckBunny_1080_25mbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Samples\BigBuckBunny_2160_2000kbps.mp4">
+    <None Include="Assets\Samples\X265\BigBuckBunny_2160_2mbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Samples\ChairVertical_720_10000kbps.mp4">
+    <None Include="Assets\Samples\Author\ChairVertical_720_10mbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Samples\Tractor_1080_500kbp.mp4">
+    <None Include="Assets\Samples\X265\Tractor_1080_500kbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -224,6 +224,12 @@
     <None Include="Assets\InfoTexts\Custom\Licenses.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Assets\Samples\Author\ForestStatic_2160_16mbps.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Samples\TestVideos\Jellyfish_1080_4mbps.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Translations\en-us.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

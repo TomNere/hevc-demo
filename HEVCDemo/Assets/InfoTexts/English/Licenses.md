@@ -1,33 +1,42 @@
 ﻿HEVC Demo app uses these open source projects:
 
-**HEVC HM reference software** - [BSD license](https://vcgit.hhi.fraunhofer.de/jvet/HM/-/blob/master/COPYING)
+* __HEVC HM reference software__ - [BSD licence](https://vcgit.hhi.fraunhofer.de/jvet/HM/-/blob/master/COPYING)
 
-**FFmpeg** - [GNU LGPL 2.1](http://ffmpeg.org/legal.html)
+* __FFmpeg__ - [GNU LGPL 2.1](http://ffmpeg.org/legal.html)
 
-**WPF** - [MIT](https://github.com/dotnet/wpf/blob/main/LICENSE.TXT)
+* __WPF__ - [MIT](https://github.com/dotnet/wpf/blob/main/LICENSE.TXT)
 
-**MahApps.Metro** - [MIT](https://github.com/MahApps/MahApps.Metro/blob/develop/LICENSE)
+* __MahApps.Metro__ - [MIT](https://github.com/MahApps/MahApps.Metro/blob/develop/LICENSE)
 
-**MahApps.Metro.IconPacks.Modern** - [MIT](https://github.com/MahApps/MahApps.Metro.IconPacks/blob/develop/LICENSE)
+* __MahApps.Metro.IconPacks.Modern__ - [MIT](https://github.com/MahApps/MahApps.Metro.IconPacks/blob/develop/LICENSE)
 
-**MdXaml** - [MIT](https://github.com/whistyun/MdXaml/blob/master/LICENSE.txt)
+* __MdXaml__ - [MIT](https://github.com/whistyun/MdXaml/blob/master/LICENSE.txt)
 
-**MvvmLightLibs** - [MIT](https://github.com/lbugnion/mvvmlight/blob/master/LICENSE)
+* __MvvmLightLibs__ - [MIT](https://github.com/lbugnion/mvvmlight/blob/master/LICENSE)
 
-**Newtonsoft.Json** - [MIT](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md)
+* __Newtonsoft.Json__ - [MIT](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md)
 
-**Prism** - [MIT](https://github.com/PrismLibrary/Prism/blob/master/LICENSE)
+* __Prism__ - [MIT](https://github.com/PrismLibrary/Prism/blob/master/LICENSE)
 
-**Rasyidf.Localization** - [MIT](https://github.com/rasyidf/Rasyidf.Localization/blob/master/LICENSE.md)
+* __Rasyidf.Localization__ - [MIT](https://github.com/rasyidf/Rasyidf.Localization/blob/master/LICENSE.md)
 
-**WriteableBitmapEx** - [MIT](https://github.com/reneschulte/WriteableBitmapEx/blob/master/LICENSE)
+* __WriteableBitmapEx__ - [MIT](https://github.com/reneschulte/WriteableBitmapEx/blob/master/LICENSE)
 
-**Xabe.FFmpeg** - [CC BY-NC-SA 3.0](https://ffmpeg.xabe.net/license.html)
+* __Xabe.FFmpeg__ - [CC BY-NC-SA 3.0](https://ffmpeg.xabe.net/license.html)
+
+Origin of video files in Assets/Samples:
+
+* __X265__ - [https://x265.com/hevc-video-files/](https://x265.com/hevc-video-files/)
+
+* __TestVideos__ - [https://test-videos.co.uk/bigbuckbunny/mp4-h265](https://test-videos.co.uk/bigbuckbunny/mp4-h265)
+
+* __Author__ - videos created by the author of the app
 
 
 The HEVC Demo app is distributed under MIT license:
 
 *The MIT License (MIT)*
+
 *Copyright 2021 Tomáš Nereča*
 
 *Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:*
