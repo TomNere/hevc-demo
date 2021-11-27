@@ -21,6 +21,7 @@ Aplikace i s jejími zdrojovými kódy je volně dostupná na platformě GitHub:
 **Autor**
 
 Tomáš Nereča
+
 Masarykova univerzita, Fakulta informatiky
 
 

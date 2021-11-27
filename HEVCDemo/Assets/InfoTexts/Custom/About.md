@@ -21,6 +21,7 @@ App with its source code is available on GitHub:
 **Author**
 
 Tomáš Nereča
+
 Masaryk University, Fakulty of Informatics
 
 
