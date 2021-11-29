@@ -4,6 +4,6 @@
 
 **Predikční jednotky mohou být vnitřně predikovány těmito módy:**
 
-* __MÓD 0 (DC - konstantní)__ - všem pixelům v červeném obdélníku (obr.1) je přiřazena stejná barevná hodnota. Ta je vypočtena jako průměr hodnot referenčních pixelů (mimo obdélníku)
-* __MÓD 1 (planar - plochý)__ - v tomhle případě se pro výpočet hodnot pixelů využívá průměr 2 hodnot. Jedna je predikce v horizontálním směru a druhá ve vertikalním směru. Detailní výpočet viz. [https://www.elecard.com/page/spatial_intra_prediction_in_hevc](https://www.elecard.com/page/spatial_intra_prediction_in_hevc)
+* __MÓD 1 (DC - konstantní)__ - všem pixelům v červeném obdélníku (obr.1) je přiřazena stejná barevná hodnota. Ta je vypočtena jako průměr hodnot referenčních pixelů (mimo obdélníku)
+* __MÓD 0 (planar - plochý)__ - v tomhle případě se pro výpočet hodnot pixelů využívá průměr 2 hodnot. Jedna je predikce v horizontálním směru a druhá ve vertikalním směru. Detailní výpočet viz. [https://www.elecard.com/page/spatial_intra_prediction_in_hevc](https://www.elecard.com/page/spatial_intra_prediction_in_hevc)
 * __MÓDY 2-34 (angular - směrový)__ - hodnoty referenčních pixelů jsou ve specifikovaném směru (obr. 2) distribuovány do kódovaného bloku. Pokud se predikovaný pixel nachází mezi referenčními vzorky, použije se interpolace
