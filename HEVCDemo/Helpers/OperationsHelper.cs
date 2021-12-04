@@ -13,25 +13,43 @@ namespace HEVCDemo.Helpers
             return await InvokeSafelyAsync(async() => await Task.Run(action), actionDescription, allowEnableViewer, stateBefore, stateAfter);
         }
 
-        public static async Task<bool> InvokeSafelyAsync(Func<Task> action, string actionDescription, bool allowEnableViewer, string stateBefore, string stateAfter)
+        public static async Task<bool> InvokeSafelyAsync(Func<Task> action,
+                                                         string actionDescription,
+                                                         bool allowEnableViewer,
+                                                         string stateBefore,
+                                                         string stateAfter)
         {
             try
             {
-                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
+                // Set waiting cursor and busy state of the app
+                Application.Current.Dispatcher.Invoke(
+                    () => Mouse.OverrideCursor = Cursors.Wait);
+
                 GlobalActionsHelper.OnAppStateChanged(stateBefore, false, true);
                 await action();
             }
             catch (Exception e)
             {
-                GlobalActionsHelper.OnAppStateChanged("ErrorOccuredState,Text".Localize(), allowEnableViewer ? true : (bool?)null, false);
-                MessageBox.Show($"{"ErrorOccured,Text".Localize()} - {actionDescription}\n\n{e.Message}", "AppTitle,Title".Localize());
+                // Error occured - set error state and 
+                GlobalActionsHelper.OnAppStateChanged(
+                    "ErrorOccuredState,Text".Localize(),
+                    allowEnableViewer ? true : (bool?)null, false);
+
+                // Show message box with error message
+                string error = "ErrorOccured,Text".Localize();
+                MessageBox.Show(
+                    $"{error} - {actionDescription}\n\n{e.Message}",
+                    "AppTitle,Title".Localize());
                 return false;
             }
             finally
             {
-                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Arrow);
+                // Always set cursor to arrow
+                Application.Current.Dispatcher.Invoke(
+                    () => Mouse.OverrideCursor = Cursors.Arrow);
             }
 
+            // Change state if action was successful
             GlobalActionsHelper.OnAppStateChanged(stateAfter, true, false);
             return true;
         }

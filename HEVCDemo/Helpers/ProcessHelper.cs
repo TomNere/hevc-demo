@@ -9,17 +9,18 @@ namespace HEVCDemo.Helpers
         {
             var tcs = new TaskCompletionSource<int>();
 
-            var startInfo = new ProcessStartInfo
+            var startInfoArgs = new ProcessStartInfo
             {
-                FileName = fileName,
-                Arguments = arguments,
-                UseShellExecute = false,
+                FileName = fileName,     // App to run
+                Arguments = arguments,   // Command line arguments
+                UseShellExecute = false, // Run directly from exe
+                // Show or don't show terminal
                 CreateNoWindow = !Properties.Settings.Default.IsTerminalEnabled
             };
 
             var process = new Process
             {
-                StartInfo = startInfo,
+                StartInfo = startInfoArgs,
                 EnableRaisingEvents = true
             };
 

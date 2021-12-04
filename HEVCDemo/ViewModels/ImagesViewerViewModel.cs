@@ -232,6 +232,7 @@ namespace HEVCDemo.ViewModels
             {
                 if (StepBackwardCommand.CanExecute())
                 {
+                    // Step to start if ctrl is pressed
                     if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                     {
                         StepStartCommand.Execute();

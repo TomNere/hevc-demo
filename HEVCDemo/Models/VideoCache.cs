@@ -288,37 +288,35 @@ namespace HEVCDemo.Models
             });
         }
 
-        public async Task<HevcBitmaps> GetFrameBitmaps(int index, string afterStateText, ViewConfiguration configuration)
+        public async Task<HevcBitmaps> GetFrameBitmaps(int index,
+                                                       string afterStateText,
+                                                       ViewConfiguration configuration)
         {
-            HevcBitmaps toReturn = null;
-
-            // Check if precached
+            HevcBitmaps bitmapToReturn = null;
             lock (PrecachedHevcBitmaps)
             {
+                // Check if bitmap is precached
                 if (PrecachedHevcBitmaps.ContainsKey(index))
                 {
-                    toReturn = PrecachedHevcBitmaps[index];
+                    bitmapToReturn = PrecachedHevcBitmaps[index];
                 }
             }
 
-            // Not precached
-            if (toReturn == null)
+            // Bitmap not precached
+            if (bitmapToReturn == null)
             {
                 await OperationsHelper.InvokeSafelyAsync(async () =>
                 {
-                // Load only 3 frames to save time
-                toReturn = await PrecacheHevcBitmaps(index, 1, configuration);
+                    // Load only 3 frames to save time
+                    bitmapToReturn = await PrecacheHevcBitmaps(index, 1, configuration);
                 },
-                "LoadingIntoCacheState,Text".Localize(),
-                true,
-                "LoadingIntoCacheState,Text".Localize(),
-                afterStateText);
+                "LoadingIntoCacheState,Text".Localize(), true,
+                "LoadingIntoCacheState,Text".Localize(), afterStateText);
             }
 
             // Precache in background for later use
             _ = PrecacheHevcBitmaps(index, precachedBitmapsRange, configuration);
-
-            return toReturn;
+            return bitmapToReturn;
         }
 
         public bool GetIntraPredictionBitmap(int index, WriteableBitmap writeableBitmap)
