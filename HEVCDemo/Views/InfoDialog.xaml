@@ -30,7 +30,11 @@
             <mdx:MarkdownScrollViewer Grid.Row="1"
                                       Markdown="{Binding Text}"
                                       xml:space="preserve"
-                                      VerticalScrollBarVisibility="Hidden" />
+                                      ScrollViewer.CanContentScroll="False"
+                                      ScrollViewer.IsDeferredScrollingEnabled="False"
+                                      VerticalScrollBarVisibility="Disabled"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      PreviewMouseWheel="MarkdownScrollViewer_PreviewMouseWheel"/>
             <ItemsControl Grid.Row="2"
                           Margin="0,20,0,0"
                           ItemsSource="{Binding Images}">

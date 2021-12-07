@@ -2,9 +2,11 @@ using HEVCDemo.Helpers;
 using HEVCDemo.Models;
 using HEVCDemo.ViewModels;
 using MahApps.Metro.Controls;
+using MdXaml;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace HEVCDemo.Views
@@ -41,6 +43,17 @@ namespace HEVCDemo.Views
                         proc.StartInfo.FileName = (string)e.Parameter;
                         proc.Start();
                     }));
+        }
+
+        // Override Markdown's PreviewMouseWheel event
+        private void MarkdownScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var scrollViewer = (sender as MarkdownScrollViewer).TryFindParent<ScrollViewer>();
+            if (scrollViewer != null)
+            {
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+            }
+            e.Handled = true;
         }
     }
 }
