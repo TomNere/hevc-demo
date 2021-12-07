@@ -46,7 +46,7 @@ namespace HEVCDemo.Views
         }
 
         // Override Markdown's PreviewMouseWheel event
-        private void MarkdownScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void Markdown_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             var scrollViewer = (sender as MarkdownScrollViewer).TryFindParent<ScrollViewer>();
             if (scrollViewer != null)
