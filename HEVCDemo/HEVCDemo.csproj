@@ -51,6 +51,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -218,6 +221,7 @@
     <Resource Include="Assets\Images\InfoDialogs\cupuStructure.png" />
     <Resource Include="Assets\Images\InfoDialogs\dc.png" />
     <Resource Include="Assets\Images\InfoDialogs\mv.png" />
+    <Resource Include="AppIcon.ico" />
     <Content Include="Assets\InfoTexts\Custom\About.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
