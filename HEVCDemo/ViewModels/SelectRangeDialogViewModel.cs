@@ -1,4 +1,5 @@
 ﻿using Prism.Mvvm;
+using System;
 
 namespace HEVCDemo.ViewModels
 {
@@ -28,6 +29,9 @@ namespace HEVCDemo.ViewModels
         public SelectRangeDialogViewModel(int maximum)
         {
             Maximum = maximum;
+
+            // 3s - default value
+            EndSecond = Math.Min(3, Maximum);
         }
     }
 }
