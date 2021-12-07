@@ -76,19 +76,19 @@ namespace HEVCDemo.ViewModels
         private void ExecuteShowHelp()
         {
             var infoDialog = new InfoDialog("HelpHeader,Header".Localize(), "Help", null);
-            infoDialog.Show();
+            infoDialog.ShowDialog();
         }
 
         private void ExecuteShowLicenses()
         {
             var infoDialog = new InfoDialog("LicensesHeader,Header".Localize(), "Licenses", null);
-            infoDialog.Show();
+            infoDialog.ShowDialog();
         }
 
         private void ExecuteShowAbout()
         {
             var infoDialog = new InfoDialog("AppTitle,Title".Localize(), "About", null);
-            infoDialog.Show();
+            infoDialog.ShowDialog();
         }
 
         public MainWindowViewModel()

@@ -278,7 +278,7 @@ namespace HEVCDemo.ViewModels
         private void ExecuteShowHelp()
         {
             var infoDialog = new InfoDialog("HelpHeader,Header".Localize(), "Help", null);
-            infoDialog.Show();
+            infoDialog.ShowDialog();
         }
 
         private void MainWindowDeactivated(object sender, EventArgs e)
