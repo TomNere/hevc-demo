@@ -102,11 +102,11 @@ namespace HEVCDemo.Helpers
             ShowExclusiveDialog(infoDialog, DialogType.InterPrediction);
         }
 
-        private static void ShowExclusiveDialog(InfoDialog dialog, DialogType type)
+        private static void ShowExclusiveDialog(InfoDialog infoDialog, DialogType type)
         {
             openedDialogs.Add(type);
-            dialog.Show();
-            dialog.Closed += (s, e) => openedDialogs.Remove(type);
+            infoDialog.Show();
+            infoDialog.Closed += (s, e) => openedDialogs.Remove(type);
         }
     }
 }
