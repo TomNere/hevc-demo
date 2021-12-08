@@ -307,6 +307,14 @@
       "Content": "Mód vnější predikce"
     },
     {
+      "Id": "SkipMode",
+      "Text": "Přeskočit"
+    },
+    {
+      "Id": "NoneMode",
+      "Text": "Žádný"
+    },
+    {
       "Id": "UniPrediction1",
       "Content": "Jednostranná, vektor 1"
     },

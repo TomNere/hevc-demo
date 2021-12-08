@@ -299,6 +299,14 @@
       "Content": "Inter prediction mode"
     },
     {
+      "Id": "SkipMode",
+      "Text": "Skip"
+    },
+    {
+      "Id": "NoneMode",
+      "Text": "None"
+    },
+    {
       "Id": "UniPrediction1",
       "Content": "Uni, vector 1"
     },

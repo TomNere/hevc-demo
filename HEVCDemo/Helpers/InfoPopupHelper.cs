@@ -35,6 +35,14 @@ namespace HEVCDemo.Helpers
                 parameters.PredictionMode = "InterPredictionTitle,Text".Localize();
                 GetInterParameters(parameters, predictionUnit);
             }
+            else if (predictionUnit.PredictionMode == PredictionMode.MODE_SKIP)
+            {
+                parameters.PredictionMode = "SkipMode,Text".Localize();
+            }
+            else
+            {
+                parameters.PredictionMode = "NoneMode,Text".Localize();
+            }
 
             try
             {
