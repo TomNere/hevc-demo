@@ -8,6 +8,27 @@
             <Setter Property="Background" Value="Transparent"/>
         </Style.Setters>
     </Style>
+    <Style x:Key="LightButton"
+           TargetType="Button"
+           BasedOn="{StaticResource {x:Type Button}}">
+        <Style.Setters>
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="Background"
+                    Value="WhiteSmoke" />
+            <Setter Property="FontSize"
+                    Value="13" />
+        </Style.Setters>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Trigger.Setters>
+                    <Setter Property="Foreground"
+                            Value="White" />
+                </Trigger.Setters>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
     <Style TargetType="TreeViewItem"
            BasedOn="{StaticResource {x:Type TreeViewItem}}">
         <Style.Setters>

@@ -52,7 +52,7 @@
     },
     {
       "Id": "StartButton",
-      "Content": "Začněte volbou H.265 (HEVC) video souboru"
+      "Content": "Začněte volbou HEVC/H.265 video souboru"
     },
     {
       "Id": "TimelineDescription",
@@ -149,6 +149,10 @@
     {
       "Id": "ViewBiPrediction",
       "Text": "2 vektory (oboustranná predikce). Barva opět znázorňuje, o který vektor se jedná. Červená barva znamená druhý vektor z dvojice."
+    },
+    {
+      "Id": "WhatIsHevc",
+      "Content": "Co je to HEVC/H.265?"
     },
     {
       "Id": "AppState",

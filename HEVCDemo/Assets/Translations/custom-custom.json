@@ -52,7 +52,7 @@
     },
     {
       "Id": "StartButton",
-      "Content": "Start by selecting a H.265 (HEVC) video file"
+      "Content": "Start by selecting a HEVC/H.265 video file"
     },
     {
       "Id": "TimelineDescription",
@@ -149,6 +149,10 @@
     {
       "Id": "ViewBiPrediction",
       "Text": "2 vectors (bi-prediction). Again, color symbolizes which vector is which. Red color means second of the two vectors was used."
+    },
+    {
+      "Id": "WhatIsHevc",
+      "Content": "What is HEVC/H.265?"
     },
     {
       "Id": "AppState",

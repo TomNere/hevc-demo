@@ -12,18 +12,21 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="Auto"
                            x:Name="AppStateRow" />
         </Grid.RowDefinitions>
         <Popup IsOpen="{Binding IsHelpPopupOpen}"
                PopupAnimation="Fade"
                AllowsTransparency="True"
-               PlacementTarget="{Binding ElementName=AppState}"
+               PlacementTarget="{Binding ElementName=WhatIsHevc}"
+               VerticalOffset="-4"
                Placement="Top">
-            <Grid Width="350"
+            <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}"
+                  Margin="-8,0,4,0"   
                   Background="LightGoldenrodYellow">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32" />
+                    <ColumnDefinition Width="40" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="32" />
                 </Grid.ColumnDefinitions>
@@ -32,7 +35,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Image Grid.Column="0"
-                       Margin="4"
+                       Margin="12,4,4,4"
                        VerticalAlignment="Top"
                        Source="../Assets/Images/Bulb.png" />
                 <StackPanel Grid.Column="1">
@@ -477,8 +480,14 @@
                 </TreeView>
             </Grid>
         </ScrollViewer>
+        <Button x:Name="WhatIsHevc"
+                Grid.Row="1"
+                Margin="4"
+                Style="{StaticResource LightButton}"
+                Content="{rf:Tr Uid='WhatIsHevc'}"
+                Command="{Binding ShowWhatIsHevcCommand}"/>
         <Grid x:Name="AppState"
-              Grid.Row="1"
+              Grid.Row="2"
               Margin="0,0,0,10"
               HorizontalAlignment="Left"
               VerticalAlignment="Bottom">

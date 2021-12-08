@@ -116,6 +116,13 @@ namespace HEVCDemo.ViewModels
             InfoDialogHelper.ShowInterPredictionInfoDialog();
         }
 
+        private DelegateCommand showWhatIsHevcCommand;
+        public DelegateCommand ShowWhatIsHevcCommand => showWhatIsHevcCommand ?? (showWhatIsHevcCommand = new DelegateCommand(ExecuteShowWhatIsHevc));
+        private void ExecuteShowWhatIsHevc()
+        {
+            InfoDialogHelper.ShowWhatIsHevcInfoDialog();
+        }
+
         #endregion
 
         #region View options

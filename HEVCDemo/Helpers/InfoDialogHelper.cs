@@ -15,7 +15,8 @@ namespace HEVCDemo.Helpers
             CodingUnits,
             PredictionType,
             IntraPrediction,
-            InterPrediction
+            InterPrediction,
+            WhatIsHevc
         }
 
         private const string subPath = "../Assets/Images/InfoDialogs/";
@@ -100,6 +101,15 @@ namespace HEVCDemo.Helpers
 
             var infoDialog = new InfoDialog("InterPredictionTitle,Text".Localize(), "InterPrediction", images);
             ShowExclusiveDialog(infoDialog, DialogType.InterPrediction);
+        }
+
+        public static void ShowWhatIsHevcInfoDialog()
+        {
+            // Don't show the same dialog multiple times
+            if (openedDialogs.Contains(DialogType.WhatIsHevc)) return;
+
+            var infoDialog = new InfoDialog("WhatIsHevc,Content".Localize(), "WhatIsHevc", null);
+            ShowExclusiveDialog(infoDialog, DialogType.WhatIsHevc);
         }
 
         private static void ShowExclusiveDialog(InfoDialog infoDialog, DialogType type)
