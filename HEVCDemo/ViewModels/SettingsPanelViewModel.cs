@@ -22,6 +22,8 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
             GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabled;
             GlobalActionsHelper.VideoLoaded += VideoLoaded;
+            GlobalActionsHelper.LanguageChanged += LanguageChanged;
+            InitializeHelpTexts();
             InitializeHelpPopup();
             _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
 
@@ -31,6 +33,12 @@ namespace HEVCDemo.ViewModels
             IsIntraPredictionEnabled = viewConfiguration.IsIntraPredictionVisible;
             IsInterPredictionEnabled = viewConfiguration.IsInterPredictionVisible;
             IsVectorsStartEnabled = viewConfiguration.IsMotionVectorsStartEnabled;
+        }
+
+        private void LanguageChanged(object sender, EventArgs e)
+        {
+            InitializeHelpTexts();
+            ExecuteCloseHelp();
         }
 
         private void VideoLoaded(object sender, VideoLoadedEventArgs e)
@@ -216,7 +224,14 @@ namespace HEVCDemo.ViewModels
         private readonly TimeSpan helpPopupTimeout = TimeSpan.FromSeconds(15);
         private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(15);
         private readonly TimeSpan tryLaterDelay = TimeSpan.FromSeconds(30);
-        private readonly List<string> helpPopupTexts = new List<string>
+        private readonly List<string> helpPopupTexts = new List<string>();
+
+        private Timer helpPopupTimer;
+
+        private void InitializeHelpTexts()
+        {
+            helpPopupTexts.Clear();
+            helpPopupTexts.AddRange(new List<string>
             {
                 "PopupHelp1,Content".Localize(),
                 "PopupHelp2,Content".Localize(),
@@ -229,9 +244,8 @@ namespace HEVCDemo.ViewModels
                 "PopupHelp9,Content".Localize(),
                 "PopupHelp10,Content".Localize(),
                 "PopupHelp11,Content".Localize(),
-            };
-
-        private Timer helpPopupTimer;
+            });
+        }
 
         private void InitializeHelpPopup()
         {

@@ -1,4 +1,4 @@
-﻿using HEVCDemo.CustomEventArgs;
+using HEVCDemo.CustomEventArgs;
 using HEVCDemo.Models;
 using System;
 using System.Windows.Input;
@@ -15,6 +15,7 @@ namespace HEVCDemo.Helpers
         public static event EventHandler<ShowTipsEventArgs> ShowTipsEnabledChanged;
         public static event EventHandler<KeyDownEventArgs> KeyDown;
         public static event EventHandler<VideoLoadedEventArgs> VideoLoaded;
+        public static event EventHandler LanguageChanged;
 
         public static void OnViewConfigurationChanged(ViewConfiguration configuration)
         {
@@ -67,6 +68,11 @@ namespace HEVCDemo.Helpers
             };
 
             VideoLoaded?.Invoke(new object(), e);
+        }
+
+        public static void OnLanguageChanged()
+        {
+            LanguageChanged?.Invoke(new object(), new EventArgs());
         }
     }
 }

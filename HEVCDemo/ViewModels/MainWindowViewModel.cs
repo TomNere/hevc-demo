@@ -148,6 +148,7 @@ namespace HEVCDemo.ViewModels
                 Properties.Settings.Default.Language = value.Culture.Name;
                 LocalizationService.Current.ChangeLanguage(value);
                 CreateCultureMenuItems();
+                GlobalActionsHelper.OnLanguageChanged();
             }
         }
 
