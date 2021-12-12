@@ -83,6 +83,7 @@ namespace HEVCDemo.Helpers
             {
                 new InfoImage { Name = "IntraPredictionFig1,Text".Localize(), ImagePath = $"{subPath}dc.png"},
                 new InfoImage { Name = "IntraPredictionFig2,Text".Localize(), ImagePath = $"{subPath}angular.png"},
+                new InfoImage { Name = "IntraPredictionFig3,Text".Localize(), ImagePath = $"{subPath}35modes.png"},
             };
 
             var infoDialog = new InfoDialog("IntraPredictionTitle,Text".Localize(), "IntraPrediction", images);

@@ -160,7 +160,7 @@
     },
     {
       "Id": "ConvertingAnnexBState",
-      "Text": "Převod na tok bajtů a ořezávání videa"
+      "Text": "Převod na tok bitů a ořezávání videa"
     },
     {
       "Id": "ErrorOccuredState",
@@ -343,6 +343,10 @@
       "Text": "Obr.2: Směrové (Angular 2-34) módy vnitřní predikce."
     },
     {
+      "Id": "IntraPredictionFig3",
+      "Text": "Obr.3: Bloky velikosti 8x8 vygenerovány aplikací všech 35 módů vnitřní predikce."
+    },
+    {
       "Id": "InterPredictionFig1",
       "Text": "Obr.1: Dva příklady konfigurace jednotek. Žlutou barvou je znázorněna aktuálně kódovaná jednotka, A0/A1 a B0/B1/B2 jsou kandidátní jednotky pro použití vektoru, přičemž výběr závisí na pozicích pixelů pA1 a pA2, resp. pB0, pB1 a pB2."
     },
@@ -428,7 +432,7 @@
     },
     {
       "Id": "SelectFileFilter",
-      "Text": "H.265 video v kontejneru|*.mp4|H.265 video jako tok bajtů|*.bin;*.h265"
+      "Text": "H.265 video v kontejneru|*.mp4|H.265 video jako tok bitů|*.bin;*.h265"
     },
     {
       "Id": "AppTitle",
