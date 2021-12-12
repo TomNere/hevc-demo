@@ -1,9 +1,9 @@
-﻿HEVC Demo app was create as diploma thesis at Faculty of Informatics Masaryk University in Brno. The app should serve as support for teaching **H.265 (HEVC)** codec and also for everyone who wants to dive into secrets of video coding/compression. Main aim of the app is clarity and simplicity. There are other apps for professional video analysis.
+﻿HEVC Demo app was create as a diploma thesis at Faculty of Informatics Masaryk University in Brno. The app should serve as support for teaching **HEVC/H.265** codec and also for everyone who wants to dive into secrets of video coding and compression. Main aim of the app is clarity and simplicity. There are other apps for professional video analysis.
 
 **Supported formats**
 
-* H.265 coded video in container (**.mp4** extension)
-* H.265 coded video as byte stream [AnnexB](https://aomedia.org/av1/specification/annex-b/) (extensions **.bin**, **.h265**)
+* H.265 coded video as bitstream [AnnexB](https://aomedia.org/av1/specification/annex-b/) (extensions **.bin**, **.h265**)
+* video in **.mp4** container, can be coded also by other codec than H.265
 
 
 **System requirements**
