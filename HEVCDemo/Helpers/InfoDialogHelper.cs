@@ -95,12 +95,7 @@ namespace HEVCDemo.Helpers
             // Don't show the same dialog multiple times
             if (openedDialogs.Contains(DialogType.InterPrediction)) return;
 
-            var images = new List<InfoImage>
-            {
-                new InfoImage { Name = "InterPredictionFig1,Text".Localize(), ImagePath = $"{subPath}mv.png"}
-            };
-
-            var infoDialog = new InfoDialog("InterPredictionTitle,Text".Localize(), "InterPrediction", images);
+            var infoDialog = new InfoDialog("InterPredictionTitle,Text".Localize(), "InterPrediction", null);
             ShowExclusiveDialog(infoDialog, DialogType.InterPrediction);
         }
 

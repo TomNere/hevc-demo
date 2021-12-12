@@ -347,10 +347,6 @@
       "Text": "Obr.3: Bloky velikosti 8x8 vygenerovány aplikací všech 35 módů vnitřní predikce."
     },
     {
-      "Id": "InterPredictionFig1",
-      "Text": "Obr.1: Dva příklady konfigurace jednotek. Žlutou barvou je znázorněna aktuálně kódovaná jednotka, A0/A1 a B0/B1/B2 jsou kandidátní jednotky pro použití vektoru, přičemž výběr závisí na pozicích pixelů pA1 a pA2, resp. pB0, pB1 a pB2."
-    },
-    {
       "Id": "PopupHelp1",
       "Content": "Klávesama ← a → se lze přepínat mezi snímky. Při současně stisknuté klávese CTRL lze provést skok na začátek a na konec."
     },

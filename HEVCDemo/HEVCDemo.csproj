@@ -233,7 +233,6 @@
     <Resource Include="Assets\Images\InfoDialogs\angular.png" />
     <Resource Include="Assets\Images\InfoDialogs\cupuStructure.png" />
     <Resource Include="Assets\Images\InfoDialogs\dc.png" />
-    <Resource Include="Assets\Images\InfoDialogs\mv.png" />
     <Resource Include="AppIcon.ico" />
     <Content Include="Assets\InfoTexts\Custom\About.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
