@@ -10,6 +10,6 @@
         public bool IsPredictionTypeVisible { get; set; } = true;
         public bool IsIntraPredictionVisible { get; set; } = true;
         public bool IsInterPredictionVisible { get; set; } = true;
-        public bool IsMotionVectorsStartEnabled { get; set; } = true;
+        public bool IsMotionVectorsStartVisible { get; set; } = true;
     }
 }

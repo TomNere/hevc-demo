@@ -474,8 +474,8 @@ namespace HEVCDemo.ViewModels
                         GlobalActionsHelper.OnAppStateChanged("LoadingDemoDataState,Text".Localize(), false, true);
                         await FFmpegHelper.InitProperties(cacheToCreate);
                         cacheToCreate.VideoSequence = new VideoSequence();
-                        cacheToCreate.ParseProps();
-                        await cacheToCreate.ProcessFiles();
+                        cacheToCreate.ParseSequenceProperties();
+                        await cacheToCreate.ProcessStatsFiles();
                         cacheToCreate.InitializeYuvFramesFiles();
                     }
                 }

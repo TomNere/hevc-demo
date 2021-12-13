@@ -311,11 +311,11 @@
       "Content": "Mód vnější predikce"
     },
     {
-      "Id": "SkipMode",
+      "Id": "SkipType",
       "Text": "Přeskočit"
     },
     {
-      "Id": "NoneMode",
+      "Id": "NoneType",
       "Text": "Žádný"
     },
     {

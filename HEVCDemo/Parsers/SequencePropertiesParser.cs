@@ -11,7 +11,7 @@ namespace HEVCDemo.Parsers
 
         public void ParseSequenceProperties(VideoCache cacheProvider, VideoSequence sequence)
         {
-            var propsFile = new System.IO.StreamReader(cacheProvider.PropsFilePath);
+            var propsFile = new System.IO.StreamReader(cacheProvider.SequencePropertiesFilePath);
             string line;
 
             while ((line = propsFile.ReadLine()) != null)

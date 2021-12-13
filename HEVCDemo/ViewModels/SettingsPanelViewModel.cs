@@ -32,7 +32,7 @@ namespace HEVCDemo.ViewModels
             IsPredictionTypeEnabled = viewConfiguration.IsPredictionTypeVisible;
             IsIntraPredictionEnabled = viewConfiguration.IsIntraPredictionVisible;
             IsInterPredictionEnabled = viewConfiguration.IsInterPredictionVisible;
-            IsVectorsStartEnabled = viewConfiguration.IsMotionVectorsStartEnabled;
+            IsVectorsStartEnabled = viewConfiguration.IsMotionVectorsStartVisible;
         }
 
         #region Event handlers
@@ -168,7 +168,7 @@ namespace HEVCDemo.ViewModels
             set
             {
                 SetProperty(ref isVectorsStartEnabled, value);
-                viewConfiguration.IsMotionVectorsStartEnabled = value;
+                viewConfiguration.IsMotionVectorsStartVisible = value;
                 GlobalActionsHelper.OnViewConfigurationChanged(viewConfiguration);
             }
         }

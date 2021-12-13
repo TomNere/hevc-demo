@@ -98,7 +98,7 @@ namespace HEVCDemo.ViewModels
             var result = MessageBox.Show("ClearCacheMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                _ = VideoCache.ClearCache();
+                _ = VideoCache.ClearLocalCache();
             }
         }
 

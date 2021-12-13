@@ -7,7 +7,7 @@ namespace HEVCDemo.Models
     /// </summary>
     public class HevcBitmaps
     {
-        // YUV frame, coding and prediction units, intra prediction and inter prediction
+        // Decoded frame, coding and prediction units, intra prediction and inter prediction
         public WriteableBitmap AllOthers { get; private set; }
 
         // Prediction type needs to be shown separately because of transparency

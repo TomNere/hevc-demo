@@ -27,21 +27,21 @@ namespace HEVCDemo.Helpers
 
             if (predictionUnit.PredictionType == PredictionType.INTRA)
             {
-                parameters.PredictionMode = "IntraPredictionTitle,Text".Localize();
+                parameters.PredictionType = "IntraPredictionTitle,Text".Localize();
                 GetIntraParameters(parameters, predictionUnit);
             }
             else if (predictionUnit.PredictionType == PredictionType.INTER)
             {
-                parameters.PredictionMode = "InterPredictionTitle,Text".Localize();
+                parameters.PredictionType = "InterPredictionTitle,Text".Localize();
                 GetInterParameters(parameters, predictionUnit);
             }
             else if (predictionUnit.PredictionType == PredictionType.SKIP)
             {
-                parameters.PredictionMode = "SkipMode,Text".Localize();
+                parameters.PredictionType = "SkipType,Text".Localize();
             }
             else
             {
-                parameters.PredictionMode = "NoneMode,Text".Localize();
+                parameters.PredictionType = "NoneType,Text".Localize();
             }
 
             try

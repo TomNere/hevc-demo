@@ -303,11 +303,11 @@
       "Content": "Inter prediction mode"
     },
     {
-      "Id": "SkipMode",
+      "Id": "SkipType",
       "Text": "Skip"
     },
     {
-      "Id": "NoneMode",
+      "Id": "NoneType",
       "Text": "None"
     },
     {

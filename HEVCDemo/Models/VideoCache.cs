@@ -22,18 +22,18 @@ namespace HEVCDemo.Models
         private const string yuvExtension = ".yuv";
         private const string mp4Extension = ".mp4";
 
-        private readonly string cacheDirPath;
+        private readonly string cacheDirectoryPath;
         private readonly Dictionary<int, HevcBitmaps> PrecachedHevcBitmaps = new Dictionary<int, HevcBitmaps>();
 
         private List<FileInfo> orderedYuvFramesFiles;
 
         public string LoadedFilePath;
 
-        public bool CacheExists => File.Exists(PropsFilePath);
+        public bool CacheExists => File.Exists(SequencePropertiesFilePath);
         public bool IsMp4 => Path.GetExtension(LoadedFilePath) == mp4Extension;
         public string StatsDirPath;
-        public string CodingUnitsFilePath;
-        public string PropsFilePath;
+        public string CodingPredictionUnitsFilePath;
+        public string SequencePropertiesFilePath;
         public string PredictionTypeFilePath;
         public string IntraPredictionFilePath;
         public string InterPredictionFilePath;
@@ -47,6 +47,7 @@ namespace HEVCDemo.Models
         public double Framerate { get; set; }
         public int StartSecond { get; set; }
         public int EndSecond { get; set; }
+
         public VideoSequence VideoSequence;
 
         public static bool CacheDirectoryExists => Directory.Exists(cachePrefix);
@@ -54,21 +55,21 @@ namespace HEVCDemo.Models
         public VideoCache(string filePath)
         {
             LoadedFilePath = filePath;
-            cacheDirPath = $@".\{cachePrefix}\{Path.GetFileNameWithoutExtension(filePath)}";
+            cacheDirectoryPath = $@".\{cachePrefix}\{Path.GetFileNameWithoutExtension(filePath)}";
 
-            // Stats
-            StatsDirPath = $@"{cacheDirPath}\stats";
-            CodingUnitsFilePath = $@"{StatsDirPath}\cupu{textExtension}";
-            PropsFilePath = $@"{StatsDirPath}\props{textExtension}";
+            // Stats files
+            StatsDirPath = $@"{cacheDirectoryPath}\stats";
+            CodingPredictionUnitsFilePath = $@"{StatsDirPath}\cupu{textExtension}";
+            SequencePropertiesFilePath = $@"{StatsDirPath}\props{textExtension}";
             PredictionTypeFilePath = $@"{StatsDirPath}\prediction{textExtension}";
             IntraPredictionFilePath = $@"{StatsDirPath}\intra{textExtension}";
             InterPredictionFilePath = $@"{StatsDirPath}\motionVectors{textExtension}";
 
             // Set paths
-            YuvFramesDirPath = $@"{cacheDirPath}\yuvFrames";
-            AnnexBFilePath = $@"{cacheDirPath}\annexBFile{annexBExtension}";
-            HevcFilePath = $@"{cacheDirPath}\hevcConverted{mp4Extension}";
-            YuvFilePath = $@"{cacheDirPath}\yuvFile{yuvExtension}";
+            YuvFramesDirPath = $@"{cacheDirectoryPath}\yuvFrames";
+            AnnexBFilePath = $@"{cacheDirectoryPath}\annexBFile{annexBExtension}";
+            HevcFilePath = $@"{cacheDirectoryPath}\hevcConverted{mp4Extension}";
+            YuvFilePath = $@"{cacheDirectoryPath}\yuvFile{yuvExtension}";
         }
 
         public async Task CreateCache(int startSecond, int endSecond, bool convert)
@@ -77,14 +78,14 @@ namespace HEVCDemo.Models
             EndSecond = endSecond;
 
             // Clear at first
-            if (Directory.Exists(cacheDirPath))
+            if (Directory.Exists(cacheDirectoryPath))
             {
-                Directory.Delete(cacheDirPath, true);
+                Directory.Delete(cacheDirectoryPath, true);
             }
 
             InitCacheFolders();
 
-            // Try to convert to hevc
+            // Try to convert to HEVC
             if (convert)
             {
                 GlobalActionsHelper.OnAppStateChanged("ConvertingToHevcState,Text".Localize(), false, true);
@@ -111,13 +112,13 @@ namespace HEVCDemo.Models
             VideoSequence = new VideoSequence();
 
             // Parse properties
-            ParseProps();
+            ParseSequenceProperties();
 
             // Extract frames
             GlobalActionsHelper.OnAppStateChanged("LoadingDemoDataState,Text".Localize(), false, true);
             var framesLoading = FFmpegHelper.ExtractFrames(this);
 
-            await ProcessFiles();
+            await ProcessStatsFiles();
             await framesLoading;
             InitializeYuvFramesFiles();
             File.Delete(AnnexBFilePath);
@@ -128,7 +129,7 @@ namespace HEVCDemo.Models
             }
         }
 
-        public async Task ProcessFiles()
+        public async Task ProcessStatsFiles()
         {
             var codingPredictionUnitsParser = new CodingPredictionUnitsParser(VideoSequence);
             _ = await codingPredictionUnitsParser.ParseFile(this);
@@ -148,7 +149,7 @@ namespace HEVCDemo.Models
             await Task.WhenAll(tasks);
         }
 
-        public void ParseProps()
+        public void ParseSequenceProperties()
         {
             var propertiesParser = new SequencePropertiesParser();
             propertiesParser.ParseSequenceProperties(this, VideoSequence);
@@ -236,7 +237,7 @@ namespace HEVCDemo.Models
                             // Inter prediction
                             if (configuration.IsInterPredictionVisible)
                             {
-                                if (!GetInterPredictionBitmap(i, allOthers, configuration.IsMotionVectorsStartEnabled))
+                                if (!GetInterPredictionBitmap(i, allOthers, configuration.IsMotionVectorsStartVisible))
                                 {
                                     isValid = false;
                                 }
@@ -375,7 +376,7 @@ namespace HEVCDemo.Models
             }
         }
 
-        public static async Task ClearCache()
+        public static async Task ClearLocalCache()
         {
             if (!Directory.Exists(cachePrefix)) return;
 
