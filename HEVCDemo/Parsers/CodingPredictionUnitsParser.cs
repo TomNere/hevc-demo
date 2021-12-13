@@ -27,15 +27,15 @@ namespace HEVCDemo.Parsers
                     throw new FormatException("InvalidHeightWidthEx,Text".Localize());
                 }
 
-                int iCUOneRow = (videoSequence.Width + videoSequence.MaxCUSize - 1) / videoSequence.MaxCUSize;
+                int CUOneRow = (videoSequence.Width + videoSequence.MaxCUSize - 1) / videoSequence.MaxCUSize;
                 int iLCUSize = videoSequence.MaxCUSize;
 
                 try
                 {
                     var file = new System.IO.StreamReader(cacheProvider.CodingPredictionUnitsFilePath);
                     string strOneLine = file.ReadLine();
-                    int iDecOrder = -1;
-                    int iLastPOC = -1;
+                    int decOrder = -1;
+                    int lastPOC = -1;
 
                     /// <1,1> 99 0 0 5 0
                     while (strOneLine != null)
@@ -52,30 +52,30 @@ namespace HEVCDemo.Parsers
                             int pocStart = strOneLine.LastIndexOf('<');
                             int addressStart = strOneLine.LastIndexOf(',');
                             int addressEnd = strOneLine.LastIndexOf('>');
-                            int iPoc = int.Parse(strOneLine.Substring(pocStart + 1, addressStart - pocStart - 1));
-                            int iAddr = int.Parse(strOneLine.Substring(addressStart + 1, addressEnd - addressStart - 1));
+                            int poc = int.Parse(strOneLine.Substring(pocStart + 1, addressStart - pocStart - 1));
+                            int address = int.Parse(strOneLine.Substring(addressStart + 1, addressEnd - addressStart - 1));
 
-                            iDecOrder += iLastPOC != iPoc ? 1 : 0;
+                            decOrder += lastPOC != poc ? 1 : 0;
                             ComFrame frame;
 
-                            if (iPoc != iLastPOC)
+                            if (poc != lastPOC)
                             {
-                                frame = new ComFrame { Poc = iPoc, Sequence = videoSequence };
-                                videoSequence.FramesInDecodeOrder.Add(iDecOrder, frame);
+                                frame = new ComFrame { Poc = poc, Sequence = videoSequence };
+                                videoSequence.FramesInDecodeOrder.Add(decOrder, frame);
                             }
                             else
                             {
-                                frame = videoSequence.FramesInDecodeOrder[iDecOrder];
+                                frame = videoSequence.FramesInDecodeOrder[decOrder];
                             }
 
-                            iLastPOC = iPoc;
+                            lastPOC = poc;
 
                             var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
 
                             /// Poc and Lcu addr
-                            var pcLCU = new CodingUnit { Address = iAddr, Frame = frame, Size = iLCUSize };
-                            pcLCU.PixelX = (iAddr % iCUOneRow) * videoSequence.MaxCUSize;
-                            pcLCU.PixelY = (iAddr / iCUOneRow) * videoSequence.MaxCUSize;
+                            var pcLCU = new CodingUnit { Address = address, Frame = frame, Size = iLCUSize };
+                            pcLCU.PixelX = (address % CUOneRow) * videoSequence.MaxCUSize;
+                            pcLCU.PixelY = (address / CUOneRow) * videoSequence.MaxCUSize;
 
                             /// Recursively parse the CU&PU quard-tree structure
                             var index = 0;
@@ -109,12 +109,12 @@ namespace HEVCDemo.Parsers
         {
             if (index > tokens.Length - 1) return false;
 
-            var iCUMode = int.Parse(tokens[index]);
+            var CUMode = int.Parse(tokens[index]);
 
-            if (iCUMode == 99)
+            if (CUMode == 99)
             {
-                int iMaxDepth = pcLCU.Frame.Sequence.MaxCUDepth;
-                int iTotalNumPart = 1 << ((iMaxDepth - pcLCU.Depth) << 1);
+                int maxDepth = pcLCU.Frame.Sequence.MaxCUDepth;
+                int totalNumPart = 1 << ((maxDepth - pcLCU.Depth) << 1);
 
                 /// Non-leaf node, add 4 children CUs
                 for (int i = 0; i < 4; i++)
@@ -125,13 +125,13 @@ namespace HEVCDemo.Parsers
                         Address = pcLCU.Address, 
                         Size = pcLCU.Size / 2,
                         Depth = pcLCU.Depth + 1,
-                        ZOrder = pcLCU.ZOrder + (iTotalNumPart/4) * i
+                        ZOrder = pcLCU.ZOrder + (totalNumPart/4) * i
                     };
 
-                    int iSubCUX = pcLCU.PixelX + i % 2 * (pcLCU.Size / 2);
-                    int iSubCUY = pcLCU.PixelY + i / 2 * (pcLCU.Size / 2);
-                    pcChildNode.PixelX = iSubCUX;
-                    pcChildNode.PixelY = iSubCUY;
+                    int subCUX = pcLCU.PixelX + i % 2 * (pcLCU.Size / 2);
+                    int subCUY = pcLCU.PixelY + i / 2 * (pcLCU.Size / 2);
+                    pcChildNode.PixelX = subCUX;
+                    pcChildNode.PixelY = subCUY;
                     pcLCU.SubCUs.Add(pcChildNode);
                     index++;
                     ReadInCUMode(tokens, pcChildNode, ref index);
@@ -140,19 +140,19 @@ namespace HEVCDemo.Parsers
             else
             {
                 /// Leaf node - create PUs and write the PU Mode for it
-                pcLCU.PartitionSize = (PartitionSize)iCUMode;
+                pcLCU.PartitionSize = (PartitionSize)CUMode;
 
-                int iPUCount = GetPUNumber((PartitionSize)iCUMode);
+                int iPUCount = GetPUNumber((PartitionSize)CUMode);
                 for (int i = 0; i < iPUCount; i++)
                 {
                     var pcPU = new PredictionUnit { ParentCU = pcLCU };
-                    GetPUOffsetAndSize(pcLCU.Size, (PartitionSize)iCUMode, i, out var iPUOffsetX, out var iPUOffsetY, out var iPUWidth, out var iPUHeight);
-                    int iPUX = pcLCU.PixelX + iPUOffsetX;
-                    int iPUY = pcLCU.PixelY + iPUOffsetY;
-                    pcPU.X = iPUX;
-                    pcPU.Y = iPUY;
-                    pcPU.Width = iPUWidth;
-                    pcPU.Height = iPUHeight;
+                    GetPUOffsetAndSize(pcLCU.Size, (PartitionSize)CUMode, i, out var PUOffsetX, out var PUOffsetY, out var PUWidth, out var PUHeight);
+                    int PUX = pcLCU.PixelX + PUOffsetX;
+                    int PUY = pcLCU.PixelY + PUOffsetY;
+                    pcPU.X = PUX;
+                    pcPU.Y = PUY;
+                    pcPU.Width = PUWidth;
+                    pcPU.Height = PUHeight;
                     pcLCU.PUs.Add(pcPU);
                 }
             }
@@ -161,9 +161,9 @@ namespace HEVCDemo.Parsers
 
         public static void WriteBitmaps(CodingUnit cu, WriteableBitmap writeableBitmap)
         {
-            foreach (var sCu in cu.SubCUs)
+            foreach (var subCu in cu.SubCUs)
             {
-                WriteBitmaps(sCu, writeableBitmap);
+                WriteBitmaps(subCu, writeableBitmap);
             }
 
             using (writeableBitmap.GetBitmapContext())
@@ -177,77 +177,77 @@ namespace HEVCDemo.Parsers
             }
         }
 
-        private void GetPUOffsetAndSize(int iLeafCUSize,
-                                        PartitionSize ePartSize,
-                                        int uiPUIdx,
-                                        out int riXOffset,
-                                        out int riYOffset,
-                                        out int riWidth,
-                                        out int riHeight)
+        private void GetPUOffsetAndSize(int leafCUSize,
+                                        PartitionSize partitionSize,
+                                        int PUIdx,
+                                        out int xOffset,
+                                        out int yOffset,
+                                        out int width,
+                                        out int height)
         {
-            switch (ePartSize)
+            switch (partitionSize)
             {
                 case PartitionSize.SIZE_2NxN:
-                    riWidth = iLeafCUSize;
-                    riHeight = iLeafCUSize >> 1;
-                    riXOffset = 0;
-                    riYOffset = (uiPUIdx == 0) ? 0 : iLeafCUSize >> 1;
+                    width = leafCUSize;
+                    height = leafCUSize >> 1;
+                    xOffset = 0;
+                    yOffset = (PUIdx == 0) ? 0 : leafCUSize >> 1;
                     break;
                 case PartitionSize.SIZE_Nx2N:
-                    riWidth = iLeafCUSize >> 1;
-                    riHeight = iLeafCUSize;
-                    riXOffset = (uiPUIdx == 0) ? 0 : iLeafCUSize >> 1;
-                    riYOffset = 0;
+                    width = leafCUSize >> 1;
+                    height = leafCUSize;
+                    xOffset = (PUIdx == 0) ? 0 : leafCUSize >> 1;
+                    yOffset = 0;
                     break;
                 case PartitionSize.SIZE_NxN:
-                    riWidth = iLeafCUSize >> 1;
-                    riHeight = iLeafCUSize >> 1;
-                    riXOffset = ((uiPUIdx & 1) == 0) ? 0 : iLeafCUSize >> 1;
-                    riYOffset = ((uiPUIdx & 2) == 0) ? 0 : iLeafCUSize >> 1;
+                    width = leafCUSize >> 1;
+                    height = leafCUSize >> 1;
+                    xOffset = ((PUIdx & 1) == 0) ? 0 : leafCUSize >> 1;
+                    yOffset = ((PUIdx & 2) == 0) ? 0 : leafCUSize >> 1;
                     break;
                 case PartitionSize.SIZE_2NxnU:
-                    riWidth = iLeafCUSize;
-                    riHeight = (uiPUIdx == 0) ? iLeafCUSize >> 2 : (iLeafCUSize >> 2) + (iLeafCUSize >> 1);
-                    riXOffset = 0;
-                    riYOffset = (uiPUIdx == 0) ? 0 : iLeafCUSize >> 2;
+                    width = leafCUSize;
+                    height = (PUIdx == 0) ? leafCUSize >> 2 : (leafCUSize >> 2) + (leafCUSize >> 1);
+                    xOffset = 0;
+                    yOffset = (PUIdx == 0) ? 0 : leafCUSize >> 2;
                     break;
                 case PartitionSize.SIZE_2NxnD:
-                    riWidth = iLeafCUSize;
-                    riHeight = (uiPUIdx == 0) ? (iLeafCUSize >> 2) + (iLeafCUSize >> 1) : iLeafCUSize >> 2;
-                    riXOffset = 0;
-                    riYOffset = (uiPUIdx == 0) ? 0 : (iLeafCUSize >> 2) + (iLeafCUSize >> 1);
+                    width = leafCUSize;
+                    height = (PUIdx == 0) ? (leafCUSize >> 2) + (leafCUSize >> 1) : leafCUSize >> 2;
+                    xOffset = 0;
+                    yOffset = (PUIdx == 0) ? 0 : (leafCUSize >> 2) + (leafCUSize >> 1);
                     break;
                 case PartitionSize.SIZE_nLx2N:
-                    riWidth = (uiPUIdx == 0) ? iLeafCUSize >> 2 : (iLeafCUSize >> 2) + (iLeafCUSize >> 1);
-                    riHeight = iLeafCUSize;
-                    riXOffset = (uiPUIdx == 0) ? 0 : iLeafCUSize >> 2;
-                    riYOffset = 0;
+                    width = (PUIdx == 0) ? leafCUSize >> 2 : (leafCUSize >> 2) + (leafCUSize >> 1);
+                    height = leafCUSize;
+                    xOffset = (PUIdx == 0) ? 0 : leafCUSize >> 2;
+                    yOffset = 0;
                     break;
                 case PartitionSize.SIZE_nRx2N:
-                    riWidth = (uiPUIdx == 0) ? (iLeafCUSize >> 2) + (iLeafCUSize >> 1) : iLeafCUSize >> 2;
-                    riHeight = iLeafCUSize;
-                    riXOffset = (uiPUIdx == 0) ? 0 : (iLeafCUSize >> 2) + (iLeafCUSize >> 1);
-                    riYOffset = 0;
+                    width = (PUIdx == 0) ? (leafCUSize >> 2) + (leafCUSize >> 1) : leafCUSize >> 2;
+                    height = leafCUSize;
+                    xOffset = (PUIdx == 0) ? 0 : (leafCUSize >> 2) + (leafCUSize >> 1);
+                    yOffset = 0;
                     break;
                 default:
-                    riWidth = iLeafCUSize;
-                    riHeight = iLeafCUSize;
-                    riXOffset = 0;
-                    riYOffset = 0;
+                    width = leafCUSize;
+                    height = leafCUSize;
+                    xOffset = 0;
+                    yOffset = 0;
                     break;
             }
         }
 
-        private int GetPUNumber(PartitionSize ePartSize)
+        private int GetPUNumber(PartitionSize partitionSize)
         {
-            int iTotalNum;
-            switch (ePartSize)
+            int totalNumber;
+            switch (partitionSize)
             {
                 case PartitionSize.SIZE_2Nx2N:
-                    iTotalNum = 1;
+                    totalNumber = 1;
                     break;
                 case PartitionSize.SIZE_NxN:
-                    iTotalNum = 4;
+                    totalNumber = 4;
                     break;
                 case PartitionSize.SIZE_2NxN:
                 case PartitionSize.SIZE_Nx2N:
@@ -255,14 +255,14 @@ namespace HEVCDemo.Parsers
                 case PartitionSize.SIZE_2NxnD:
                 case PartitionSize.SIZE_nLx2N:
                 case PartitionSize.SIZE_nRx2N:
-                    iTotalNum = 2;
+                    totalNumber = 2;
                     break;
                 default:
-                    iTotalNum = 0;
+                    totalNumber = 0;
                     break;
             }
 
-            return iTotalNum;
+            return totalNumber;
         }
     }
 }

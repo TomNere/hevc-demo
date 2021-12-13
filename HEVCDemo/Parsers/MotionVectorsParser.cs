@@ -27,8 +27,8 @@ namespace HEVCDemo.Parsers
                 {
                     var file = new System.IO.StreamReader(cacheProvider.InterPredictionFilePath);
                     string strOneLine = file.ReadLine();
-                    int iDecOrder = -1;
-                    int iLastPOC = -1;
+                    int decOrder = -1;
+                    int lastPOC = -1;
 
                     /// <1,1> 99 0 0 5 0
                     while (strOneLine != null)
@@ -45,16 +45,16 @@ namespace HEVCDemo.Parsers
                             int pocStart = strOneLine.LastIndexOf('<');
                             int addressStart = strOneLine.LastIndexOf(',');
                             int addressEnd = strOneLine.LastIndexOf('>');
-                            int iPoc = int.Parse(strOneLine.Substring(pocStart + 1, addressStart - pocStart - 1));
-                            int iAddr = int.Parse(strOneLine.Substring(addressStart + 1, addressEnd - addressStart - 1));
+                            int poc = int.Parse(strOneLine.Substring(pocStart + 1, addressStart - pocStart - 1));
+                            int address = int.Parse(strOneLine.Substring(addressStart + 1, addressEnd - addressStart - 1));
 
-                            iDecOrder += iLastPOC != iPoc ? 1 : 0;
-                            iLastPOC = iPoc;
+                            decOrder += lastPOC != poc ? 1 : 0;
+                            lastPOC = poc;
                             var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
 
-                            var frame = videoSequence.FramesInDecodeOrder[iDecOrder];
+                            var frame = videoSequence.FramesInDecodeOrder[decOrder];
 
-                            var pcLCU = frame.GetCUByAddress(iAddr);
+                            var pcLCU = frame.GetCUByAddress(address);
 
                             var index = 0;
                             ReadMotionVectors(tokens, pcLCU, ref index);
