@@ -89,7 +89,7 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center" />
             </Button>
-            <!--Intra mode-->
+            <!--Intra prediction mode-->
             <Label Grid.Row="3"
                    Grid.Column="0"
                    Content="{rf:Tr Uid='IntraPredictionMode'}"
@@ -111,7 +111,7 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center" />
             </Button>
-            <!--Inter mode-->
+            <!--Inter prediction mode-->
             <Label Grid.Row="4"
                    Grid.Column="0"
                    Content="{rf:Tr Uid='InterPredictionMode'}"
