@@ -16,7 +16,7 @@ namespace HEVCDemo.Hevc
 
         public ComFrame GetFrameByPoc(int poc)
         {
-            return FramesInDecodeOrder.Values.FirstOrDefault(frame => frame.POC == poc);
+            return FramesInDecodeOrder.Values.FirstOrDefault(frame => frame.Poc == poc);
         }
     }
 }

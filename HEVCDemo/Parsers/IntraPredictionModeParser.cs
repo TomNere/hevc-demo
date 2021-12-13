@@ -1,5 +1,4 @@
-﻿using HEVCDemo.Helpers;
-using HEVCDemo.Hevc;
+﻿using HEVCDemo.Hevc;
 using HEVCDemo.Models;
 using Rasyidf.Localization;
 using System;
@@ -10,11 +9,11 @@ using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
 {
-    public class IntraParser
+    public class IntraPredictionModeParser
     {
         private readonly VideoSequence videoSequence;
 
-        public IntraParser(VideoSequence videoSequence)
+        public IntraPredictionModeParser(VideoSequence videoSequence)
         {
             this.videoSequence = videoSequence;
         }
@@ -29,6 +28,7 @@ namespace HEVCDemo.Parsers
                     string strOneLine = file.ReadLine();
                     int iDecOrder = -1;
                     int iLastPOC = -1;
+
                     /// <1,1> 99 0 0 5 0
                     while (strOneLine != null)
                     {
@@ -56,7 +56,7 @@ namespace HEVCDemo.Parsers
                             var pcLCU = frame.GetCUByAddress(iAddr);
 
                             var index = 0;
-                            XReadIntraMode(tokens, pcLCU, ref index);
+                            ReadIntraPredictionMode(tokens, pcLCU, ref index);
 
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
@@ -86,7 +86,7 @@ namespace HEVCDemo.Parsers
 
             foreach (var pu in cu.PUs)
             {
-                if (pu.PredictionMode != PredictionMode.MODE_INTRA) continue;
+                if (pu.PredictionType != PredictionType.INTRA) continue;
 
                 using (writeableBitmap.GetBitmapContext())
                 {
@@ -98,7 +98,7 @@ namespace HEVCDemo.Parsers
                         case 1: // DC
                             writeableBitmap.DrawLine(pu.X, pu.Y + pu.Height / 2, pu.X + pu.Width / 2, pu.Y, Colors.Green);
                             break;
-                        default:
+                        default: // Angulars
                             if (pu.IntraDirLuma >= 2 && pu.IntraDirLuma <= 17)
                             {
                                 var offset = pu.IntraDirLuma - 1; // 2-17 => 1-16
@@ -117,7 +117,7 @@ namespace HEVCDemo.Parsers
             }
         }
 
-        public bool XReadIntraMode(string[] tokens, ComCU pcLCU, ref int index)
+        public bool ReadIntraPredictionMode(string[] tokens, ComCU pcLCU, ref int index)
         {
             if (index > tokens.Length - 1)
             {
@@ -126,15 +126,15 @@ namespace HEVCDemo.Parsers
 
             if (pcLCU.SCUs.Count > 0)
             {
-                /// non-leaf node : recursive reading for children
-                XReadIntraMode(tokens, pcLCU.SCUs[0], ref index);
-                XReadIntraMode(tokens, pcLCU.SCUs[1], ref index);
-                XReadIntraMode(tokens, pcLCU.SCUs[2], ref index);
-                XReadIntraMode(tokens, pcLCU.SCUs[3], ref index);
+                /// Non-leaf node - recursive reading for children
+                ReadIntraPredictionMode(tokens, pcLCU.SCUs[0], ref index);
+                ReadIntraPredictionMode(tokens, pcLCU.SCUs[1], ref index);
+                ReadIntraPredictionMode(tokens, pcLCU.SCUs[2], ref index);
+                ReadIntraPredictionMode(tokens, pcLCU.SCUs[3], ref index);
             }
             else
             {
-                /// leaf node : read data
+                /// Leaf node - read data
                 foreach(var pcPU in pcLCU.PUs)
                 {
                     pcPU.IntraDirLuma = int.Parse(tokens[index++]);

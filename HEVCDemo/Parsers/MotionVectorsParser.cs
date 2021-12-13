@@ -29,6 +29,7 @@ namespace HEVCDemo.Parsers
                     string strOneLine = file.ReadLine();
                     int iDecOrder = -1;
                     int iLastPOC = -1;
+
                     /// <1,1> 99 0 0 5 0
                     while (strOneLine != null)
                     {
@@ -56,7 +57,7 @@ namespace HEVCDemo.Parsers
                             var pcLCU = frame.GetCUByAddress(iAddr);
 
                             var index = 0;
-                            XReadMotionVectors(tokens, pcLCU, ref index);
+                            ReadMotionVectors(tokens, pcLCU, ref index);
 
                             strOneLine = file.ReadLine();
                             if (strOneLine == null || int.Parse(strOneLine.Substring(1, strOneLine.LastIndexOf(',') - 1)) != frameNumber)
@@ -86,7 +87,7 @@ namespace HEVCDemo.Parsers
 
             foreach (var pu in cu.PUs)
             {
-                if (pu.PredictionMode != PredictionMode.MODE_INTER) continue;
+                if (pu.PredictionType != PredictionType.INTER) continue;
 
                 if (pu.InterDir == 0)
                 {
@@ -119,7 +120,7 @@ namespace HEVCDemo.Parsers
             }
         }
 
-        public bool XReadMotionVectors(string[] tokens, ComCU pcLCU, ref int index)
+        public bool ReadMotionVectors(string[] tokens, ComCU pcLCU, ref int index)
         {
             if (index > tokens.Length - 1)
             {
@@ -129,24 +130,24 @@ namespace HEVCDemo.Parsers
             if (pcLCU.SCUs.Count > 0)
             {
                 /// non-leaf node : recursive reading for children
-                XReadMotionVectors(tokens, pcLCU.SCUs[0], ref index);
-                XReadMotionVectors(tokens, pcLCU.SCUs[1], ref index);
-                XReadMotionVectors(tokens, pcLCU.SCUs[2], ref index);
-                XReadMotionVectors(tokens, pcLCU.SCUs[3], ref index);
+                ReadMotionVectors(tokens, pcLCU.SCUs[0], ref index);
+                ReadMotionVectors(tokens, pcLCU.SCUs[1], ref index);
+                ReadMotionVectors(tokens, pcLCU.SCUs[2], ref index);
+                ReadMotionVectors(tokens, pcLCU.SCUs[3], ref index);
             }
             else
             {
-                /// leaf node : read data
+                /// Leaf node - read data
                 foreach(var pcPU in pcLCU.PUs)
                 {
                     pcPU.InterDir = int.Parse(tokens[index++]);
                     int vectorsCount = 0;
 
-                    if (pcPU.InterDir == 1 || pcPU.InterDir == 2)   //uni-prediction, 1 MV
+                    if (pcPU.InterDir == 1 || pcPU.InterDir == 2)   // uni-prediction, 1 MV
                     {
                         vectorsCount = 1;
                     }
-                    else if (pcPU.InterDir == 3)                    //bi-prediction, 2 MVs
+                    else if (pcPU.InterDir == 3)                    // bi-prediction, 2 MVs
                     {
                         vectorsCount = 2;
                     }
@@ -163,6 +164,7 @@ namespace HEVCDemo.Parsers
                     }
                 }
             }
+
             return true;
         }
     }

@@ -131,7 +131,7 @@
     <Compile Include="Hevc\ComPU.cs" />
     <Compile Include="Hevc\MotionVector.cs" />
     <Compile Include="Hevc\PartSize.cs" />
-    <Compile Include="Hevc\PredictionMode.cs" />
+    <Compile Include="Hevc\PredictionType.cs" />
     <Compile Include="Hevc\VideoSequence.cs" />
     <Compile Include="Models\ViewConfiguration.cs" />
     <Compile Include="Models\InfoImage.cs" />
@@ -151,10 +151,10 @@
     <Compile Include="Helpers\OperationsHelper.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="Parsers\MotionVectorsParser.cs" />
-    <Compile Include="Parsers\IntraParser.cs" />
-    <Compile Include="Parsers\PredictionParser.cs" />
-    <Compile Include="Parsers\PropsParser.cs" />
-    <Compile Include="Parsers\CupuParser.cs" />
+    <Compile Include="Parsers\IntraPredictionModeParser.cs" />
+    <Compile Include="Parsers\PredictionTypeParser.cs" />
+    <Compile Include="Parsers\SequencePropertiesParser.cs" />
+    <Compile Include="Parsers\CodingPredictionUnitsParser.cs" />
     <Compile Include="ViewModels\ImagesViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\ImagesViewer.xaml.cs">

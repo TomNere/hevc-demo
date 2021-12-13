@@ -1,5 +1,4 @@
-﻿using HEVCDemo.Helpers;
-using HEVCDemo.Hevc;
+﻿using HEVCDemo.Hevc;
 using HEVCDemo.Models;
 using Rasyidf.Localization;
 using System;
@@ -10,11 +9,11 @@ using System.Windows.Media.Imaging;
 
 namespace HEVCDemo.Parsers
 {
-    public class CupuParser
+    public class CodingPredictionUnitsParser
     {
         private readonly VideoSequence videoSequence;
 
-        public CupuParser(VideoSequence videoSequence)
+        public CodingPredictionUnitsParser(VideoSequence videoSequence)
         {
             this.videoSequence = videoSequence;
         }
@@ -61,7 +60,7 @@ namespace HEVCDemo.Parsers
 
                             if (iPoc != iLastPOC)
                             {
-                                frame = new ComFrame { POC = iPoc, Sequence = videoSequence };
+                                frame = new ComFrame { Poc = iPoc, Sequence = videoSequence };
                                 videoSequence.FramesInDecodeOrder.Add(iDecOrder, frame);
                             }
                             else
@@ -73,14 +72,14 @@ namespace HEVCDemo.Parsers
 
                             var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
 
-                            /// poc and lcu addr
+                            /// Poc and Lcu addr
                             var pcLCU = new ComCU { iAddr = iAddr, Frame = frame, Size = iLCUSize };
                             pcLCU.iPixelX = (iAddr % iCUOneRow) * videoSequence.MaxCUSize;
                             pcLCU.iPixelY = (iAddr / iCUOneRow) * videoSequence.MaxCUSize;
 
-                            /// recursively parse the CU&PU quard-tree structure
+                            /// Recursively parse the CU&PU quard-tree structure
                             var index = 0;
-                            if (!XReadInCUMode(tokens, pcLCU, ref index))
+                            if (!ReadInCUMode(tokens, pcLCU, ref index))
                             {
                                 throw new FormatException("Invalid format");
                             }
@@ -106,12 +105,9 @@ namespace HEVCDemo.Parsers
             });
         }
 
-        public bool XReadInCUMode(string[] tokens, ComCU pcLCU, ref int index)
+        public bool ReadInCUMode(string[] tokens, ComCU pcLCU, ref int index)
         {
-            if (index > tokens.Length - 1)
-            {
-                return false;
-            }
+            if (index > tokens.Length - 1) return false;
 
             var iCUMode = int.Parse(tokens[index]);
 
@@ -119,7 +115,8 @@ namespace HEVCDemo.Parsers
             {
                 int iMaxDepth = pcLCU.Frame.Sequence.MaxCUDepth;
                 int iTotalNumPart = 1 << ((iMaxDepth - pcLCU.Depth) << 1);
-                /// non-leaf node : add 4 children CUs
+
+                /// Non-leaf node, add 4 children CUs
                 for (int i = 0; i < 4; i++)
                 {
                     var pcChildNode = new ComCU 
@@ -137,15 +134,15 @@ namespace HEVCDemo.Parsers
                     pcChildNode.iPixelY = iSubCUY;
                     pcLCU.SCUs.Add(pcChildNode);
                     index++;
-                    XReadInCUMode(tokens, pcChildNode, ref index);
+                    ReadInCUMode(tokens, pcChildNode, ref index);
                 }
             }
             else
             {
-                /// leaf node : create PUs and write the PU Mode for it
+                /// Leaf node - create PUs and write the PU Mode for it
                 pcLCU.PartSize = (PartSize)iCUMode;
 
-                int iPUCount = GetPUNum((PartSize)iCUMode);
+                int iPUCount = GetPUNumber((PartSize)iCUMode);
                 for (int i = 0; i < iPUCount; i++)
                 {
                     var pcPU = new ComPU { CU = pcLCU };
@@ -233,7 +230,6 @@ namespace HEVCDemo.Parsers
                     riYOffset = 0;
                     break;
                 default:
-                    //Q_ASSERT(ePartSize == SIZE_2Nx2N);
                     riWidth = iLeafCUSize;
                     riHeight = iLeafCUSize;
                     riXOffset = 0;
@@ -242,9 +238,9 @@ namespace HEVCDemo.Parsers
             }
         }
 
-        private int GetPUNum(PartSize ePartSize)
+        private int GetPUNumber(PartSize ePartSize)
         {
-            int iTotalNum = 0;
+            int iTotalNum;
             switch (ePartSize)
             {
                 case PartSize.SIZE_2Nx2N:
@@ -262,10 +258,10 @@ namespace HEVCDemo.Parsers
                     iTotalNum = 2;
                     break;
                 default:
-                    //Q_ASSERT(ePartSize == SIZE_NONE); ///< SIZE_NONE (out of boundary)
                     iTotalNum = 0;
                     break;
             }
+
             return iTotalNum;
         }
     }

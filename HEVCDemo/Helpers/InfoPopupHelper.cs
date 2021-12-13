@@ -25,17 +25,17 @@ namespace HEVCDemo.Helpers
                 Size = $"{predictionUnit.Width}x{predictionUnit.Height}"
             };
 
-            if (predictionUnit.PredictionMode == PredictionMode.MODE_INTRA)
+            if (predictionUnit.PredictionType == PredictionType.INTRA)
             {
                 parameters.PredictionMode = "IntraPredictionTitle,Text".Localize();
                 GetIntraParameters(parameters, predictionUnit);
             }
-            else if (predictionUnit.PredictionMode == PredictionMode.MODE_INTER)
+            else if (predictionUnit.PredictionType == PredictionType.INTER)
             {
                 parameters.PredictionMode = "InterPredictionTitle,Text".Localize();
                 GetInterParameters(parameters, predictionUnit);
             }
-            else if (predictionUnit.PredictionMode == PredictionMode.MODE_SKIP)
+            else if (predictionUnit.PredictionType == PredictionType.SKIP)
             {
                 parameters.PredictionMode = "SkipMode,Text".Localize();
             }

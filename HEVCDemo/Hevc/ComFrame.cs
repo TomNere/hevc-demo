@@ -4,7 +4,7 @@ namespace HEVCDemo.Hevc
 {
     public class ComFrame
     {
-        public int POC;
+        public int Poc;
         public VideoSequence Sequence;
         public List<ComCU> CodingUnits = new List<ComCU>();
 

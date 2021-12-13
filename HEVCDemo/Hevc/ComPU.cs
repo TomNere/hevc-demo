@@ -8,7 +8,7 @@ namespace HEVCDemo.Hevc
         public int Y;
         public int Width;
         public int Height;
-        public PredictionMode PredictionMode;
+        public PredictionType PredictionType;
         public ComCU CU;
         public int IntraDirLuma = -1;
         public int IntraDirChroma = -1;

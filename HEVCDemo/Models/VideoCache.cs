@@ -130,18 +130,18 @@ namespace HEVCDemo.Models
 
         public async Task ProcessFiles()
         {
-            var cupuParser = new CupuParser(VideoSequence);
-            _ = await cupuParser.ParseFile(this);
+            var codingPredictionUnitsParser = new CodingPredictionUnitsParser(VideoSequence);
+            _ = await codingPredictionUnitsParser.ParseFile(this);
 
-            var predictionParser = new PredictionParser(VideoSequence);
-            _ = await predictionParser.ParseFile(this);
+            var predictionTypeParser = new PredictionTypeParser(VideoSequence);
+            _ = await predictionTypeParser.ParseFile(this);
 
-            var intraParser = new IntraParser(VideoSequence);
+            var intraPredictionModeParser = new IntraPredictionModeParser(VideoSequence);
             var motionVectorsParser = new MotionVectorsParser(VideoSequence);
 
             var tasks = new List<Task>
             {
-                intraParser.ParseFile(this),
+                intraPredictionModeParser.ParseFile(this),
                 motionVectorsParser.ParseFile(this)
             };
 
@@ -150,8 +150,8 @@ namespace HEVCDemo.Models
 
         public void ParseProps()
         {
-            var propsParser = new PropsParser();
-            propsParser.ParseProps(this, VideoSequence);
+            var propertiesParser = new SequencePropertiesParser();
+            propertiesParser.ParseSequenceProperties(this, VideoSequence);
         }
 
         private void InitCacheFolders()
@@ -326,7 +326,7 @@ namespace HEVCDemo.Models
 
             foreach (var cu in frame.CodingUnits)
             {
-                IntraParser.WriteBitmaps(cu, writeableBitmap);
+                IntraPredictionModeParser.WriteBitmaps(cu, writeableBitmap);
             }
             return true;
         }
@@ -338,7 +338,7 @@ namespace HEVCDemo.Models
 
             foreach (var cu in frame.CodingUnits)
             {
-                PredictionParser.WriteBitmaps(cu, writeableBitmap);
+                PredictionTypeParser.WriteBitmaps(cu, writeableBitmap);
             }
             return true;
         }
@@ -350,7 +350,7 @@ namespace HEVCDemo.Models
 
             foreach (var cu in frame.CodingUnits)
             {
-                CupuParser.WriteBitmaps(cu, writeableBitmap);
+                CodingPredictionUnitsParser.WriteBitmaps(cu, writeableBitmap);
             }
             return true;
         }
