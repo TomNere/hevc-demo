@@ -23,6 +23,7 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabledChanged;
             GlobalActionsHelper.VideoLoaded += VideoLoaded;
             GlobalActionsHelper.LanguageChanged += LanguageChanged;
+            GlobalActionsHelper.CacheCleared += CacheCleared;
             InitializeTipsTexts();
             InitializeTipsPopup();
             _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
@@ -36,6 +37,13 @@ namespace HEVCDemo.ViewModels
         }
 
         #region Event handlers
+
+        // Set empty strings when cache is cleared
+        private void CacheCleared(object sender, EventArgs e)
+        {
+            Resolution = string.Empty;
+            FileSize = string.Empty;
+        }
 
         // Reinitialize tips popup texts and close tips popup because it has wrong language
         private void LanguageChanged(object sender, EventArgs e)

@@ -226,6 +226,17 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.CacheCleared += CacheCleared;
             GlobalActionsHelper.KeyDown += KeyDown;
+            GlobalActionsHelper.LanguageChanged += LanguageChanged;
+        }
+
+        // Refresh strings in timeline
+        private void LanguageChanged(object sender, EventArgs e)
+        {
+            if (cache != null)
+            {
+                Framerate = string.Format("Framerate,Text".Localize(), cache.Framerate);
+                CurrentFrameDescription = string.Format("CurrentFrameDescription,Text".Localize(), CurrentFrameIndex + 1, cache.VideoSequence.FramesCount);
+            }
         }
 
         // Handle key down
@@ -722,6 +733,8 @@ namespace HEVCDemo.ViewModels
             IsEnabled = false;
             CurrentFrame = null;
             cache = null;
+            CurrentFrameDescription = string.Empty;
+            Framerate = string.Empty;
         }
 
         #endregion
