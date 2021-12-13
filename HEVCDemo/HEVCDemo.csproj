@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -202,18 +202,18 @@
     <Content Include="Assets\InfoTexts\English\WhatIsHevc.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\Samples\TestVideos\BigBuckBunny_1080_25mbps.mp4">
+    <Content Include="Assets\Samples\TestVideos\BigBuckBunny_1080_25mbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Samples\X265\BigBuckBunny_2160_2mbps.mp4">
+    </Content>
+    <Content Include="Assets\Samples\X265\BigBuckBunny_2160_2mbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Samples\Author\ChairVertical_720_10mbps.mp4">
+    </Content>
+    <Content Include="Assets\Samples\Author\ChairVertical_720_10mbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Samples\X265\Tractor_1080_500kbps.mp4">
+    </Content>
+    <Content Include="Assets\Samples\X265\Tractor_1080_500kbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -237,9 +237,9 @@
     <Content Include="Assets\InfoTexts\Custom\About.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\InfoTexts\Custom\Licenses.md">
+    <Content Include="Assets\InfoTexts\Custom\Licenses.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="Assets\Samples\Author\ForestStatic_2160_16mbps.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -330,15 +330,15 @@
     <Content Include="Assets\InfoTexts\Czech\About.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\InfoTexts\Czech\Licenses.md">
+    <Content Include="Assets\InfoTexts\Czech\Licenses.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="Assets\InfoTexts\English\About.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\InfoTexts\English\Licenses.md">
+    <Content Include="Assets\InfoTexts\English\Licenses.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
