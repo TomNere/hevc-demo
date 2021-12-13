@@ -16,8 +16,8 @@
             <RowDefinition Height="Auto"
                            x:Name="AppStateRow" />
         </Grid.RowDefinitions>
-        <!--Help popup-->
-        <Popup IsOpen="{Binding IsHelpPopupOpen}"
+        <!--Tips popup-->
+        <Popup IsOpen="{Binding IsTipsPopupOpen}"
                PopupAnimation="Fade"
                AllowsTransparency="True"
                PlacementTarget="{Binding ElementName=WhatIsHevc}"
@@ -44,7 +44,7 @@
                            FontWeight="Bold"
                            Foreground="Black" />
                     <TextBlock Margin="6,0,10,0"
-                               Text="{Binding HelpPopupText}"
+                               Text="{Binding TipsPopupText}"
                                TextWrapping="Wrap"
                                Foreground="Black" />
                 </StackPanel>
@@ -54,7 +54,7 @@
                         Height="24"
                         Width="24"
                         VerticalAlignment="Top"
-                        Command="{Binding CloseHelpPopupCommand}">
+                        Command="{Binding CloseTipsPopupCommand}">
                     <iconPacks:PackIconModern Kind="Close"
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Center" />
@@ -144,7 +144,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <CheckBox IsChecked="{Binding IsYuvFrameEnabled}"
+                        <CheckBox IsChecked="{Binding IsDecodedFrameEnabled}"
                                   VerticalAlignment="Center" />
                         <Label Grid.Column="1"
                                VerticalAlignment="Center"

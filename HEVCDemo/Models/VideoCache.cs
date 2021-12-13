@@ -194,7 +194,7 @@ namespace HEVCDemo.Models
                             bool isValid = true;
 
                             // Get YUV frame
-                            if (configuration.IsYuvFrameVisible)
+                            if (configuration.IsDecodedFrameVisible)
                             {
                                 var yuvFrame = new BitmapImage();
                                 using (var imageStreamSource = new FileStream(orderedYuvFramesFiles[i].FullName, FileMode.Open, FileAccess.Read, FileShare.Read))

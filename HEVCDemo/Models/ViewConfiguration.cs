@@ -5,7 +5,7 @@
     /// </summary>
     public class ViewConfiguration
     {
-        public bool IsYuvFrameVisible { get; set; } = true;
+        public bool IsDecodedFrameVisible { get; set; } = true;
         public bool IsCodingPredictionUnitsVisible { get; set; } = true;
         public bool IsPredictionTypeVisible { get; set; } = true;
         public bool IsIntraPredictionVisible { get; set; } = true;

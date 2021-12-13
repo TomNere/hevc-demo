@@ -347,47 +347,47 @@
       "Text": "Obr.3: Bloky velikosti 8x8 vygenerovány aplikací všech 35 módů vnitřní predikce."
     },
     {
-      "Id": "PopupHelp1",
+      "Id": "PopupTip1",
       "Content": "Klávesama ← a → se lze přepínat mezi snímky. Při současně stisknuté klávese CTRL lze provést skok na začátek a na konec."
     },
     {
-      "Id": "PopupHelp6",
+      "Id": "PopupTip6",
       "Content": "Pravým myšítkem lze otevřít dialog s informacemi o predikční jednotce, ve které se nachází kursor."
     },
     {
-      "Id": "PopupHelp3",
+      "Id": "PopupTip3",
       "Content": "Přibližovat a oddalovat snímek lze klávesama +,- a kolečkem myši."
     },
     {
-      "Id": "PopupHelp4",
+      "Id": "PopupTip4",
       "Content": "Taháním myši lze posouvat snímek v horizontálním a vertikálním směru."
     },
     {
-      "Id": "PopupHelp5",
+      "Id": "PopupTip5",
       "Content": "Kódovací data algoritmu H.265 lze zobrazit a skrýt kliknutím na zaškrtávací pole."
     },
     {
-      "Id": "PopupHelp2",
+      "Id": "PopupTip2",
       "Content": "Kliknutím na ikonu informace v panelu lze zobrazit detailní popis kódovacích algoritmů kodeku H.265."
     },
     {
-      "Id": "PopupHelp7",
+      "Id": "PopupTip7",
       "Content": "Rozbalením sekcí v panelu lze zobrazit legendu."
     },
     {
-      "Id": "PopupHelp8",
+      "Id": "PopupTip8",
       "Content": "Mezerníkem lze spustit a pozastavit automatické přepínání snímků."
     },
     {
-      "Id": "PopupHelp9",
+      "Id": "PopupTip9",
       "Content": "Snímky lze přepínat taky pomocí časové osy."
     },
     {
-      "Id": "PopupHelp10",
+      "Id": "PopupTip10",
       "Content": "Dialogy s detailním popisem lze zvětšovat a tak docílit přiblížení obrázků."
     },
     {
-      "Id": "PopupHelp11",
+      "Id": "PopupTip11",
       "Content": "Úpravou 'Custom' souborů ve složkách Assets/Translations a Assets/InfoTexts lze vytvořit vlastní lokalizaci aplikace."
     },
     {

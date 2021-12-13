@@ -16,6 +16,8 @@ namespace HEVCDemo.ViewModels
     {
         private List<LocalizationDictionary> culturePacks;
 
+        #region Binding properties
+
         private bool isTerminalEnabled;
         public bool IsTerminalEnabled
         {
@@ -57,21 +59,58 @@ namespace HEVCDemo.ViewModels
             }
         }
 
+        #endregion
+
+        #region Commands
+
         private DelegateCommand<LocalizationDictionary> changeLanguageCommand;
-        public DelegateCommand<LocalizationDictionary> ChangeLanguageCommand
-            => changeLanguageCommand ?? (changeLanguageCommand = new DelegateCommand<LocalizationDictionary>(OnChangeLanguage));
+        public DelegateCommand<LocalizationDictionary> ChangeLanguageCommand => changeLanguageCommand ?? (changeLanguageCommand = new DelegateCommand<LocalizationDictionary>(OnChangeLanguage));
 
         private DelegateCommand showHelpCommand;
-        public DelegateCommand ShowHelpCommand
-            => showHelpCommand ?? (showHelpCommand = new DelegateCommand(ExecuteShowHelp));
+        public DelegateCommand ShowHelpCommand => showHelpCommand ?? (showHelpCommand = new DelegateCommand(ExecuteShowHelp));
 
         private DelegateCommand showLicensesCommand;
-        public DelegateCommand ShowLicensesCommand
-            => showLicensesCommand ?? (showLicensesCommand = new DelegateCommand(ExecuteShowLicenses));
+        public DelegateCommand ShowLicensesCommand => showLicensesCommand ?? (showLicensesCommand = new DelegateCommand(ExecuteShowLicenses));
 
         private DelegateCommand showAboutCommand;
-        public DelegateCommand ShowAboutCommand
-            => showAboutCommand ?? (showAboutCommand = new DelegateCommand(ExecuteShowAbout));
+        public DelegateCommand ShowAboutCommand => showAboutCommand ?? (showAboutCommand = new DelegateCommand(ExecuteShowAbout));
+
+        private DelegateCommand selectVideoCommand;
+        public DelegateCommand SelectVideoCommand => selectVideoCommand ?? (selectVideoCommand = new DelegateCommand(ExecuteSelectVideo));
+
+        private DelegateCommand exitCommand;
+        public DelegateCommand ExitCommand => exitCommand ?? (exitCommand = new DelegateCommand(ExecuteExit));
+
+        private DelegateCommand clearCacheCommand;
+        public DelegateCommand ClearCacheCommand => clearCacheCommand ?? (clearCacheCommand = new DelegateCommand(ExecuteClearCache));
+
+        #endregion
+
+        public MainWindowViewModel()
+        {
+            InitializeLanguages();
+            IsShowTipsEnabled = Properties.Settings.Default.IsShowTipsEnabled;
+            IsTerminalEnabled = Properties.Settings.Default.IsTerminalEnabled;
+        }
+
+        private void ExecuteClearCache()
+        {
+            var result = MessageBox.Show("ClearCacheMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                _ = VideoCache.ClearCache();
+            }
+        }
+
+        private void ExecuteExit()
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void ExecuteSelectVideo()
+        {
+            GlobalActionsHelper.OnSelectVideoClicked();
+        }
 
         private void ExecuteShowHelp()
         {
@@ -89,13 +128,6 @@ namespace HEVCDemo.ViewModels
         {
             var infoDialog = new InfoDialog("AppTitle,Title".Localize(), "About", null);
             infoDialog.ShowDialog();
-        }
-
-        public MainWindowViewModel()
-        {
-            InitializeLanguages();
-            IsShowTipsEnabled = Properties.Settings.Default.IsShowTipsEnabled;
-            IsTerminalEnabled = Properties.Settings.Default.IsTerminalEnabled;
         }
 
         private void InitializeLanguages()
@@ -149,31 +181,6 @@ namespace HEVCDemo.ViewModels
                 LocalizationService.Current.ChangeLanguage(value);
                 CreateCultureMenuItems();
                 GlobalActionsHelper.OnLanguageChanged();
-            }
-        }
-
-        private DelegateCommand selectVideoCommand;
-        public DelegateCommand SelectVideoCommand => selectVideoCommand ?? (selectVideoCommand = new DelegateCommand(ExecuteSelectVideo));
-        private void ExecuteSelectVideo()
-        {
-            GlobalActionsHelper.OnSelectVideoClicked();
-        }
-
-        private DelegateCommand exitCommand;
-        public DelegateCommand ExitCommand => exitCommand ?? (exitCommand = new DelegateCommand(ExecuteExit));
-        private void ExecuteExit()
-        {
-            Application.Current.Shutdown();
-        }
-
-        private DelegateCommand clearCacheCommand;
-        public DelegateCommand ClearCacheCommand => clearCacheCommand ?? (clearCacheCommand = new DelegateCommand(ExecuteClearCache));
-        private void ExecuteClearCache()
-        {
-            var result = MessageBox.Show("ClearCacheMsg,Text".Localize(), "AppTitle,Title".Localize(), MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                _ = VideoCache.ClearCache();
             }
         }
     }

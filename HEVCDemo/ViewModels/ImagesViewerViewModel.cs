@@ -20,15 +20,19 @@ namespace HEVCDemo.ViewModels
 {
     public class ImagesViewerViewModel : BindableBase
     {
+        #region Private properties
+
         private const double zoomStep = 0.05;
         private readonly TimeSpan playerInterval = TimeSpan.FromSeconds(1);
         private readonly Color highlightColor = Colors.DeepPink;
-        private bool isPlaying;
-        private ViewConfiguration viewConfiguration = new ViewConfiguration();
 
+        private ViewConfiguration viewConfiguration = new ViewConfiguration();
         private VideoCache cache;
 
         private double zoom = 1;
+        private bool isPlaying;
+
+        #endregion
 
         #region Binding properties
 
@@ -191,8 +195,7 @@ namespace HEVCDemo.ViewModels
         public DelegateCommand MouseScrolledCommand => mouseScrolledCommand ?? (mouseScrolledCommand = new DelegateCommand(ExecuteMouseScrolled));
 
         private DelegateCommand<object> scrollViewerRightClickCommand;
-        public DelegateCommand<object> ScrollViewerRightClickCommand
-            => scrollViewerRightClickCommand ?? (scrollViewerRightClickCommand = new DelegateCommand<object>(ExecuteScrollViewerRightClick));
+        public DelegateCommand<object> ScrollViewerRightClickCommand => scrollViewerRightClickCommand ?? (scrollViewerRightClickCommand = new DelegateCommand<object>(ExecuteScrollViewerRightClick));
 
         private DelegateCommand closePopupCommand;
         public DelegateCommand ClosePopupCommand => closePopupCommand ?? (closePopupCommand = new DelegateCommand(ExecuteClosePopup));
@@ -225,6 +228,7 @@ namespace HEVCDemo.ViewModels
             GlobalActionsHelper.KeyDown += KeyDown;
         }
 
+        // Handle key down
         private void KeyDown(object sender, KeyDownEventArgs e)
         {
             var key = e.Key;
@@ -284,17 +288,20 @@ namespace HEVCDemo.ViewModels
             }
         }
 
+        // Clear data and show select video button
         private void CacheCleared(object sender, EventArgs e)
         {
             Clear();
             SelectVideoVisibility = Visibility.Visible;
         }
 
+        // Close popup when window deactivated
         private void MainWindowDeactivated(object sender, EventArgs e)
         {
             ClosePopup();
         }
 
+        // Enable/disable control and show/hide spinner
         private void AppStateChanged(object sender, AppStateChangedEventArgs e)
         {
             if (e.IsViewerEnabled != null)
@@ -305,11 +312,13 @@ namespace HEVCDemo.ViewModels
             SpinnerVisibility = e.IsBusy ? Visibility.Visible : Visibility.Hidden;
         }
 
+        // Select video
         private void SelectVideoClicked(object sender, EventArgs e)
         {
             _ = SelectVideo();
         }
 
+        // Show data by configuration
         private void ViewConfigurationChanged(object sender, ViewConfigurationChangedEventArgs e)
         {
             viewConfiguration = e.ViewConfiguration;

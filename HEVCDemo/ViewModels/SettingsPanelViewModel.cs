@@ -20,14 +20,14 @@ namespace HEVCDemo.ViewModels
         {
             GlobalActionsHelper.MainWindowDeactivated += MainWindowDeactivated;
             GlobalActionsHelper.AppStateChanged += AppStateChanged;
-            GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabled;
+            GlobalActionsHelper.ShowTipsEnabledChanged += SetTipsIsEnabledChanged;
             GlobalActionsHelper.VideoLoaded += VideoLoaded;
             GlobalActionsHelper.LanguageChanged += LanguageChanged;
-            InitializeHelpTexts();
-            InitializeHelpPopup();
+            InitializeTipsTexts();
+            InitializeTipsPopup();
             _ = FFmpegHelper.EnsureFFmpegIsDownloaded();
 
-            IsYuvFrameEnabled = viewConfiguration.IsYuvFrameVisible;
+            IsDecodedFrameEnabled = viewConfiguration.IsDecodedFrameVisible;
             IsCodingUnitsEnabled = viewConfiguration.IsCodingPredictionUnitsVisible;
             IsPredictionTypeEnabled = viewConfiguration.IsPredictionTypeVisible;
             IsIntraPredictionEnabled = viewConfiguration.IsIntraPredictionVisible;
@@ -35,29 +35,49 @@ namespace HEVCDemo.ViewModels
             IsVectorsStartEnabled = viewConfiguration.IsMotionVectorsStartEnabled;
         }
 
+        #region Event handlers
+
+        // Reinitialize tips popup texts and close tips popup because it has wrong language
         private void LanguageChanged(object sender, EventArgs e)
         {
-            InitializeHelpTexts();
-            ExecuteCloseHelp();
+            InitializeTipsTexts();
+            ExecuteCloseTipsPopup();
         }
 
+        // Set resolution and file size
         private void VideoLoaded(object sender, VideoLoadedEventArgs e)
         {
             Resolution = e.Resolution;
             FileSize = e.FileSize;
         }
 
-        private void SetTipsIsEnabled(object sender, ShowTipsEventArgs e)
+        // Enable or hide tips popup
+        private void SetTipsIsEnabledChanged(object sender, ShowTipsEventArgs e)
         {
             if (e.IsEnabled)
             {
-                helpPopupTimer.Change(TimeSpan.Zero, helpPopupInterval);
+                tipsPopupTimer.Change(TimeSpan.Zero, tipsPopupInterval);
             }
             else
             {
-                IsHelpPopupOpen = false;
+                IsTipsPopupOpen = false;
             }
         }
+
+        private void MainWindowDeactivated(object sender, EventArgs e)
+        {
+            IsTipsPopupOpen = false;
+        }
+
+        private void AppStateChanged(object sender, AppStateChangedEventArgs e)
+        {
+            SetAppState(e.StateText);
+            SettingsEnabled = !e.IsBusy;
+        }
+
+        #endregion
+
+        #region Binding properties
 
         private string resolution;
         public string Resolution
@@ -73,70 +93,7 @@ namespace HEVCDemo.ViewModels
             set => SetProperty(ref fileSize, value);
         }
 
-        #region Info dialogs
-
-        private DelegateCommand showResolutionInfoCommand;
-        public DelegateCommand ShowResolutionInfoCommand => showResolutionInfoCommand ?? (showResolutionInfoCommand = new DelegateCommand(ExecuteShowResolutionInfo));
-        private void ExecuteShowResolutionInfo()
-        {
-            InfoDialogHelper.ShowResolutionInfoDialog();
-        }
-
-        private DelegateCommand showFileSizeInfoCommand;
-        public DelegateCommand ShowFileSizeInfoCommand => showFileSizeInfoCommand ?? (showFileSizeInfoCommand = new DelegateCommand(ExecuteShowFileSizeInfo));
-        private void ExecuteShowFileSizeInfo()
-        {
-            InfoDialogHelper.ShowFileSizeInfoDialog();
-        }
-
-        private DelegateCommand showDecodedFramesInfoCommand;
-        public DelegateCommand ShowDecodedFramesInfoCommand => showDecodedFramesInfoCommand ?? (showDecodedFramesInfoCommand = new DelegateCommand(ExecuteShowDecodedFramesInfo));
-        private void ExecuteShowDecodedFramesInfo()
-        {
-            InfoDialogHelper.ShowDecodedFramesInfoDialog();
-        }
-
-        private DelegateCommand showCodingUnitsInfoCommand;
-        public DelegateCommand ShowCodingUnitsInfoCommand => showCodingUnitsInfoCommand ?? (showCodingUnitsInfoCommand = new DelegateCommand(ExecuteShowCodingUnitsInfo));
-        private void ExecuteShowCodingUnitsInfo()
-        {
-            InfoDialogHelper.ShowCodingUnitsInfoDialog();
-        }
-
-        private DelegateCommand showPredictionTypeInfoCommand;
-        public DelegateCommand ShowPredictionTypeInfoCommand => showPredictionTypeInfoCommand ?? (showPredictionTypeInfoCommand = new DelegateCommand(ExecuteShowPredictionTypeInfo));
-        private void ExecuteShowPredictionTypeInfo()
-        {
-            InfoDialogHelper.ShowPredictionTypeInfoDialog();
-        }
-
-        private DelegateCommand showIntraPredictionInfoCommand;
-        public DelegateCommand ShowIntraPredictionInfoCommand => showIntraPredictionInfoCommand ?? (showIntraPredictionInfoCommand = new DelegateCommand(ExecutShowIntraPredictionInfo));
-        private void ExecutShowIntraPredictionInfo()
-        {
-            InfoDialogHelper.ShowIntraPredictionInfoDialog();
-        }
-
-        private DelegateCommand showInterPredictionInfoCommand;
-        public DelegateCommand ShowInterPredictionInfoCommand => showInterPredictionInfoCommand ?? (showInterPredictionInfoCommand = new DelegateCommand(ExecuteShowInterPredictionInfo));
-        private void ExecuteShowInterPredictionInfo()
-        {
-            InfoDialogHelper.ShowInterPredictionInfoDialog();
-        }
-
-        private DelegateCommand showWhatIsHevcCommand;
-        public DelegateCommand ShowWhatIsHevcCommand => showWhatIsHevcCommand ?? (showWhatIsHevcCommand = new DelegateCommand(ExecuteShowWhatIsHevc));
-        private void ExecuteShowWhatIsHevc()
-        {
-            InfoDialogHelper.ShowWhatIsHevcInfoDialog();
-        }
-
-        #endregion
-
-        #region View options
-
         private bool settingsEnabled;
-
         public bool SettingsEnabled
         {
             get => settingsEnabled;
@@ -144,14 +101,14 @@ namespace HEVCDemo.ViewModels
         }
 
 
-        private bool isYuvFrameEnabled = true;
-        public bool IsYuvFrameEnabled
+        private bool isDecodedFrameEnabled = true;
+        public bool IsDecodedFrameEnabled
         {
-            get => isYuvFrameEnabled;
+            get => isDecodedFrameEnabled;
             set
             {
-                SetProperty(ref isYuvFrameEnabled, value);
-                viewConfiguration.IsYuvFrameVisible = value;
+                SetProperty(ref isDecodedFrameEnabled, value);
+                viewConfiguration.IsDecodedFrameVisible = value;
                 GlobalActionsHelper.OnViewConfigurationChanged(viewConfiguration);
             }
         }
@@ -216,82 +173,92 @@ namespace HEVCDemo.ViewModels
             }
         }
 
+        private bool isTipsPopupOpen;
+        public bool IsTipsPopupOpen
+        {
+            get => isTipsPopupOpen;
+            set => SetProperty(ref isTipsPopupOpen, value);
+        }
+
+        private string tipsPopupText;
+        public string TipsPopupText
+        {
+            get => tipsPopupText;
+            set => SetProperty(ref tipsPopupText, value);
+        }
+
+        private string appState;
+        public string AppState
+        {
+            get => appState;
+            set => SetProperty(ref appState, value);
+        }
+
         #endregion
 
-        #region HelpPopup
+        #region Commands
 
-        private readonly TimeSpan helpPopupInterval = TimeSpan.FromMinutes(3);
-        private readonly TimeSpan helpPopupTimeout = TimeSpan.FromSeconds(15);
-        private readonly TimeSpan helpPopupInitialDelay = TimeSpan.FromSeconds(15);
-        private readonly TimeSpan tryLaterDelay = TimeSpan.FromSeconds(30);
-        private readonly List<string> helpPopupTexts = new List<string>();
-
-        private Timer helpPopupTimer;
-
-        private void InitializeHelpTexts()
+        private DelegateCommand showResolutionInfoCommand;
+        public DelegateCommand ShowResolutionInfoCommand => showResolutionInfoCommand ?? (showResolutionInfoCommand = new DelegateCommand(ExecuteShowResolutionInfo));
+        private void ExecuteShowResolutionInfo()
         {
-            helpPopupTexts.Clear();
-            helpPopupTexts.AddRange(new List<string>
-            {
-                "PopupHelp1,Content".Localize(),
-                "PopupHelp2,Content".Localize(),
-                "PopupHelp3,Content".Localize(),
-                "PopupHelp4,Content".Localize(),
-                "PopupHelp5,Content".Localize(),
-                "PopupHelp6,Content".Localize(),
-                "PopupHelp7,Content".Localize(),
-                "PopupHelp8,Content".Localize(),
-                "PopupHelp9,Content".Localize(),
-                "PopupHelp10,Content".Localize(),
-                "PopupHelp11,Content".Localize(),
-            });
+            InfoDialogHelper.ShowResolutionInfoDialog();
         }
 
-        private void InitializeHelpPopup()
+        private DelegateCommand showFileSizeInfoCommand;
+        public DelegateCommand ShowFileSizeInfoCommand => showFileSizeInfoCommand ?? (showFileSizeInfoCommand = new DelegateCommand(ExecuteShowFileSizeInfo));
+        private void ExecuteShowFileSizeInfo()
         {
-            helpPopupTimer = new Timer(DoHelpPopupTimerTick, null, helpPopupInitialDelay, helpPopupInterval);
+            InfoDialogHelper.ShowFileSizeInfoDialog();
         }
 
-        private async void DoHelpPopupTimerTick(object state)
+        private DelegateCommand showDecodedFramesInfoCommand;
+        public DelegateCommand ShowDecodedFramesInfoCommand => showDecodedFramesInfoCommand ?? (showDecodedFramesInfoCommand = new DelegateCommand(ExecuteShowDecodedFramesInfo));
+        private void ExecuteShowDecodedFramesInfo()
         {
-            if (!Properties.Settings.Default.IsShowTipsEnabled) return;
-
-            if (!WindowHelper.GetApplicationIsActivated())
-            {
-                // Try later
-                helpPopupTimer.Change(tryLaterDelay, helpPopupInterval);
-                return;
-            }
-
-            var index = Properties.Settings.Default.ShowTipsCounter;
-
-            HelpPopupText = helpPopupTexts[index];
-            IsHelpPopupOpen = true;
-            Properties.Settings.Default.ShowTipsCounter = index + 1 >= helpPopupTexts.Count ? 0 : index + 1;
-
-            await Task.Delay(helpPopupTimeout);
-            IsHelpPopupOpen = false;
+            InfoDialogHelper.ShowDecodedFramesInfoDialog();
         }
 
-        private bool isHelpPopupOpen;
-        public bool IsHelpPopupOpen
+        private DelegateCommand showCodingUnitsInfoCommand;
+        public DelegateCommand ShowCodingUnitsInfoCommand => showCodingUnitsInfoCommand ?? (showCodingUnitsInfoCommand = new DelegateCommand(ExecuteShowCodingUnitsInfo));
+        private void ExecuteShowCodingUnitsInfo()
         {
-            get => isHelpPopupOpen;
-            set => SetProperty(ref isHelpPopupOpen, value);
+            InfoDialogHelper.ShowCodingUnitsInfoDialog();
         }
 
-        private string helpPopupText;
-        public string HelpPopupText
+        private DelegateCommand showPredictionTypeInfoCommand;
+        public DelegateCommand ShowPredictionTypeInfoCommand => showPredictionTypeInfoCommand ?? (showPredictionTypeInfoCommand = new DelegateCommand(ExecuteShowPredictionTypeInfo));
+        private void ExecuteShowPredictionTypeInfo()
         {
-            get => helpPopupText;
-            set => SetProperty(ref helpPopupText, value);
+            InfoDialogHelper.ShowPredictionTypeInfoDialog();
         }
 
-        private DelegateCommand closeHelpPopupCommand;
-        public DelegateCommand CloseHelpPopupCommand => closeHelpPopupCommand ?? (closeHelpPopupCommand = new DelegateCommand(ExecuteCloseHelp));
-        private void ExecuteCloseHelp()
+        private DelegateCommand showIntraPredictionInfoCommand;
+        public DelegateCommand ShowIntraPredictionInfoCommand => showIntraPredictionInfoCommand ?? (showIntraPredictionInfoCommand = new DelegateCommand(ExecutShowIntraPredictionInfo));
+        private void ExecutShowIntraPredictionInfo()
         {
-            IsHelpPopupOpen = false;
+            InfoDialogHelper.ShowIntraPredictionInfoDialog();
+        }
+
+        private DelegateCommand showInterPredictionInfoCommand;
+        public DelegateCommand ShowInterPredictionInfoCommand => showInterPredictionInfoCommand ?? (showInterPredictionInfoCommand = new DelegateCommand(ExecuteShowInterPredictionInfo));
+        private void ExecuteShowInterPredictionInfo()
+        {
+            InfoDialogHelper.ShowInterPredictionInfoDialog();
+        }
+
+        private DelegateCommand showWhatIsHevcCommand;
+        public DelegateCommand ShowWhatIsHevcCommand => showWhatIsHevcCommand ?? (showWhatIsHevcCommand = new DelegateCommand(ExecuteShowWhatIsHevc));
+        private void ExecuteShowWhatIsHevc()
+        {
+            InfoDialogHelper.ShowWhatIsHevcInfoDialog();
+        }
+
+        private DelegateCommand closeTipsPopupCommand;
+        public DelegateCommand CloseTipsPopupCommand => closeTipsPopupCommand ?? (closeTipsPopupCommand = new DelegateCommand(ExecuteCloseTipsPopup));
+        private void ExecuteCloseTipsPopup()
+        {
+            IsTipsPopupOpen = false;
         }
 
         private DelegateCommand showHelpCommand;
@@ -302,33 +269,69 @@ namespace HEVCDemo.ViewModels
             infoDialog.ShowDialog();
         }
 
-        private void MainWindowDeactivated(object sender, EventArgs e)
+        #endregion
+
+        #region Tips popup
+
+        private readonly TimeSpan tipsPopupInterval = TimeSpan.FromMinutes(3);
+        private readonly TimeSpan tipsPopupTimeout = TimeSpan.FromSeconds(15);
+        private readonly TimeSpan tipsPopupInitialDelay = TimeSpan.FromSeconds(15);
+        private readonly TimeSpan tryLaterDelay = TimeSpan.FromSeconds(30);
+        private readonly List<string> tipsPopupTexts = new List<string>();
+
+        private Timer tipsPopupTimer;
+
+        private void InitializeTipsTexts()
         {
-            IsHelpPopupOpen = false;
+            tipsPopupTexts.Clear();
+            tipsPopupTexts.AddRange(new List<string>
+            {
+                "PopupTip1,Content".Localize(),
+                "PopupTip2,Content".Localize(),
+                "PopupTip3,Content".Localize(),
+                "PopupTip4,Content".Localize(),
+                "PopupTip5,Content".Localize(),
+                "PopupTip6,Content".Localize(),
+                "PopupTip7,Content".Localize(),
+                "PopupTip8,Content".Localize(),
+                "PopupTip9,Content".Localize(),
+                "PopupTip10,Content".Localize(),
+                "PopupTip11,Content".Localize(),
+            });
+        }
+
+        private void InitializeTipsPopup()
+        {
+            tipsPopupTimer = new Timer(DoTipsPopupTimerTick, null, tipsPopupInitialDelay, tipsPopupInterval);
+        }
+
+        private async void DoTipsPopupTimerTick(object state)
+        {
+            if (!Properties.Settings.Default.IsShowTipsEnabled) return;
+
+            if (!WindowHelper.GetApplicationIsActivated())
+            {
+                // Try later
+                tipsPopupTimer.Change(tryLaterDelay, tipsPopupInterval);
+                return;
+            }
+
+            var index = Properties.Settings.Default.ShowTipsCounter;
+
+            TipsPopupText = tipsPopupTexts[index];
+            IsTipsPopupOpen = true;
+            Properties.Settings.Default.ShowTipsCounter = index + 1 >= tipsPopupTexts.Count ? 0 : index + 1;
+
+            await Task.Delay(tipsPopupTimeout);
+            IsTipsPopupOpen = false;
         }
 
         #endregion
-
-        #region App state
-
-        private string appState;
-        public string AppState
-        {
-            get => appState;
-            set => SetProperty(ref appState, value);
-        }
-
-        private void AppStateChanged(object sender, AppStateChangedEventArgs e)
-        {
-            SetAppState(e.StateText);
-            SettingsEnabled = !e.IsBusy;
-        }
 
         private void SetAppState(string stateText)
         {
             AppState = stateText;
         }
 
-        #endregion
     }
 }
