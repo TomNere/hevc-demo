@@ -11,14 +11,15 @@
                  PreviewKeyDown="WindowPreviewKeyDown">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="400" />
         </Grid.ColumnDefinitions>
 
+        <!--Menu-->
         <Menu>
             <MenuItem Header="{rf:Tr Uid='FileHeader'}">
                 <MenuItem Header="{rf:Tr Uid='SelectVideoHeader'}"
@@ -50,12 +51,15 @@
                           IsCheckable="True"
                           IsChecked="{Binding IsShowTipsEnabled}" />
                 <MenuItem Header="{rf:Tr Uid='LicensesHeader'}"
-                          Command="{Binding ShowLicensesCommand}"/>
+                          Command="{Binding ShowLicensesCommand}" />
                 <MenuItem Header="{rf:Tr Uid='AboutHeader'}"
-                          Command="{Binding ShowAboutCommand}"/>
+                          Command="{Binding ShowAboutCommand}" />
             </MenuItem>
         </Menu>
-        <views:ImagesViewer x:Name="ImagesViewer" Grid.Row="1"/>
+        <!--Images viewer-->
+        <views:ImagesViewer x:Name="ImagesViewer"
+                            Grid.Row="1" />
+        <!--Settings panel-->
         <views:SettingsPanel Grid.Column="1"
                              Grid.RowSpan="2"
                              Margin="4,0,0,0" />

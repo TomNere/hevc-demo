@@ -15,18 +15,20 @@
                  MaxHeight="768"
                  MaxWidth="1024"
                  WindowStartupLocation="CenterOwner">
-    <ScrollViewer  VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="30,0,30,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            <!--Title-->
             <Label Grid.Row="0"
                    HorizontalAlignment="Center"
                    Content="{Binding Title}"
                    FontSize="24"
                    Margin="0,0,0,20" />
+            <!--Markdown-->
             <mdx:MarkdownScrollViewer Grid.Row="1"
                                       Markdown="{Binding Text}"
                                       xml:space="preserve"
@@ -34,7 +36,8 @@
                                       ScrollViewer.IsDeferredScrollingEnabled="False"
                                       VerticalScrollBarVisibility="Disabled"
                                       HorizontalScrollBarVisibility="Disabled"
-                                      PreviewMouseWheel="Markdown_PreviewMouseWheel"/>
+                                      PreviewMouseWheel="Markdown_PreviewMouseWheel" />
+            <!--Images-->
             <ItemsControl Grid.Row="2"
                           Margin="0,20,0,0"
                           ItemsSource="{Binding Images}">
@@ -49,6 +52,7 @@
                                     Background="#B3B5B3">
                                 <Image Source="{Binding ImagePath}" />    
                             </Border>
+                            <!--Image description-->
                             <TextBlock Grid.Row="1"
                                        Text="{Binding Name}"
                                        HorizontalAlignment="Center"

@@ -1,18 +1,19 @@
 ﻿<mah:MetroWindow x:Class="HEVCDemo.Views.SelectRangeDialog"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization"
-        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-        mc:Ignorable="d"
-        Title="{rf:Tr Uid='AppTitle'}"
-        Height="Auto" Width="400"
-        SizeToContent="Height"
-        WindowStartupLocation="CenterOwner">
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:rf="https://rasyidf.github.io/Rasyidf.Localization"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 mc:Ignorable="d"
+                 Title="{rf:Tr Uid='AppTitle'}"
+                 Height="Auto"
+                 Width="400"
+                 SizeToContent="Height"
+                 WindowStartupLocation="CenterOwner">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="40" />
             <RowDefinition Height="50" />
             <RowDefinition Height="32" />
             <RowDefinition Height="32" />
@@ -34,12 +35,12 @@
                Content="{Binding Maximum}" />
         <!--Start-->
         <Label Grid.Row="2"
-               Content="{rf:Tr Uid='StartSecond'}"/>
+               Content="{rf:Tr Uid='StartSecond'}" />
         <mah:NumericUpDown Grid.Row="2"
                            Grid.Column="1"
                            Value="{Binding StartSecond}"
                            Minimum="0"
-                           Maximum="{Binding Maximum}"/>
+                           Maximum="{Binding Maximum}" />
         <!--End-->
         <Label Grid.Row="3"
                Content="{rf:Tr Uid='EndSecond'}" />
@@ -47,7 +48,12 @@
                            Grid.Column="1"
                            Value="{Binding EndSecond}"
                            Minimum="0"
-                           Maximum="{Binding Maximum}"/>
-        <Button Grid.Row="4" Grid.ColumnSpan="2" Width="100" Margin="0,20,0,0" Content="{rf:Tr Uid='Ok'}" Click="Ok_Click" />
+                           Maximum="{Binding Maximum}" />
+        <Button Grid.Row="4"
+                Grid.ColumnSpan="2"
+                Width="100"
+                Margin="0,20,0,0"
+                Content="{rf:Tr Uid='Ok'}"
+                Click="Ok_Click" />
     </Grid>
 </mah:MetroWindow>
