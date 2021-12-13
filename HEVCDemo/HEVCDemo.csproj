@@ -126,11 +126,11 @@
     <Compile Include="Helpers\ScrollDragger.cs" />
     <Compile Include="Helpers\GlobalActionsHelper.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
-    <Compile Include="Hevc\ComCU.cs" />
+    <Compile Include="Hevc\CodingUnit.cs" />
     <Compile Include="Hevc\ComFrame.cs" />
-    <Compile Include="Hevc\ComPU.cs" />
+    <Compile Include="Hevc\PredictionUnit.cs" />
     <Compile Include="Hevc\MotionVector.cs" />
-    <Compile Include="Hevc\PartSize.cs" />
+    <Compile Include="Hevc\PartitionSize.cs" />
     <Compile Include="Hevc\PredictionType.cs" />
     <Compile Include="Hevc\VideoSequence.cs" />
     <Compile Include="Models\ViewConfiguration.cs" />

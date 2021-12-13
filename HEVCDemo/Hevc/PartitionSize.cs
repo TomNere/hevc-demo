@@ -1,6 +1,6 @@
 ﻿namespace HEVCDemo.Hevc
 {
-    public enum PartSize
+    public enum PartitionSize
     {
         SIZE_2Nx2N,           ///< symmetric motion partition,  2Nx2N
         SIZE_2NxN,            ///< symmetric motion partition,  2Nx N

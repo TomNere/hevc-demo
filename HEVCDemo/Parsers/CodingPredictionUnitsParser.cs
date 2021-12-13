@@ -73,9 +73,9 @@ namespace HEVCDemo.Parsers
                             var tokens = strOneLine.Substring(addressEnd + 2).Split(' ');
 
                             /// Poc and Lcu addr
-                            var pcLCU = new ComCU { iAddr = iAddr, Frame = frame, Size = iLCUSize };
-                            pcLCU.iPixelX = (iAddr % iCUOneRow) * videoSequence.MaxCUSize;
-                            pcLCU.iPixelY = (iAddr / iCUOneRow) * videoSequence.MaxCUSize;
+                            var pcLCU = new CodingUnit { Address = iAddr, Frame = frame, Size = iLCUSize };
+                            pcLCU.PixelX = (iAddr % iCUOneRow) * videoSequence.MaxCUSize;
+                            pcLCU.PixelY = (iAddr / iCUOneRow) * videoSequence.MaxCUSize;
 
                             /// Recursively parse the CU&PU quard-tree structure
                             var index = 0;
@@ -105,7 +105,7 @@ namespace HEVCDemo.Parsers
             });
         }
 
-        public bool ReadInCUMode(string[] tokens, ComCU pcLCU, ref int index)
+        public bool ReadInCUMode(string[] tokens, CodingUnit pcLCU, ref int index)
         {
             if (index > tokens.Length - 1) return false;
 
@@ -119,20 +119,20 @@ namespace HEVCDemo.Parsers
                 /// Non-leaf node, add 4 children CUs
                 for (int i = 0; i < 4; i++)
                 {
-                    var pcChildNode = new ComCU 
+                    var pcChildNode = new CodingUnit 
                     {
                         Frame = pcLCU.Frame,
-                        iAddr = pcLCU.iAddr, 
+                        Address = pcLCU.Address, 
                         Size = pcLCU.Size / 2,
                         Depth = pcLCU.Depth + 1,
-                        Zorder = pcLCU.Zorder + (iTotalNumPart/4) * i
+                        ZOrder = pcLCU.ZOrder + (iTotalNumPart/4) * i
                     };
 
-                    int iSubCUX = pcLCU.iPixelX + i % 2 * (pcLCU.Size / 2);
-                    int iSubCUY = pcLCU.iPixelY + i / 2 * (pcLCU.Size / 2);
-                    pcChildNode.iPixelX = iSubCUX;
-                    pcChildNode.iPixelY = iSubCUY;
-                    pcLCU.SCUs.Add(pcChildNode);
+                    int iSubCUX = pcLCU.PixelX + i % 2 * (pcLCU.Size / 2);
+                    int iSubCUY = pcLCU.PixelY + i / 2 * (pcLCU.Size / 2);
+                    pcChildNode.PixelX = iSubCUX;
+                    pcChildNode.PixelY = iSubCUY;
+                    pcLCU.SubCUs.Add(pcChildNode);
                     index++;
                     ReadInCUMode(tokens, pcChildNode, ref index);
                 }
@@ -140,15 +140,15 @@ namespace HEVCDemo.Parsers
             else
             {
                 /// Leaf node - create PUs and write the PU Mode for it
-                pcLCU.PartSize = (PartSize)iCUMode;
+                pcLCU.PartitionSize = (PartitionSize)iCUMode;
 
-                int iPUCount = GetPUNumber((PartSize)iCUMode);
+                int iPUCount = GetPUNumber((PartitionSize)iCUMode);
                 for (int i = 0; i < iPUCount; i++)
                 {
-                    var pcPU = new ComPU { CU = pcLCU };
-                    GetPUOffsetAndSize(pcLCU.Size, (PartSize)iCUMode, i, out var iPUOffsetX, out var iPUOffsetY, out var iPUWidth, out var iPUHeight);
-                    int iPUX = pcLCU.iPixelX + iPUOffsetX;
-                    int iPUY = pcLCU.iPixelY + iPUOffsetY;
+                    var pcPU = new PredictionUnit { ParentCU = pcLCU };
+                    GetPUOffsetAndSize(pcLCU.Size, (PartitionSize)iCUMode, i, out var iPUOffsetX, out var iPUOffsetY, out var iPUWidth, out var iPUHeight);
+                    int iPUX = pcLCU.PixelX + iPUOffsetX;
+                    int iPUY = pcLCU.PixelY + iPUOffsetY;
                     pcPU.X = iPUX;
                     pcPU.Y = iPUY;
                     pcPU.Width = iPUWidth;
@@ -159,9 +159,9 @@ namespace HEVCDemo.Parsers
             return true;
         }
 
-        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap)
+        public static void WriteBitmaps(CodingUnit cu, WriteableBitmap writeableBitmap)
         {
-            foreach (var sCu in cu.SCUs)
+            foreach (var sCu in cu.SubCUs)
             {
                 WriteBitmaps(sCu, writeableBitmap);
             }
@@ -173,12 +173,12 @@ namespace HEVCDemo.Parsers
                     writeableBitmap.DrawRectangle(pu.X, pu.Y, pu.X + pu.Width, pu.Y + pu.Height, Colors.Yellow);
                 }
 
-                writeableBitmap.DrawRectangle(cu.iPixelX, cu.iPixelY, cu.iPixelX + cu.Size, cu.iPixelY + cu.Size, Colors.Blue);
+                writeableBitmap.DrawRectangle(cu.PixelX, cu.PixelY, cu.PixelX + cu.Size, cu.PixelY + cu.Size, Colors.Blue);
             }
         }
 
         private void GetPUOffsetAndSize(int iLeafCUSize,
-                                        PartSize ePartSize,
+                                        PartitionSize ePartSize,
                                         int uiPUIdx,
                                         out int riXOffset,
                                         out int riYOffset,
@@ -187,43 +187,43 @@ namespace HEVCDemo.Parsers
         {
             switch (ePartSize)
             {
-                case PartSize.SIZE_2NxN:
+                case PartitionSize.SIZE_2NxN:
                     riWidth = iLeafCUSize;
                     riHeight = iLeafCUSize >> 1;
                     riXOffset = 0;
                     riYOffset = (uiPUIdx == 0) ? 0 : iLeafCUSize >> 1;
                     break;
-                case PartSize.SIZE_Nx2N:
+                case PartitionSize.SIZE_Nx2N:
                     riWidth = iLeafCUSize >> 1;
                     riHeight = iLeafCUSize;
                     riXOffset = (uiPUIdx == 0) ? 0 : iLeafCUSize >> 1;
                     riYOffset = 0;
                     break;
-                case PartSize.SIZE_NxN:
+                case PartitionSize.SIZE_NxN:
                     riWidth = iLeafCUSize >> 1;
                     riHeight = iLeafCUSize >> 1;
                     riXOffset = ((uiPUIdx & 1) == 0) ? 0 : iLeafCUSize >> 1;
                     riYOffset = ((uiPUIdx & 2) == 0) ? 0 : iLeafCUSize >> 1;
                     break;
-                case PartSize.SIZE_2NxnU:
+                case PartitionSize.SIZE_2NxnU:
                     riWidth = iLeafCUSize;
                     riHeight = (uiPUIdx == 0) ? iLeafCUSize >> 2 : (iLeafCUSize >> 2) + (iLeafCUSize >> 1);
                     riXOffset = 0;
                     riYOffset = (uiPUIdx == 0) ? 0 : iLeafCUSize >> 2;
                     break;
-                case PartSize.SIZE_2NxnD:
+                case PartitionSize.SIZE_2NxnD:
                     riWidth = iLeafCUSize;
                     riHeight = (uiPUIdx == 0) ? (iLeafCUSize >> 2) + (iLeafCUSize >> 1) : iLeafCUSize >> 2;
                     riXOffset = 0;
                     riYOffset = (uiPUIdx == 0) ? 0 : (iLeafCUSize >> 2) + (iLeafCUSize >> 1);
                     break;
-                case PartSize.SIZE_nLx2N:
+                case PartitionSize.SIZE_nLx2N:
                     riWidth = (uiPUIdx == 0) ? iLeafCUSize >> 2 : (iLeafCUSize >> 2) + (iLeafCUSize >> 1);
                     riHeight = iLeafCUSize;
                     riXOffset = (uiPUIdx == 0) ? 0 : iLeafCUSize >> 2;
                     riYOffset = 0;
                     break;
-                case PartSize.SIZE_nRx2N:
+                case PartitionSize.SIZE_nRx2N:
                     riWidth = (uiPUIdx == 0) ? (iLeafCUSize >> 2) + (iLeafCUSize >> 1) : iLeafCUSize >> 2;
                     riHeight = iLeafCUSize;
                     riXOffset = (uiPUIdx == 0) ? 0 : (iLeafCUSize >> 2) + (iLeafCUSize >> 1);
@@ -238,23 +238,23 @@ namespace HEVCDemo.Parsers
             }
         }
 
-        private int GetPUNumber(PartSize ePartSize)
+        private int GetPUNumber(PartitionSize ePartSize)
         {
             int iTotalNum;
             switch (ePartSize)
             {
-                case PartSize.SIZE_2Nx2N:
+                case PartitionSize.SIZE_2Nx2N:
                     iTotalNum = 1;
                     break;
-                case PartSize.SIZE_NxN:
+                case PartitionSize.SIZE_NxN:
                     iTotalNum = 4;
                     break;
-                case PartSize.SIZE_2NxN:
-                case PartSize.SIZE_Nx2N:
-                case PartSize.SIZE_2NxnU:
-                case PartSize.SIZE_2NxnD:
-                case PartSize.SIZE_nLx2N:
-                case PartSize.SIZE_nRx2N:
+                case PartitionSize.SIZE_2NxN:
+                case PartitionSize.SIZE_Nx2N:
+                case PartitionSize.SIZE_2NxnU:
+                case PartitionSize.SIZE_2NxnD:
+                case PartitionSize.SIZE_nLx2N:
+                case PartitionSize.SIZE_nRx2N:
                     iTotalNum = 2;
                     break;
                 default:

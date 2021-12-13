@@ -79,9 +79,9 @@ namespace HEVCDemo.Parsers
             });
         }
 
-        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap)
+        public static void WriteBitmaps(CodingUnit cu, WriteableBitmap writeableBitmap)
         {
-            foreach (var sCu in cu.SCUs)
+            foreach (var sCu in cu.SubCUs)
             {
                 WriteBitmaps(sCu, writeableBitmap);
             }
@@ -112,20 +112,20 @@ namespace HEVCDemo.Parsers
             }
         }
 
-        public bool ReadPredictionType(string[] tokens, ComCU pcLCU, ref int index)
+        public bool ReadPredictionType(string[] tokens, CodingUnit pcLCU, ref int index)
         {
             if (index > tokens.Length - 1)
             {
                 return false;
             }
 
-            if (pcLCU.SCUs.Count > 0)
+            if (pcLCU.SubCUs.Count > 0)
             {
                 /// Non-leaf node - recursive reading for children
-                ReadPredictionType(tokens, pcLCU.SCUs[0], ref index);
-                ReadPredictionType(tokens, pcLCU.SCUs[1], ref index);
-                ReadPredictionType(tokens, pcLCU.SCUs[2], ref index);
-                ReadPredictionType(tokens, pcLCU.SCUs[3], ref index);
+                ReadPredictionType(tokens, pcLCU.SubCUs[0], ref index);
+                ReadPredictionType(tokens, pcLCU.SubCUs[1], ref index);
+                ReadPredictionType(tokens, pcLCU.SubCUs[2], ref index);
+                ReadPredictionType(tokens, pcLCU.SubCUs[3], ref index);
             }
             else
             {

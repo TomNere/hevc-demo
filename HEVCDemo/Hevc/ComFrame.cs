@@ -6,13 +6,13 @@ namespace HEVCDemo.Hevc
     {
         public int Poc;
         public VideoSequence Sequence;
-        public List<ComCU> CodingUnits = new List<ComCU>();
+        public List<CodingUnit> CodingUnits = new List<CodingUnit>();
 
-        public ComCU GetCUByAddress(int address)
+        public CodingUnit GetCUByAddress(int address)
         {
             foreach(var cu in CodingUnits)
             {
-                if (cu.iAddr == address) return cu;
+                if (cu.Address == address) return cu;
             }
 
             return null;

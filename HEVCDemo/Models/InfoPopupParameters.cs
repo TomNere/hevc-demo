@@ -5,7 +5,7 @@ namespace HEVCDemo.Models
 {
     public class InfoPopupParameters
     {
-        public ComPU Pu { get; set; }
+        public PredictionUnit Pu { get; set; }
         public string Location { get; set; }
         public string Size { get; set; }
         public string PredictionType { get; set; }

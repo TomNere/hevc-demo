@@ -56,13 +56,13 @@ namespace HEVCDemo.Helpers
             return parameters;
         }
 
-        private static ComPU GetPredictionUnit(List<ComCU> codingUnits, Point mouseLocation)
+        private static PredictionUnit GetPredictionUnit(List<CodingUnit> codingUnits, Point mouseLocation)
         {
             foreach (var unit in codingUnits)
             {
-                if (unit.SCUs.Count > 0)
+                if (unit.SubCUs.Count > 0)
                 {
-                    var subUnit = GetPredictionUnit(unit.SCUs, mouseLocation);
+                    var subUnit = GetPredictionUnit(unit.SubCUs, mouseLocation);
                     if (subUnit != null)
                     {
                         return subUnit;
@@ -82,7 +82,7 @@ namespace HEVCDemo.Helpers
             return null;
         }
 
-        private static void GetIntraParameters(InfoPopupParameters parameters, ComPU predictionUnit)
+        private static void GetIntraParameters(InfoPopupParameters parameters, PredictionUnit predictionUnit)
         {
             parameters.InterMode = string.Empty;
 
@@ -104,7 +104,7 @@ namespace HEVCDemo.Helpers
             parameters.IntraMode = $"{intraMode}";
         }
 
-        private static void GetInterParameters(InfoPopupParameters parameters, ComPU predictionUnit)
+        private static void GetInterParameters(InfoPopupParameters parameters, PredictionUnit predictionUnit)
         {
             parameters.IntraMode = string.Empty;
 
@@ -122,7 +122,7 @@ namespace HEVCDemo.Helpers
             }
         }
 
-        private static void GetUnitImage(InfoPopupParameters parameters, ComPU predictionUnit, double horizontalOffset, double verticalOffset, Grid grid, double zoom)
+        private static void GetUnitImage(InfoPopupParameters parameters, PredictionUnit predictionUnit, double horizontalOffset, double verticalOffset, Grid grid, double zoom)
         {
             double actualHeight = grid.ActualHeight - (verticalOffset * 2);
             double actualWidth = grid.ActualWidth - (horizontalOffset * 2);

@@ -78,9 +78,9 @@ namespace HEVCDemo.Parsers
             });
         }
 
-        public static void WriteBitmaps(ComCU cu, WriteableBitmap writeableBitmap, bool isStartEnabled)
+        public static void WriteBitmaps(CodingUnit cu, WriteableBitmap writeableBitmap, bool isStartEnabled)
         {
-            foreach (var sCu in cu.SCUs)
+            foreach (var sCu in cu.SubCUs)
             {
                 WriteBitmaps(sCu, writeableBitmap, isStartEnabled);
             }
@@ -108,7 +108,7 @@ namespace HEVCDemo.Parsers
                 }
             }
 
-            void DrawMotionVector(ComPU pu, MotionVector mv, Color color)
+            void DrawMotionVector(PredictionUnit pu, MotionVector mv, Color color)
             {
                 var centerX = pu.X + (pu.Width / 2);
                 var centerY = pu.Y + (pu.Height / 2);
@@ -120,20 +120,20 @@ namespace HEVCDemo.Parsers
             }
         }
 
-        public bool ReadMotionVectors(string[] tokens, ComCU pcLCU, ref int index)
+        public bool ReadMotionVectors(string[] tokens, CodingUnit pcLCU, ref int index)
         {
             if (index > tokens.Length - 1)
             {
                 return false;
             }
 
-            if (pcLCU.SCUs.Count > 0)
+            if (pcLCU.SubCUs.Count > 0)
             {
                 /// non-leaf node : recursive reading for children
-                ReadMotionVectors(tokens, pcLCU.SCUs[0], ref index);
-                ReadMotionVectors(tokens, pcLCU.SCUs[1], ref index);
-                ReadMotionVectors(tokens, pcLCU.SCUs[2], ref index);
-                ReadMotionVectors(tokens, pcLCU.SCUs[3], ref index);
+                ReadMotionVectors(tokens, pcLCU.SubCUs[0], ref index);
+                ReadMotionVectors(tokens, pcLCU.SubCUs[1], ref index);
+                ReadMotionVectors(tokens, pcLCU.SubCUs[2], ref index);
+                ReadMotionVectors(tokens, pcLCU.SubCUs[3], ref index);
             }
             else
             {
