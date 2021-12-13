@@ -359,7 +359,8 @@ enum PredMode
 {
   MODE_INTER                 = 0,     ///< inter-prediction mode
   MODE_INTRA                 = 1,     ///< intra-prediction mode
-  NUMBER_OF_PREDICTION_MODES = 2,
+  MODE_NONE                  = 15,
+  NUMBER_OF_PREDICTION_MODES = 3,
 };
 
 /// reference list index

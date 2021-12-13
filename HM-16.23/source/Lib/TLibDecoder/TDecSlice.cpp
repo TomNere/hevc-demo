@@ -297,15 +297,15 @@ Void TDecSlice::WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iD
 
         switch (puhPartSize[iOffset])
         {
-        case SIZE_2Nx2N:    iNumPart = 1; break;
-        case SIZE_2NxN:     iNumPart = 2; break;
-        case SIZE_Nx2N:     iNumPart = 2; break;
-        case SIZE_NxN:      iNumPart = 4; break;
-        case SIZE_2NxnU:    iNumPart = 2; break;
-        case SIZE_2NxnD:    iNumPart = 2; break;
-        case SIZE_nLx2N:    iNumPart = 2; break;
-        case SIZE_nRx2N:    iNumPart = 2; break;
-        default:    iNumPart = 0;  /*assert(0);*/  break;  ///< out of boundery
+            case SIZE_2Nx2N:    iNumPart = 1; break;
+            case SIZE_2NxN:     iNumPart = 2; break;
+            case SIZE_Nx2N:     iNumPart = 2; break;
+            case SIZE_NxN:      iNumPart = 4; break;
+            case SIZE_2NxnU:    iNumPart = 2; break;
+            case SIZE_2NxnD:    iNumPart = 2; break;
+            case SIZE_nLx2N:    iNumPart = 2; break;
+            case SIZE_nRx2N:    iNumPart = 2; break;
+            default:            iNumPart = 0; break; // error
         }
 
         /// Traverse every PU
@@ -314,42 +314,48 @@ Void TDecSlice::WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iD
         {
             switch (puhPartSize[iOffset])
             {
-            case SIZE_2NxN:
-                iPartAddOffset = (i == 0) ? 0 : iLength >> 1;
-                break;
-            case SIZE_Nx2N:
-                iPartAddOffset = (i == 0) ? 0 : iLength >> 2;
-                break;
-            case SIZE_NxN:
-                iPartAddOffset = (iLength >> 2) * i;
-                break;
-            case SIZE_2NxnU:
-                iPartAddOffset = (i == 0) ? 0 : iLength >> 3;
-                break;
-            case SIZE_2NxnD:
-                iPartAddOffset = (i == 0) ? 0 : (iLength >> 1) + (iLength >> 3);
-                break;
-            case SIZE_nLx2N:
-                iPartAddOffset = (i == 0) ? 0 : iLength >> 4;
-                break;
-            case SIZE_nRx2N:
-                iPartAddOffset = (i == 0) ? 0 : (iLength >> 2) + (iLength >> 4);
-                break;
-            default:
-                assert(puhPartSize[iOffset] == SIZE_2Nx2N);
-                iPartAddOffset = 0;
+                case SIZE_2NxN:
+                    iPartAddOffset = (i == 0) ? 0 : iLength >> 1;
+                    break;
+                case SIZE_Nx2N:
+                    iPartAddOffset = (i == 0) ? 0 : iLength >> 2;
+                    break;
+                case SIZE_NxN:
+                    iPartAddOffset = (iLength >> 2) * i;
+                    break;
+                case SIZE_2NxnU:
+                    iPartAddOffset = (i == 0) ? 0 : iLength >> 3;
+                    break;
+                case SIZE_2NxnD:
+                    iPartAddOffset = (i == 0) ? 0 : (iLength >> 1) + (iLength >> 3);
+                    break;
+                case SIZE_nLx2N:
+                    iPartAddOffset = (i == 0) ? 0 : iLength >> 4;
+                    break;
+                case SIZE_nRx2N:
+                    iPartAddOffset = (i == 0) ? 0 : (iLength >> 2) + (iLength >> 4);
+                    break;
+                default:
+                    assert(puhPartSize[iOffset] == SIZE_2Nx2N);
+                    iPartAddOffset = 0;
                 break;
             }
 
-            /// Write prediction info (for historical reason, MODE_SKIP = 0, MODE_INTER = 1 ....) (SKIP mode removed after HM-8.0)
+            /// Write prediction info
             PredMode ePred = pcCU->getPredictionMode(iOffset + iPartAddOffset);
             Int iPred = ePred;
             if (ePred == MODE_INTER)
+            {
                 iPred = 1;
+            }
             else if (ePred == MODE_INTRA)
+            {
                 iPred = 2;
-            /*else if (ePred == MODE_NONE)
-                iPred = 15;*/
+            }
+            else if (ePred == MODE_NONE)
+            {
+                iPred = 15;
+            }
             predictionOutput << iPred << " ";
 
             // Write MV info
@@ -387,16 +393,13 @@ Void TDecSlice::WriteCUStats(TComDataCU* pcCU, Int iLength, Int iOffset, UInt iD
             Int iChromaIntraDir = pcCU->getIntraDir(CHANNEL_TYPE_CHROMA, iOffset + iPartAddOffset);
             intraOutput << iLumaIntraDir << " " << iChromaIntraDir << " ";
 
-        } /// PU end
+        }
     }
     else
     {
-        //m_cCUPUOutput << "99" << " ";     ///< CU info
         for (UInt i = 0; i < 4; i++)
         {
             WriteCUStats(pcCU, iLength / 4, iOffset + iLength / 4 * i, iDepth + 1, predictionOutput, intraOutput, motionVectorsOutput);
         }
     }
 }
-
-//! \}
